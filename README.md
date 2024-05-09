@@ -46,7 +46,7 @@ o gerenciamento de versões de diversas ferramentas de desenvolvimento.
      grails run-app
      ```
    
-4. Acesse o projeto no navegador: [http://localhost:8080](http://localhost:8080)
+5. Acesse o projeto no navegador: [http://localhost:8080](http://localhost:8080)
 
 ## Funcionalidades
 
