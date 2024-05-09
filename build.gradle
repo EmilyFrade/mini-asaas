@@ -85,6 +85,23 @@ bootRun {
     sourceResources sourceSets.main
     String springProfilesActive = 'spring.profiles.active'
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
+    doFirst {
+        def envFile = file('.env') as File
+        if (envFile.exists()) {
+            envFile.readLines().each() {
+                // it se refere a cada linha do arquivo
+                if (it.startsWith('#') || it.trim().isEmpty()) {
+                    return
+                }
+                def separatorIndex = it.indexOf('=')
+                if (separatorIndex > 0) {
+                    String key = it.substring(0, separatorIndex)
+                    String value = it.substring(separatorIndex + 1).trim()
+                    environment key, value
+                }
+            }
+        }
+    }
 }
 
 tasks.withType(GroovyCompile) {

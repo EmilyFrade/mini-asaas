@@ -36,7 +36,12 @@ o gerenciamento de versões de diversas ferramentas de desenvolvimento.
     cd mini-asaas
     ```
    
-3. Execute o projeto
+3. Adicione um arquivo .env na raiz do projeto conforme o arquivo .env.example e preencha com as informações necessárias
+   ```sh
+    cp .env.example .env
+    ```
+   
+4. Execute o projeto
     ```sh
      grails run-app
      ```
