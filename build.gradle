@@ -22,6 +22,7 @@ apply plugin:"org.grails.grails-gsp"
 apply plugin:"com.bertramlabs.asset-pipeline"
 
 repositories {
+    mavenCentral()
     maven { url "https://repo.grails.org/grails/core" }
 }
 
@@ -59,7 +60,7 @@ dependencies {
     implementation "org.grails.plugins:gsp"
     profile "org.grails.profiles:web"
     runtimeOnly "org.glassfish.web:el-impl:2.2.1-b05"
-    runtimeOnly "com.h2database:h2"
+    runtimeOnly "com.mysql:mysql-connector-j:8.4.0"
     runtimeOnly "org.apache.tomcat:tomcat-jdbc"
     runtimeOnly "javax.xml.bind:jaxb-api:2.3.1"
     runtimeOnly "com.bertramlabs.plugins:asset-pipeline-grails:3.3.4"
@@ -73,6 +74,7 @@ dependencies {
     testImplementation "org.seleniumhq.selenium:selenium-support:3.141.59"
     testRuntimeOnly "org.seleniumhq.selenium:selenium-chrome-driver:3.141.59"
     testRuntimeOnly "org.seleniumhq.selenium:selenium-firefox-driver:3.141.59"
+    testRuntimeOnly "com.h2database:h2"
 }
 
 bootRun {
@@ -85,6 +87,23 @@ bootRun {
     sourceResources sourceSets.main
     String springProfilesActive = 'spring.profiles.active'
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
+    doFirst {
+        def envFile = file('.env') as File
+        if (envFile.exists()) {
+            envFile.readLines().each() {
+                // it se refere a cada linha do arquivo
+                if (it.startsWith('#') || it.trim().isEmpty()) {
+                    return
+                }
+                def separatorIndex = it.indexOf('=')
+                if (separatorIndex > 0) {
+                    String key = it.substring(0, separatorIndex)
+                    String value = it.substring(separatorIndex + 1).trim()
+                    environment key, value
+                }
+            }
+        }
+    }
 }
 
 tasks.withType(GroovyCompile) {

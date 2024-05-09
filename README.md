@@ -36,12 +36,17 @@ o gerenciamento de versões de diversas ferramentas de desenvolvimento.
     cd mini-asaas
     ```
    
-3. Execute o projeto
+3. Adicione um arquivo .env na raiz do projeto conforme o arquivo .env.example e preencha com as informações necessárias
+   ```sh
+    cp .env.example .env
+    ```
+   
+4. Execute o projeto
     ```sh
      grails run-app
      ```
    
-4. Acesse o projeto no navegador: [http://localhost:8080](http://localhost:8080)
+5. Acesse o projeto no navegador: [http://localhost:8080](http://localhost:8080)
 
 ## Funcionalidades
 
