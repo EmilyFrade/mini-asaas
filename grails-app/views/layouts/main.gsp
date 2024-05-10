@@ -20,17 +20,13 @@
             crossorigin="anonymous"
     ></script>
 
-    <style>
-        html, body{
-            height: 100%;
-        }
-    </style>
-
     <g:layoutHead/>
 </head>
 
 <body>
-    <g:layoutBody/>
+    <atlas-screen>
+        <g:layoutBody/>
+    </atlas-screen>
 </body>
 </html>
 
