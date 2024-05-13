@@ -14,10 +14,4 @@ class UpdateCustomerDTO {
         this.phoneNumber = params.phoneNumber
     }
 
-    static constraints = {
-        name nullable: true, blank: false
-        email nullable: true, blank: false, email: true
-        cpfCnpj nullable: true, blank: false, matches: "\\d{11}|\\d{14}"
-        phoneNumber nullable: true, blank: false, matches: "(\\d{2})?\\d{4,5}-\\d{4}"
-    }
 }
