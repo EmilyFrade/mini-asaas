@@ -4,32 +4,18 @@ import core.dtos.CreateAddressDTO
 import core.dtos.CreateCustomerDTO
 import core.dtos.UpdateCustomerDTO
 import core.enums.PersonType
+import core.exceptions.EntityNotFoundException
 import core.valueobjects.Address
+import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
+import grails.validation.ValidationException
 
+@GrailsCompileStatic
 @Transactional
 class CustomerService {
 
-    private static Address createAddress(CreateAddressDTO addressDTO) {
-        Address address = new Address()
-        address.street = addressDTO.street
-        address.neighborhood = addressDTO.neighborhood
-        address.city = addressDTO.city
-        address.ufState = addressDTO.ufState
-        address.zipCode = addressDTO.zipCode
-        address.number = addressDTO.number
-        address.complement = addressDTO.complement
-        return address
-    }
+    public Customer save(CreateCustomerDTO customerDTO, CreateAddressDTO addressDTO) {
 
-    private static void updateProperty(Customer customer, String property, Object value) {
-        if (value) {
-            customer[property] = value
-            customer.markDirty(property)
-        }
-    }
-
-    def save(CreateCustomerDTO customerDTO, CreateAddressDTO addressDTO) {
         Customer customer = new Customer()
         customer.name = customerDTO.name
         customer.email = customerDTO.email
@@ -38,36 +24,88 @@ class CustomerService {
         customer.personType = PersonType.fromCpfCnpj(customerDTO.cpfCnpj)
         customer.address = createAddress(addressDTO)
 
-        if (customer.validate()) {
-            customer.save(failOnError: true)
+        if (!customer.validate()) {
+            throw new ValidationException("Ocorreu um erro ao validar os dados", customer.errors)
         }
 
-        return [data: customer, errors: customer.errors, success: !customer.hasErrors()]
+        customer.save(failOnError: true)
+
+        return customer
     }
 
-    def update(Customer customer, UpdateCustomerDTO customerDTO) {
+    public Customer update(Long id, UpdateCustomerDTO customerDTO) {
 
-        updateProperty(customer, "name", customerDTO.name)
-        updateProperty(customer, "email", customerDTO.email)
-        updateProperty(customer, "cpfCnpj", customerDTO.cpfCnpj)
-        updateProperty(customer, "phoneNumber", customerDTO.phoneNumber)
-        updateProperty(customer, "personType", PersonType.fromCpfCnpj(customerDTO.cpfCnpj))
+        Customer customer = Customer.get(id)
 
-        if (customer.validate()) {
-            customer.save(failOnError: true)
+        if (!customer) {
+            throw new EntityNotFoundException("Cliente não encontrado")
         }
 
-        return [data: customer, errors: customer.errors, success: !customer.hasErrors()]
+        if (customerDTO.name) {
+            customer.name = customerDTO.name
+            customer.markDirty("name")
+        }
+
+        if (customerDTO.email) {
+            customer.email = customerDTO.email
+            customer.markDirty("email")
+        }
+
+        if (customerDTO.cpfCnpj) {
+            customer.cpfCnpj = customerDTO.cpfCnpj
+            customer.markDirty("cpfCnpj")
+
+            PersonType personType = PersonType.fromCpfCnpj(customerDTO.cpfCnpj)
+            if (customer.personType != personType) {
+                customer.personType = personType
+                customer.markDirty("personType")
+            }
+        }
+
+        if (customerDTO.phoneNumber) {
+            customer.phoneNumber = customerDTO.phoneNumber
+            customer.markDirty("phoneNumber")
+        }
+
+        if (!customer.validate()) {
+            throw new ValidationException("Ocorreu um erro ao validar os dados", customer.errors)
+        }
+
+        customer.save(failOnError: true)
+
+        return customer
     }
 
-    def updateAddress(Customer customer, CreateAddressDTO addressDTO) {
-        updateProperty(customer, "address", createAddress(addressDTO))
+    public Customer updateAddress(Long id, CreateAddressDTO addressDTO) {
 
-        if (customer.validate()) {
-            customer.save(failOnError: true)
+        Customer customer = Customer.get(id)
+
+        if (!customer) {
+            throw new EntityNotFoundException("Cliente não encontrado")
         }
 
-        return [data: customer, errors: customer.errors, success: !customer.hasErrors()]
+        if (addressDTO) {
+            customer.address = createAddress(addressDTO)
+            customer.markDirty("address")
+        }
+
+        if (!customer.validate()) {
+            throw new ValidationException("Ocorreu um erro ao validar os dados de endereço", customer.errors)
+        }
+
+        return customer
+    }
+
+    private static Address createAddress(CreateAddressDTO addressDTO) {
+        Address address = new Address()
+        address.street = addressDTO.street
+        address.neighborhood = addressDTO.neighborhood
+        address.city = addressDTO.city
+        address.state = addressDTO.state
+        address.zipCode = addressDTO.zipCode
+        address.number = addressDTO.number
+        address.complement = addressDTO.complement
+        return address
     }
 
 }
