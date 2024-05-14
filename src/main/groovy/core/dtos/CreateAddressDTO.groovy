@@ -5,11 +5,17 @@ import core.enums.AddressState
 class CreateAddressDTO {
 
     String street
+
     String neighborhood
+
     String city
+
     AddressState state
+
     String zipCode
+
     Integer number
+
     String complement
 
     public CreateAddressDTO(Map params) {

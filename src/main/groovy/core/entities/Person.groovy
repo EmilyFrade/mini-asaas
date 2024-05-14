@@ -10,9 +10,13 @@ import core.valueobjects.Address
 abstract class Person extends BaseEntity {
 
     String name
+
     String email
+
     String cpfCnpj
+
     String phoneNumber
+
     PersonType personType
 
     Address address

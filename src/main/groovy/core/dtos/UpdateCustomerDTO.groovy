@@ -3,8 +3,11 @@ package core.dtos
 class UpdateCustomerDTO {
 
     String name
+
     String email
+
     String cpfCnpj
+
     String phoneNumber
 
     public UpdateCustomerDTO(Map params) {

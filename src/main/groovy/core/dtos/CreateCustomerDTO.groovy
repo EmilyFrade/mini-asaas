@@ -3,8 +3,11 @@ package core.dtos
 class CreateCustomerDTO {
 
     String name
+
     String email
+
     String cpfCnpj
+
     String phoneNumber
 
     public CreateCustomerDTO(Map params) {

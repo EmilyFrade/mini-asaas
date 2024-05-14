@@ -7,8 +7,11 @@ import java.time.LocalDateTime
  * <p>Essa classe contém os atributos comuns a todas as entidades.</p>
  */
 abstract class BaseEntity {
+
     LocalDateTime dateCreated
+
     LocalDateTime lastUpdated
+
     Boolean deleted = false
 
     static mapping = {
