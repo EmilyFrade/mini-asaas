@@ -2,12 +2,12 @@ package core.dtos
 
 class UpdateCustomerDTO {
 
-    final String name
-    final String email
-    final String cpfCnpj
-    final String phoneNumber
+    String name
+    String email
+    String cpfCnpj
+    String phoneNumber
 
-    UpdateCustomerDTO(Map < String, String > params) {
+    public UpdateCustomerDTO(Map params) {
         this.name = params.name
         this.email = params.email
         this.cpfCnpj = params.cpfCnpj
