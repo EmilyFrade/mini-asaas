@@ -4,7 +4,9 @@ import core.dtos.CreateAddressDTO
 import core.dtos.CreateCustomerDTO
 import core.dtos.UpdateCustomerDTO
 import core.enums.PersonType
+import core.exceptions.EntityNoDataChangedException
 import core.exceptions.EntityNotFoundException
+import core.exceptions.EntityWithSamePropertyAlreadyExistsException
 import core.valueobjects.Address
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
@@ -16,7 +18,19 @@ class CustomerService {
 
     public Customer save(CreateCustomerDTO customerDTO, CreateAddressDTO addressDTO) {
 
-        Customer customer = new Customer()
+        Customer customer = Customer.findByCpfCnpj(customerDTO.cpfCnpj)
+
+        if (customer) {
+            throw new EntityWithSamePropertyAlreadyExistsException("Já existe um cliente cadastrado com o CPF/CNPJ informado")
+        }
+
+        customer = Customer.findByEmail(customerDTO.email)
+
+        if (customer) {
+            throw new EntityWithSamePropertyAlreadyExistsException("Já existe um cliente cadastrado com o e-mail informado")
+        }
+
+        customer = new Customer()
         customer.name = customerDTO.name
         customer.email = customerDTO.email
         customer.cpfCnpj = customerDTO.cpfCnpj
@@ -41,17 +55,27 @@ class CustomerService {
             throw new EntityNotFoundException("Cliente não encontrado")
         }
 
-        if (customerDTO.name) {
+        if (customerDTO.name && customer.name != customerDTO.name) {
             customer.name = customerDTO.name
             customer.markDirty("name")
         }
 
-        if (customerDTO.email) {
+        if (customerDTO.email && customer.email != customerDTO.email) {
+
+            if (Customer.findByEmail(customerDTO.email)) {
+                throw new EntityWithSamePropertyAlreadyExistsException("Já existe um cliente cadastrado com o e-mail informado")
+            }
+
             customer.email = customerDTO.email
             customer.markDirty("email")
         }
 
-        if (customerDTO.cpfCnpj) {
+        if (customerDTO.cpfCnpj && customer.cpfCnpj != customerDTO.cpfCnpj) {
+
+            if (Customer.findByCpfCnpj(customerDTO.cpfCnpj)) {
+                throw new EntityWithSamePropertyAlreadyExistsException("Já existe um cliente cadastrado com o CPF/CNPJ informado")
+            }
+
             customer.cpfCnpj = customerDTO.cpfCnpj
             customer.markDirty("cpfCnpj")
 
@@ -62,13 +86,17 @@ class CustomerService {
             }
         }
 
-        if (customerDTO.phoneNumber) {
+        if (customerDTO.phoneNumber && customer.phoneNumber != customerDTO.phoneNumber) {
             customer.phoneNumber = customerDTO.phoneNumber
             customer.markDirty("phoneNumber")
         }
 
         if (!customer.validate()) {
             throw new ValidationException("Ocorreu um erro ao validar os dados", customer.errors)
+        }
+
+        if (!customer.dirty) {
+            throw new EntityNoDataChangedException()
         }
 
         customer.save(failOnError: true)
@@ -84,10 +112,23 @@ class CustomerService {
             throw new EntityNotFoundException("Cliente não encontrado")
         }
 
-        if (addressDTO) {
-            customer.address = createAddress(addressDTO)
-            customer.markDirty("address")
+        boolean isNewAddress = false
+
+        // Verifica se algum campo do endereço foi alterado
+        for (String propertyName : addressDTO.properties.keySet()) {
+            if (propertyName == "class") continue
+            if (customer.address[propertyName] != addressDTO[propertyName]) {
+                isNewAddress = true
+                break
+            }
         }
+
+        if (!isNewAddress) {
+            throw new EntityNoDataChangedException()
+        }
+
+        customer.address = createAddress(addressDTO)
+        customer.markDirty("address")
 
         if (!customer.validate()) {
             throw new ValidationException("Ocorreu um erro ao validar os dados de endereço", customer.errors)

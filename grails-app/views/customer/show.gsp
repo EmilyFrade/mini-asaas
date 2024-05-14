@@ -10,6 +10,9 @@
 <atlas-page class="js-atlas-page">
     <atlas-page-header page-name="Meu Perfil" slot="header"></atlas-page-header>
     <atlas-page-content slot="content" class="js-atlas-content">
+        <g:if test="${flash.message && flash.type == "customer"}">
+            <atlas-alert type="${flash.status}" message="${flash.message}"></atlas-alert>
+        </g:if>
         <atlas-form-panel header="Dados Pessoais" description="" submit-button-label="" action="${createLink(controller: "customer", action: "update", params: [id: customer.id])}" method="post">
             <atlas-button slot="actions" description="Editar" icon="pencil" data-panel-start-editing="true"></atlas-button>
             <atlas-layout gap="3">
@@ -59,6 +62,9 @@
                 </atlas-input>
             </atlas-layout>
         </atlas-form-panel>
+        <g:if test="${flash.message && flash.type == "address"}">
+            <atlas-alert type="${flash.status}" message="${flash.message}"></atlas-alert>
+        </g:if>
         <atlas-form-panel header="Meu Endereço" description="" submit-button-label="" action="${createLink(controller: "customer", action: "updateAddress", params: [id: customer.id])}" method="post">
             <atlas-button slot="actions" description="Editar" icon="pencil" data-panel-start-editing="true"></atlas-button>
             <atlas-grid>

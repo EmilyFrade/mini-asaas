@@ -1,7 +1,7 @@
 package core.exceptions
 
 class EntityNotFoundException extends Exception {
-    EntityNotFoundException(String message) {
+    public EntityNotFoundException(String message) {
         super(message)
     }
 }

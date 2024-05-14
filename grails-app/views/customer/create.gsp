@@ -10,6 +10,9 @@
     <atlas-page class="js-atlas-page">
         <atlas-page-header page-name="Cadastro" slot="header"></atlas-page-header>
         <atlas-page-content slot="content" class="js-atlas-content">
+            <g:if test="${flash.message}">
+                <atlas-alert type="${flash.status}" message="${flash.message}"></atlas-alert>
+            </g:if>
             <atlas-form class="form" method="POST" action="${createLink(controller: "customer", action: "save")}">
                 <atlas-row>
                     <atlas-input
