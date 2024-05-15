@@ -1,6 +1,6 @@
 <html>
 <head>
-  <title>Listar pagadores</title>
+  <title>Lista de pagadores</title>
   <meta name="layout" content="main">
 </head>
 <body page-title="Lista de pagadores">
@@ -21,6 +21,7 @@
               slot="actions"
       ></atlas-button>
     </atlas-toolbar>
+
     <atlas-table has-actions>
       <atlas-table-header slot="header">
         <atlas-table-col>
@@ -56,9 +57,8 @@
   <g:else>
     <atlas-empty-state
             illustration="schedule-user-avatar"
-            header="Sem pagadores cadastrados"
-    >
-      Aqui você pode cadastrar os pagadores que deseja utilizar em suas transações.
+            header="Sem pagadores cadastrados">
+            Aqui você pode cadastrar os pagadores que deseja utilizar em suas transações.
       <atlas-button
               icon="plus"
               description="Adicionar pagador"

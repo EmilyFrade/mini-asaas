@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta name="layout" content="main"/>
-  <title>Mini Asaas - Cadastrar pagador</title>
+  <title>Cadastrar pagador</title>
 </head>
 
 <body>
@@ -110,6 +110,7 @@
               </atlas-input>
             </atlas-col>
           </atlas-row>
+
           <atlas-row>
             <atlas-col lg="4">
               <atlas-input

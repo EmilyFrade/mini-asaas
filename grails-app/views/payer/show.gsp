@@ -4,7 +4,7 @@
     <title>Detalhes do Pagador</title>
     <meta name="layout" content="main">
 </head>
-<body page-title="Detalhes do Pagador">
+<body>
 <atlas-form-panel header="Detalhes do pagador" description="" submit-button-label=""
                   action="${createLink(controller: "payer", action: "update", params: [id: payer.id])}" method="post">
     <atlas-input
