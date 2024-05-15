@@ -1,9 +1,7 @@
 package core.exceptions
 
-class EntityWithSamePropertyAlreadyExistsException extends Exception {
-
+class EntityWithSamePropertyAlreadyExistsException extends DomainException {
     public EntityWithSamePropertyAlreadyExistsException(String message) {
         super(message)
     }
-
 }

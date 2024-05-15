@@ -32,6 +32,7 @@ class CustomerService {
      * @see Customer#address
      */
     public Customer save(CustomerDTO customerDTO, AddressDTO addressDTO) {
+
         if (Customer.findByCpfCnpj(customerDTO.cpfCnpj)) {
             throw new EntityWithSamePropertyAlreadyExistsException("Já existe um cliente cadastrado com o CPF/CNPJ informado")
         }

@@ -1,6 +1,6 @@
 package core.exceptions
 
-class EntityNotFoundException extends Exception {
+class EntityNotFoundException extends DomainException {
     public EntityNotFoundException(String message) {
         super(message)
     }
