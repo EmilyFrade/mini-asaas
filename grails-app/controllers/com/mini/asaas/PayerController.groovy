@@ -6,6 +6,11 @@ import grails.validation.ValidationException
 class PayerController {
     PayerService payerService
 
+    def index() {
+        def payerList = PayerService.listAll()
+        [payerList: payerList]
+    }
+
     def register() {}
 
     def save() {

@@ -11,4 +11,8 @@ class PayerService {
         Payer payer = dto.toPayer()
         return payer.save(failOnError: true)
     }
+
+    static List<Payer> listAll() {
+        return Payer.list()
+    }
 }
