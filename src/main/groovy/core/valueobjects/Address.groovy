@@ -13,7 +13,7 @@ class Address {
     String complement
     String neighborhood
     String city
-    String ufState
+    String state
     String zipCode
 
     static constraints = {
@@ -22,8 +22,17 @@ class Address {
         complement nullable: true
         neighborhood blank: false, nullable: false
         city blank: false, nullable: false
-        ufState blank: false, nullable: false, matches: /[A-Z]{2}/
+        state blank: false, nullable: false, matches: /[A-Z]{2}/
         zipCode blank: false, nullable: false, matches: /\d{8}/
     }
- 
+
+    static String formatZipCode(String zipCode) {
+        switch (zipCode.length()) {
+            case 8:
+                return zipCode.substring(0, 5) + "-" + zipCode.substring(5, 8)
+            case 9:
+                return zipCode.replaceAll("-", "")
+            default: throw new IllegalArgumentException("O valor não é um CEP válido")
+        }
+    }
 }

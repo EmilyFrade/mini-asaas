@@ -40,4 +40,11 @@ enum PersonType {
         }
     }
 
+    static PersonType fromCpfCnpj(String cpfCnpj) {
+        switch (cpfCnpj.length()) {
+            case 11: return NATURAL
+            case 14: return LEGAL
+            default: throw new IllegalArgumentException("O valor não é um CPF/CNPJ válido")
+        }
+    }
 }

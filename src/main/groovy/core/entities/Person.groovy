@@ -28,8 +28,20 @@ abstract class Person extends BaseEntity {
 
     static embedded = ['address']
 
-    static mapping = {
-        tablePerHierarchy false
+    static String cleanCpfCnpj(String cpfCnpj) {
+        if (cpfCnpj.length() == 14 || cpfCnpj.length() == 18)
+            return cpfCnpj.replaceAll("[^0-9]", "")
+        else
+            throw new IllegalArgumentException("O valor não é um CPF/CNPJ válido")
     }
 
+    static String formatCpfCnpj(String cpfCnpj) {
+        switch (cpfCnpj.length()) {
+            case 11:
+                return cpfCnpj.replaceAll(/(\d{3})(\d{3})(\d{3})(\d{2})/, "\$1.\$2.\$3-\$4")
+            case 14:
+                return cpfCnpj.replaceAll(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "\$1.\$2.\$3/\$4-\$5")
+            default: throw new IllegalArgumentException("O valor não é um CPF/CNPJ válido")
+        }
+    }
 }
