@@ -1,8 +1,7 @@
 package com.mini.asaas
 
-import core.dtos.CreateAddressDTO
-import core.dtos.CreateCustomerDTO
-import core.dtos.UpdateCustomerDTO
+import core.dtos.AddressDTO
+import core.dtos.CustomerDTO
 import core.exceptions.EntityNoDataChangedException
 import core.exceptions.EntityNotFoundException
 import core.exceptions.EntityWithSamePropertyAlreadyExistsException
@@ -16,7 +15,7 @@ class CustomerController {
 
     def save() {
         try {
-            Customer customer = customerService.save(new CreateCustomerDTO(params), new CreateAddressDTO(params))
+            Customer customer = customerService.save(new CustomerDTO(params), new AddressDTO(params))
             flash.message = "Cliente cadastrado com sucesso"
             flash.status = "success"
             flash.type = "customer"
@@ -28,13 +27,18 @@ class CustomerController {
             flash.status = "error"
             flash.type = "customer"
             render view: "create"
+        } catch (Exception e) {
+            flash.message = "Ocorreu um erro inesperado, aguarde um momento e tente novamente."
+            flash.status = "error"
+            flash.type = "customer"
+            render view: "create"
         }
     }
 
     def update() {
         try {
             Long id = params.id.toLong()
-            Customer customer = customerService.update(id, new UpdateCustomerDTO(params))
+            Customer customer = customerService.update(id, new CustomerDTO(params))
             flash.message = "Cliente atualizado com sucesso"
             flash.status = "success"
             flash.type = "customer"
@@ -51,13 +55,18 @@ class CustomerController {
             flash.status = "warning"
             flash.type = "customer"
             redirect(action: "show", id: params.id)
+        } catch (Exception e) {
+            flash.message = "Ocorreu um erro inesperado, aguarde um momento e tente novamente."
+            flash.status = "error"
+            flash.type = "customer"
+            redirect(action: "show", id: params.id)
         }
     }
 
     def updateAddress() {
         try {
             Long id = params.id.toLong()
-            Customer customer = customerService.updateAddress(id, new CreateAddressDTO(params))
+            Customer customer = customerService.updateAddress(id, new AddressDTO(params))
             flash.message = "Endereço atualizado com sucesso"
             flash.status = "success"
             flash.type = "address"
@@ -73,6 +82,11 @@ class CustomerController {
             flash.message = e.getMessage()
             flash.status = "error"
             flash.type = "address"
+            redirect(action: "show", id: params.id)
+        } catch (Exception e) {
+            flash.message = "Ocorreu um erro inesperado, aguarde um momento e tente novamente."
+            flash.status = "error"
+            flash.type = "customer"
             redirect(action: "show", id: params.id)
         }
     }

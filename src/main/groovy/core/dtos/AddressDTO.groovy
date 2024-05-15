@@ -1,8 +1,9 @@
 package core.dtos
 
 import core.enums.AddressState
+import core.valueobjects.Address
 
-class CreateAddressDTO {
+class AddressDTO {
 
     String street
 
@@ -18,7 +19,7 @@ class CreateAddressDTO {
 
     String complement
 
-    public CreateAddressDTO(Map params) {
+    public AddressDTO(Map params) {
         this.street = params.street
         this.neighborhood = params.neighborhood
         this.city = params.city
@@ -26,6 +27,18 @@ class CreateAddressDTO {
         this.zipCode = params.zipCode.toString().replace("-", "")
         this.complement = params.complement
         this.number = params.number ? params.number as Integer : null
+    }
+
+    public Address toAddress() {
+        return new Address(
+            street: this.street,
+            neighborhood: this.neighborhood,
+            city: this.city,
+            state: this.state,
+            zipCode: this.zipCode,
+            number: this.number,
+            complement: this.complement
+        )
     }
 
 }
