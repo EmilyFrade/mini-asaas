@@ -23,11 +23,11 @@ class AuthController {
     def doLogin() {
         try {
             User user = authService.login(new LoginDTO(params))
-            redirect controller: "user", action: "show", id: user.id
+            redirect(controller: "user", action: "show", id: user.id)
         } catch (DomainException e) {
             flash.message = e.message
             flash.status = "error"
-            redirect view: "login"
+            redirect(controller: "auth", action: "login")
         }
     }
 
