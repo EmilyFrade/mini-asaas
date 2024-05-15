@@ -7,7 +7,7 @@ class PayerController {
     PayerService payerService
 
     def index() {
-        def payerList = PayerService.listAll()
+        def payerList = PayerService.listNotDeleted()
         [payerList: payerList]
     }
 
@@ -43,6 +43,16 @@ class PayerController {
         }
 
         render "Pagador não encontrado"
+    }
+
+    def delete() {
+        try {
+            Payer payer = payerService.delete(params)
+            redirect(action: "index")
+        } catch (ValidationException e) {
+            String errosMessage = e.errors.allErrors.defaultMessage.join(", ")
+            render "Não foi possível remover o pagador, encontramos os seguintes erros: " + errosMessage
+        }
     }
 }
 
