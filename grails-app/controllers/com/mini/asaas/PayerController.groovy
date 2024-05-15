@@ -18,5 +18,15 @@ class PayerController {
             render "Não foi criar um pagador, encontramos os seguintes erros: " + errosMessage
         }
     }
+
+    def show() {
+        Payer payer = Payer.get(params.id)
+
+        if (payer) {
+            return [payer: payer]
+        }
+
+        render "Pagador não encontrado"
+    }
 }
 
