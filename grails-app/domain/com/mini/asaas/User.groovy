@@ -13,10 +13,15 @@ class User extends BaseEntity implements Serializable {
     private static final long serialVersionUID = 1
 
     String email
+
     String password
+
     boolean enabled = true
+
     boolean accountExpired = false
+
     boolean accountLocked = false
+
     boolean passwordExpired = false
 
     Set<Role> getAuthorities() {
