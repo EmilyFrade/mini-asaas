@@ -20,7 +20,18 @@ class PayerController {
             redirect(action: "show", id: payer.id)
         } catch (ValidationException e) {
             String errosMessage = e.errors.allErrors.defaultMessage.join(", ")
-            render "Não foi criar um pagador, encontramos os seguintes erros: " + errosMessage
+            render "Não foi possível criar um pagador, encontramos os seguintes erros: " + errosMessage
+        }
+    }
+
+    def update() {
+        try {
+            PayerDTO dto = new PayerDTO(params)
+            Payer payer = payerService.update(dto, params)
+            redirect(action: "show", id: payer.id)
+        } catch (ValidationException e) {
+            String errosMessage = e.errors.allErrors.defaultMessage.join(", ")
+            render "Não foi possível editar o pagador, encontramos os seguintes erros: " + errosMessage
         }
     }
 

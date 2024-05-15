@@ -14,8 +14,7 @@ class PayerDTO extends Person {
         this.address = new AddressDTO(params)
     }
 
-    public Payer toPayer(){
-        Payer payer = new Payer()
+    public Payer updatePayer(Payer payer){
         payer.name = this.name
         payer.email = this.email
         payer.cpfCnpj = this.cpfCnpj
@@ -25,4 +24,10 @@ class PayerDTO extends Person {
 
         return payer
     }
+
+    public Payer toPayer() {
+        Payer payer = new Payer()
+        return this.updatePayer(payer)
+    }
+
 }
