@@ -14,8 +14,15 @@
     </atlas-input>
 
     <atlas-button slot="actions" description="Editar" icon="pencil" data-panel-start-editing="true"></atlas-button>
-    <atlas-button slot="actions" description="Excluir" icon="trash" theme="danger"
-                  href="${createLink(controller: "payer", action: "delete", params: [id: payer.id])}"></atlas-button>
+
+    <g:if test="${ !payer.deleted }">
+        <atlas-button slot="actions" description="Excluir" icon="trash" theme="danger"
+                      href="${createLink(controller: "payer", action: "deleteRestore", params: [id: payer.id])}"></atlas-button>
+    </g:if>
+    <g:else>
+        <atlas-button slot="actions" description="Restaurar" icon="refresh" theme="danger"
+                      href="${createLink(controller: "payer", action: "deleteRestore", params: [id: payer.id])}"></atlas-button>
+    </g:else>
 
     <atlas-grid>
         <atlas-row>

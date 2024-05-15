@@ -1,26 +1,12 @@
 <html>
 <head>
-  <title>Listar pagadores</title>
+  <title>Pagadores deletados</title>
   <meta name="layout" content="main">
 </head>
-<body page-title="Lista de pagadores">
+
+<body page-title="Pagadores deletados">
 <atlas-panel>
   <g:if test="${ payerList }">
-    <atlas-toolbar>
-      <atlas-button
-              icon="plus"
-              description="Adicionar pagador"
-              href="${createLink(controller: "payer", action: "register")}"
-              slot="actions"
-      ></atlas-button>
-      <atlas-button
-              icon="refresh"
-              theme="danger"
-              description="Restaurar pagador"
-              href="${createLink(controller: "payer", action: "restore")}"
-              slot="actions"
-      ></atlas-button>
-    </atlas-toolbar>
     <atlas-table has-actions>
       <atlas-table-header slot="header">
         <atlas-table-col>
@@ -56,13 +42,11 @@
   <g:else>
     <atlas-empty-state
             illustration="schedule-user-avatar"
-            header="Sem pagadores cadastrados"
-    >
-      Aqui você pode cadastrar os pagadores que deseja utilizar em suas transações.
+            header="Sem pagadores deletados">
+            Aqui você pode vizualizar os pagadores que foram deletados.
       <atlas-button
-              icon="plus"
-              description="Adicionar pagador"
-              href="${createLink(controller: "payer", action: "register")}"
+              description="Lista de pagadores"
+              href="${createLink(controller: "payer", action: "index")}"
               slot="button"
       ></atlas-button>
     </atlas-empty-state>

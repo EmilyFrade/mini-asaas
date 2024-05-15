@@ -13,6 +13,11 @@ class PayerController {
 
     def register() {}
 
+    def restore() {
+        def payerList = PayerService.listDeleted()
+        [payerList: payerList]
+    }
+
     def save() {
         try {
             PayerDTO dto = new PayerDTO(params)
@@ -45,9 +50,9 @@ class PayerController {
         render "Pagador não encontrado"
     }
 
-    def delete() {
+    def deleteRestore() {
         try {
-            Payer payer = payerService.delete(params)
+            Payer payer = payerService.deleteRestore(params)
             redirect(action: "index")
         } catch (ValidationException e) {
             String errosMessage = e.errors.allErrors.defaultMessage.join(", ")

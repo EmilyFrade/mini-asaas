@@ -27,14 +27,14 @@ class PayerService {
         return payer.save(failOnError: true)
     }
 
-    public Payer delete(Map params) {
+    public Payer deleteRestore(Map params) {
         Payer payer = Payer.get(params.id as Serializable)
 
         if (!payer) {
             throw new EntityNotFoundException("Pagador não encontrado")
         }
 
-        payer.deleted = true
+        payer.deleted = !payer.deleted
         payer.markDirty()
 
         return payer.save(failOnError: true)
@@ -42,5 +42,9 @@ class PayerService {
 
     static List<Payer> listNotDeleted() {
         return Payer.findAllByDeleted(false)
+    }
+
+    static List<Payer> listDeleted() {
+        return Payer.findAllByDeleted(true)
     }
 }
