@@ -1,4 +1,13 @@
 ---
+security:
+    basic:
+        users:
+            user:
+                role: ${ROLE_USER}
+            admin:
+                role: ${ROLE_ADMIN}
+                email: ${ADMIN_EMAIL}
+                password: ${ADMIN_PASSWORD}
 grails:
     profile: web
     codegen:
