@@ -1,5 +1,7 @@
 package com.mini.asaas.shared.objects
 
+import com.mini.asaas.shared.enums.AddressState
+
 class Address {
 
     String street
@@ -12,7 +14,7 @@ class Address {
 
     String city
 
-    String state
+    AddressState state
 
     String zipCode
 
@@ -24,5 +26,10 @@ class Address {
         city blank: false
         state blank: false, matches: /[A-Z]{2}/
         zipCode blank: false, matches: /\d{8}/
+    }
+
+    static mappings = {
+        state enumType: AddressState, sqlType: "varchar(2)"
+        zipCode sqlType: "varchar(8)"
     }
 }
