@@ -1,6 +1,5 @@
 package com.mini.asaas
 
-import core.entities.BaseEntity
 import grails.gorm.DetachedCriteria
 import groovy.transform.ToString
 
@@ -9,7 +8,7 @@ import grails.compiler.GrailsCompileStatic
 
 @GrailsCompileStatic
 @ToString(cache=true, includeNames=true, includePackage=false)
-class UserRole extends BaseEntity implements Serializable {
+class UserRole implements Serializable {
 
 	private static final long serialVersionUID = 1
 
