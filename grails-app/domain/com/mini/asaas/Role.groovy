@@ -1,6 +1,5 @@
 package com.mini.asaas
 
-import core.entities.BaseEntity
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 import grails.compiler.GrailsCompileStatic
@@ -8,7 +7,7 @@ import grails.compiler.GrailsCompileStatic
 @GrailsCompileStatic
 @EqualsAndHashCode(includes='authority')
 @ToString(includes='authority', includeNames=true, includePackage=false)
-class Role extends BaseEntity implements Serializable {
+class Role implements Serializable {
 
 	private static final long serialVersionUID = 1
 
