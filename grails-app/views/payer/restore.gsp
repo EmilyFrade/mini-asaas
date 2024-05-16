@@ -27,13 +27,13 @@
               ${payer.email}
             </atlas-table-col>
 
-            <atlas-button-group slot="actions" group-all>
-              <atlas-icon-button
-                      icon="pencil"
-                      theme="primary"
-                      description="Editar pagador">
-              </atlas-icon-button>
-            </atlas-button-group>
+            <atlas-table-col>
+              <atlas-button-group>
+                <atlas-button icon="pencil" type="ghost" size="sm"></atlas-button>
+                <atlas-button icon="refresh" type="ghost" size="sm" theme="danger"
+                              href="${createLink(controller: "payer", action: "deleteRestore", params: [id: payer.id])}"></atlas-button>
+              </atlas-button-group>
+            </atlas-table-col>
           </atlas-table-row>
         </g:each>
       </atlas-table-body>
