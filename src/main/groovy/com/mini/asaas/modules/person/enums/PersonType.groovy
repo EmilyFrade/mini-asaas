@@ -1,4 +1,4 @@
-package com.mini.asaas.shared.enums
+package com.mini.asaas.modules.person.enums
 
 import grails.compiler.GrailsCompileStatic
 import grails.util.Holders
@@ -8,16 +8,14 @@ enum PersonType {
     NATURAL,
     LEGAL
 
-    String getLabel() {
-        Locale locale = new Locale("pt", "BR")
+    public String getLabel() {
         String messageCode = "personType.${this.name()}.label"
-        return Holders
-                .applicationContext
-                .getBean('messageSource')
-                .getMessage(messageCode, null, "", locale)
+        return Holders.applicationContext
+                .getBean("messageSource")
+                .getMessage(messageCode, null, "", Locale.getDefault())
     }
 
-    static PersonType fromString(String value) {
+    public static PersonType fromString(String value) {
         try {
             return valueOf(value.toUpperCase())
         } catch (Exception ignored) {
