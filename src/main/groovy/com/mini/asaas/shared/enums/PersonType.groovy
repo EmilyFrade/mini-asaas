@@ -1,6 +1,6 @@
 package com.mini.asaas.shared.enums
 
-import com.mini.asaas.shared.utils.CpfCnpjUtils
+import com.mini.asaas.utils.person.CpfCnpjUtils
 import grails.compiler.GrailsCompileStatic
 import grails.util.Holders
 
@@ -10,12 +10,10 @@ enum PersonType {
     LEGAL
 
     public String getLabel() {
-        Locale locale = new Locale("pt", "BR")
         String messageCode = "personType.${this.name()}.label"
-        return Holders
-                .applicationContext
+        return Holders.applicationContext
                 .getBean('messageSource')
-                .getMessage(messageCode, null, "", locale)
+                .getMessage(messageCode, null, "", Locale.getDefault())
     }
 
     public static PersonType fromString(String value) {
