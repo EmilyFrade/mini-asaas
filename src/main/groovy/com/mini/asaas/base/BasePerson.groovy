@@ -24,7 +24,7 @@ abstract class BasePerson extends BaseEntity {
 
     String city
 
-    String state
+    AddressState state
 
     String zipCode
 
@@ -40,7 +40,7 @@ abstract class BasePerson extends BaseEntity {
         neighborhood blank: false
         city blank: false
         state blank: false
-        zipCode blank: false, matches: /\d{8}/
+        zipCode blank: false
     }
 
 }
