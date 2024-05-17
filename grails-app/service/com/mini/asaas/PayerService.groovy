@@ -4,8 +4,6 @@ import core.dtos.PayerDTO
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 
-import javax.persistence.EntityNotFoundException
-
 @GrailsCompileStatic
 @Transactional
 class PayerService {
