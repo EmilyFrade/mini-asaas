@@ -1,4 +1,4 @@
-package com.mini.asaas.modules.person.enums
+package com.mini.asaas.enums.person
 
 import grails.compiler.GrailsCompileStatic
 import grails.util.Holders
