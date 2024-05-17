@@ -9,7 +9,7 @@ class PayerController {
     PayerService payerService
 
     def index() {
-        def payerList = PayerService.listAll()
+        def payerList = payerService.listAll()
         [payerList: payerList]
     }
 

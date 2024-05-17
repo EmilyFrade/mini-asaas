@@ -51,12 +51,13 @@
                 </atlas-input>
             </atlas-col>
             <atlas-col  lg="6">
-                <atlas-input
+                <atlas-masked-input
+                        mask-alias="cpf-cnpj"
                         label="CPF/CNPJ"
                         name="cpfCnpj"
-                        value="${Person.formatCpfCnpj(payer.cpfCnpj)}"
+                        value="${payer.cpfCnpj}"
                         required="true">
-                </atlas-input>
+                </atlas-masked-input>
             </atlas-col>
         </atlas-row>
 
