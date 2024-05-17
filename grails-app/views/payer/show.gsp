@@ -5,6 +5,9 @@
     <meta name="layout" content="main">
 </head>
 <body page-title="Detalhes do Pagador">
+<g:if test="${flash.message}">
+    <atlas-alert type="${flash.status}" message="${flash.message}"></atlas-alert>
+</g:if>
 <atlas-form-panel header="Detalhes do pagador" description="" submit-button-label=""
                   action="${createLink(controller: "payer", action: "update", params: [id: payer.id])}" method="post">
     <atlas-input

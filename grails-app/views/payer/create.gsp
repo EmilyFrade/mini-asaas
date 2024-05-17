@@ -11,6 +11,9 @@
     <atlas-page-header page-name="Cadastro de pagador" slot="header"></atlas-page-header>
 
     <atlas-page-content slot="content" class="js-atlas-content">
+      <g:if test="${flash.message}">
+        <atlas-alert type="${flash.status}" message="${flash.message}"></atlas-alert>
+      </g:if>
       <atlas-form class="form" method="POST" action="${createLink(controller: "payer", action: "save")}">
         <atlas-grid>
           <atlas-row>
@@ -23,6 +26,11 @@
                       value="${params.name}"
                       required >
               </atlas-input>
+              <g:hasErrors bean="${errors}" field="name">
+                <span class="form--error">
+                  <g:renderErrors bean="${errors}" field="name"/>
+                </span>
+              </g:hasErrors>
             </atlas-col>
             <atlas-col lg="6">
               <atlas-masked-input
@@ -35,6 +43,11 @@
                       value="${params.email}"
                       required >
               </atlas-masked-input>
+              <g:hasErrors bean="${errors}" field="email">
+                <span class="form--error">
+                  <g:renderErrors bean="${errors}" field="email"/>
+                </span>
+              </g:hasErrors>
             </atlas-col>
           </atlas-row>
 
@@ -49,6 +62,11 @@
                       value="${params.cpfCnpj}"
                       required >
               </atlas-masked-input>
+              <g:hasErrors bean="${errors}" field="cpfCnpj">
+                <span class="form--error">
+                  <g:renderErrors bean="${errors}" field="cpfCnpj"/>
+                </span>
+              </g:hasErrors>
             </atlas-col>
             <atlas-col lg="6">
               <atlas-masked-input
@@ -60,6 +78,11 @@
                       value="${params.phoneNumber}"
                       required >
               </atlas-masked-input>
+              <g:hasErrors bean="${errors}" field="phoneNumber">
+                <span class="form--error">
+                  <g:renderErrors bean="${errors}" field="phoneNumber"/>
+                </span>
+              </g:hasErrors>
             </atlas-col>
           </atlas-row>
 
