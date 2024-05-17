@@ -1,4 +1,4 @@
-package com.mini.asaas.shared.enums
+package com.mini.asaas.enums.address
 
 import grails.compiler.GrailsCompileStatic
 

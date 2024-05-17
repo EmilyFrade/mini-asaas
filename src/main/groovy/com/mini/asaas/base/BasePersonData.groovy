@@ -1,5 +1,6 @@
 package com.mini.asaas.base
 
+import com.mini.asaas.enums.address.AddressState
 import com.mini.asaas.enums.person.PersonType
 
 abstract class BasePersonData extends BaseEntity {
@@ -39,11 +40,13 @@ abstract class BasePersonData extends BaseEntity {
         complement nullable: true
         neighborhood blank: false
         city blank: false
-        state blank: false, matches: /[A-Z]{2}/
+        state blank: false
         zipCode blank: false, matches: /\d{8}/
     }
 
     static mapping = {
         tablePerHierarchy false
+        state enumType: AddressState, sqlType: "varchar(2)"
+        zipCode sqlType: "varchar(8)"
     }
 }
