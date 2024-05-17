@@ -1,10 +1,9 @@
-package com.mini.asaas.shared.enums
+package com.mini.asaas.enums
 
-import com.mini.asaas.utils.person.CpfCnpjUtils
+import com.mini.asaas.utils.CpfCnpjUtils
 import grails.compiler.GrailsCompileStatic
 import grails.util.Holders
 
-@GrailsCompileStatic
 enum PersonType {
     NATURAL,
     LEGAL
