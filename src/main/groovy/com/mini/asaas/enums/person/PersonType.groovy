@@ -1,4 +1,4 @@
-package com.mini.asaas.modules.person.enums
+package com.mini.asaas.enums.person
 
 import com.mini.asaas.shared.utils.CpfCnpjUtils
 import grails.compiler.GrailsCompileStatic
