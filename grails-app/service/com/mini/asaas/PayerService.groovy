@@ -9,25 +9,38 @@ import javax.persistence.EntityNotFoundException
 @GrailsCompileStatic
 @Transactional
 class PayerService {
+
     public Payer save(PayerDTO dto) {
-        Payer payer = dto.toPayer()
+        Payer payer = new Payer()
+
+        payer.name = dto.name
+        payer.email = dto.email
+        payer.cpfCnpj = dto.cpfCnpj
+        payer.phoneNumber = dto.phoneNumber
+        payer.personType = dto.personType
+        payer.address = dto.address
         return payer.save(failOnError: true)
     }
 
     public Payer update(PayerDTO dto, Map params) {
-        Payer payer = Payer.get(params.id as Serializable)
+        Payer payer = Payer.get(params.id as Long)
 
         if (!payer) {
-            throw new EntityNotFoundException("Pagador não encontrado")
+            throw new RuntimeException("Pagador não encontrado")
         }
 
-        payer = dto.updatePayer(payer)
+        payer.name = dto.name
+        payer.email = dto.email
+        payer.cpfCnpj = dto.cpfCnpj
+        payer.phoneNumber = dto.phoneNumber
+        payer.personType = dto.personType
+        payer.address = dto.address
         payer.markDirty()
 
         return payer.save(failOnError: true)
     }
 
-    static List<Payer> listAll() {
+    public List<Payer> listAll() {
         return Payer.list()
     }
 }

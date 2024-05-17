@@ -13,21 +13,4 @@ class PayerDTO extends Person {
         this.personType = PersonType.fromCpfCnpj(this.cpfCnpj)
         this.address = new AddressDTO(params)
     }
-
-    public Payer updatePayer(Payer payer){
-        payer.name = this.name
-        payer.email = this.email
-        payer.cpfCnpj = this.cpfCnpj
-        payer.phoneNumber = this.phoneNumber
-        payer.personType = this.personType
-        payer.address = this.address
-
-        return payer
-    }
-
-    public Payer toPayer() {
-        Payer payer = new Payer()
-        return this.updatePayer(payer)
-    }
-
 }
