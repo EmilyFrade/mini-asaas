@@ -19,7 +19,7 @@ abstract class BasePersonData extends BaseEntity {
 
     static constraints = {
         name blank: false
-        email blank: false, email: true, unique: true
+        email blank: false, email: true
         cpfCnpj blank: false, size: 11..14
         phoneNumber blank: false
         personType blank: false
@@ -30,5 +30,7 @@ abstract class BasePersonData extends BaseEntity {
 
     static mapping = {
         tablePerHierarchy false
+        email unique: true
+        cpfCnpj unique: true
     }
 }
