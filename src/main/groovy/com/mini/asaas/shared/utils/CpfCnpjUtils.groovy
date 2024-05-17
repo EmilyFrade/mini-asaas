@@ -1,6 +1,14 @@
 package com.mini.asaas.shared.utils
 
+import grails.compiler.GrailsCompileStatic
+
+@GrailsCompileStatic
 class CpfCnpjUtils {
+
+    private static final int[] CPF_WEIGHTS_FIRST_CHECK = [10, 9, 8, 7, 6, 5, 4, 3, 2]
+    private static final int[] CPF_WEIGHTS_SECOND_CHECK = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2]
+    private static final int[] CNPJ_WEIGHTS_FIRST_CHECK = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
+    private static final int[] CNPJ_WEIGHTS_SECOND_CHECK = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
 
     private CpfCnpjUtils() {
         throw new IllegalStateException("Classe utilitária não deve ser instanciada.")
@@ -45,27 +53,38 @@ class CpfCnpjUtils {
     }
 
     private static List<Integer> getDigits(String cpfCnpj) {
-        return cpfCnpj.collect { it.toInteger() }
+        if (cpfCnpj == null) return []
+        return cpfCnpj.collect { String digit -> digit.toInteger() }
     }
 
-    private static int calculateDigit(List<Integer> numbers, int length) {
+    private static int calculateDigit(List<Integer> numbers, int length, int[] weights) {
         int sum = 0
 
         for (int i = 0; i < length; i++) {
-            sum += numbers[i] * (length + 1 - i)
+            sum += numbers[i] * weights[weights.length - length + i]
         }
 
-        int expectedDigit = (sum * 10) % 11
-        return expectedDigit == 10 ? 0 : expectedDigit
+        int expectedDigit = 11 - (sum % 11)
+        return expectedDigit >= 10 ? 0 : expectedDigit
     }
 
     private static boolean isValidDigits(String cpfCnpj) {
         List<Integer> numbers = getDigits(cpfCnpj)
 
-        int secondCheckDigitIndex = cpfCnpj.length() - 1
-        int firstCheckDigitIndex = secondCheckDigitIndex - 1
+        int length = cpfCnpj.length()
+        int firstCheckDigitIndex = length - 2
+        int secondCheckDigitIndex = length - 1
 
-        if (numbers[firstCheckDigitIndex] != calculateDigit(numbers, firstCheckDigitIndex)) return false
-        return numbers[secondCheckDigitIndex] == calculateDigit(numbers, secondCheckDigitIndex)
+        if (length == 11) {
+            if (numbers[firstCheckDigitIndex] != calculateDigit(numbers, firstCheckDigitIndex, CPF_WEIGHTS_FIRST_CHECK)) return false
+            return numbers[secondCheckDigitIndex] == calculateDigit(numbers, secondCheckDigitIndex, CPF_WEIGHTS_SECOND_CHECK)
+        }
+
+        if (length == 14) {
+            if (numbers[firstCheckDigitIndex] != calculateDigit(numbers, firstCheckDigitIndex, CNPJ_WEIGHTS_FIRST_CHECK)) return false
+            return numbers[secondCheckDigitIndex] == calculateDigit(numbers, secondCheckDigitIndex, CNPJ_WEIGHTS_SECOND_CHECK)
+        }
+
+        return false
     }
 }
