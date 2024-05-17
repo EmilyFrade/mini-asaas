@@ -1,7 +1,6 @@
 package com.mini.asaas.base
 
-import com.mini.asaas.shared.enums.PersonType
-import com.mini.asaas.shared.objects.Address
+import com.mini.asaas.modules.person.enums.PersonType
 
 abstract class BasePersonData extends BaseEntity {
 
@@ -15,7 +14,19 @@ abstract class BasePersonData extends BaseEntity {
 
     PersonType personType
 
-    Address address
+    String address
+
+    String addressNumber
+
+    String complement
+
+    String neighborhood
+
+    String city
+
+    String state
+
+    String zipCode
 
     static constraints = {
         name blank: false
@@ -23,10 +34,14 @@ abstract class BasePersonData extends BaseEntity {
         cpfCnpj blank: false, size: 11..14
         phoneNumber blank: false
         personType blank: false
-        address nullable: false
+        address blank: false
+        addressNumber defaultValue: "S/N"
+        complement nullable: true
+        neighborhood blank: false
+        city blank: false
+        state blank: false, matches: /[A-Z]{2}/
+        zipCode blank: false, matches: /\d{8}/
     }
-
-    static embedded = ["address"]
 
     static mapping = {
         tablePerHierarchy false
