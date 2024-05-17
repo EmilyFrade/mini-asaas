@@ -18,7 +18,7 @@ enum PersonType {
     public static PersonType fromString(String value) {
         try {
             return valueOf(value.toUpperCase())
-        } catch (Exception ignored) {
+        } catch (Exception exception) {
             throw new RuntimeException("'${value}' não é um tipo de pessoa válido.")
         }
     }
