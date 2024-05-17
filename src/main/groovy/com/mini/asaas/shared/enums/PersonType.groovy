@@ -1,5 +1,6 @@
 package com.mini.asaas.shared.enums
 
+import com.mini.asaas.shared.utils.CpfCnpjUtils
 import grails.compiler.GrailsCompileStatic
 import grails.util.Holders
 
@@ -8,7 +9,7 @@ enum PersonType {
     NATURAL,
     LEGAL
 
-    String getLabel() {
+    public String getLabel() {
         Locale locale = new Locale("pt", "BR")
         String messageCode = "personType.${this.name()}.label"
         return Holders
@@ -17,11 +18,17 @@ enum PersonType {
                 .getMessage(messageCode, null, "", locale)
     }
 
-    static PersonType fromString(String value) {
+    public static PersonType fromString(String value) {
         try {
             return valueOf(value.toUpperCase())
         } catch (Exception ignored) {
             throw new IllegalArgumentException("'${value}' não é um tipo de pessoa válido.")
         }
+    }
+
+    public static PersonType fromCpfCnpj(String cpfCnpj) {
+        if (CpfCnpjUtils.isValidCPF(cpfCnpj)) return NATURAL
+        if (CpfCnpjUtils.isValidCNPJ(cpfCnpj)) return LEGAL
+        throw new IllegalArgumentException("O valor não é um CPF/CNPJ válido")
     }
 }
