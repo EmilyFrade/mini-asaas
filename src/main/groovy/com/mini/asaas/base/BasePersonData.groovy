@@ -25,7 +25,7 @@ abstract class BasePersonData extends BaseEntity {
 
     String city
 
-    String state
+    AddressState state
 
     String zipCode
 
@@ -41,12 +41,10 @@ abstract class BasePersonData extends BaseEntity {
         neighborhood blank: false
         city blank: false
         state blank: false
-        zipCode blank: false, matches: /\d{8}/
+        zipCode blank: false
     }
 
     static mapping = {
         tablePerHierarchy false
-        state enumType: AddressState, sqlType: "varchar(2)"
-        zipCode sqlType: "varchar(8)"
     }
 }
