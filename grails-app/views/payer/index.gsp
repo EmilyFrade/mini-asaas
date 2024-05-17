@@ -10,7 +10,7 @@
       <atlas-button
               icon="plus"
               description="Adicionar pagador"
-              href="${createLink(controller: "payer", action: "register")}"
+              href="${createLink(controller: "payer", action: "create")}"
               slot="actions"
       ></atlas-button>
     </atlas-toolbar>
@@ -55,7 +55,7 @@
       <atlas-button
               icon="plus"
               description="Adicionar pagador"
-              href="${createLink(controller: "payer", action: "register")}"
+              href="${createLink(controller: "payer", action: "create")}"
               slot="button"
       ></atlas-button>
     </atlas-empty-state>

@@ -3,6 +3,7 @@ package com.mini.asaas
 import core.dtos.PayerDTO
 import grails.validation.ValidationException
 
+
 class PayerController {
     PayerService payerService
 
@@ -11,7 +12,7 @@ class PayerController {
         [payerList: payerList]
     }
 
-    def register() {}
+    def create() {}
 
     def save() {
         try {
