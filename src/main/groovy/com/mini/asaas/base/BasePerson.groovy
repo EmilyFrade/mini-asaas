@@ -39,7 +39,7 @@ abstract class BasePerson extends BaseEntity {
         complement nullable: true
         neighborhood blank: false
         city blank: false
-        state blank: false, matches: /[A-Z]{2}/
+        state blank: false
         zipCode blank: false, matches: /\d{8}/
     }
 

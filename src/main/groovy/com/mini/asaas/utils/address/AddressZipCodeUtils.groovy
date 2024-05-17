@@ -1,4 +1,4 @@
-package com.mini.asaas.shared.utils
+package com.mini.asaas.utils.address
 
 class AddressZipCodeUtils {
 
