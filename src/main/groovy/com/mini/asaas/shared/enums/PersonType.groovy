@@ -22,7 +22,7 @@ enum PersonType {
         try {
             return valueOf(value.toUpperCase())
         } catch (Exception ignored) {
-            throw new IllegalArgumentException("'${value}' não é um tipo de pessoa válido.")
+            throw new RuntimeException("'${value}' não é um tipo de pessoa válido.")
         }
     }
 
