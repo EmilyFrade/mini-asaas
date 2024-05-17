@@ -1,4 +1,4 @@
-package com.mini.asaas.shared.utils
+package com.mini.asaas.utils.person
 
 import grails.compiler.GrailsCompileStatic
 
