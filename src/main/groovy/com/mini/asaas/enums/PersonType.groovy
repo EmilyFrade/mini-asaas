@@ -30,7 +30,7 @@ enum PersonType {
         }
     }
 
-    public static PersonType fromCpfCnpj(String cpfCnpj) {
+    public static PersonType parseFromCpfCnpj(String cpfCnpj) {
         if (CpfCnpjUtils.isCPF(cpfCnpj)) return NATURAL
         if (CpfCnpjUtils.isCNPJ(cpfCnpj)) return LEGAL
         throw new IllegalArgumentException("O valor informado não é um CPF nem um CNPJ.")
