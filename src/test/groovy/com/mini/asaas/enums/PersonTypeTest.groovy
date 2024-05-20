@@ -38,7 +38,7 @@ class PersonTypeTest extends Specification {
 
     void "it should return correct PersonType according to CPF or CNPJ values"() {
         expect:
-            PersonType.fromCpfCnpj(input) == expected
+            PersonType.parseFromCpfCnpj(input) == expected
 
         where:
             input                   | expected
@@ -50,7 +50,7 @@ class PersonTypeTest extends Specification {
 
     void "it should throw an exception when trying to get the PersonType with a value that is neither CPF nor CNPJ"() {
         when:
-            PersonType.fromCpfCnpj("INVALID")
+            PersonType.parseFromCpfCnpj("INVALID")
         then:
             thrown(IllegalArgumentException)
     }
