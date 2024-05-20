@@ -5,8 +5,8 @@ import grails.compiler.GrailsCompileStatic
 @GrailsCompileStatic
 class CpfCnpjUtils {
 
-    public static final int CPF_LENGTH = 11
-    public static final int CNPJ_LENGTH = 14
+    public static final Integer CPF_LENGTH = 11
+    public static final Integer CNPJ_LENGTH = 14
 
     public static Boolean isCPF(String cpfCnpj) {
         String cleanedCpfCnpj = StringUtils.removeNonNumeric(cpfCnpj)
@@ -64,33 +64,33 @@ class CpfCnpjUtils {
 
     private static Integer[] getIndexOfCheckDigits(String cpfCnpj) {
         if (cpfCnpj == null) return new Integer[2]
-        int length = cpfCnpj.length()
+        Integer length = cpfCnpj.length()
         return [length -2, length - 1] as Integer[]
     }
 
-    private static int calculateCheckDigitFromCPF(List<Integer> digits, int checkDigitIndex) {
-        int sum = 0
-        int weight = checkDigitIndex + 1
+    private static Integer calculateCheckDigitFromCPF(List<Integer> digits, Integer checkDigitIndex) {
+        Integer sum = 0
+        Integer weight = checkDigitIndex + 1
 
-        for (int i = 0; i < checkDigitIndex; i++) {
+        for (Integer i = 0; i < checkDigitIndex; i++) {
             sum += digits[i] * (weight - i)
         }
 
-        int expectedDigit = 11 - (sum % 11)
+        Integer expectedDigit = 11 - (sum % 11)
         return expectedDigit >= 10 ? 0 : expectedDigit
     }
 
-    private static int calculateCheckDigitFromCNPJ(List<Integer> digits, int checkDigitIndex) {
-        int sum = 0
-        int weight = checkDigitIndex - 7
+    private static Integer calculateCheckDigitFromCNPJ(List<Integer> digits, Integer checkDigitIndex) {
+        Integer sum = 0
+        Integer weight = checkDigitIndex - 7
 
-        for (int i = 0; i < checkDigitIndex; i++) {
+        for (Integer i = 0; i < checkDigitIndex; i++) {
             sum += digits[i] * weight
             weight = weight == 2 ? 9 : weight - 1
 
         }
 
-        int expectedDigit = 11 - (sum % 11)
+        Integer expectedDigit = 11 - (sum % 11)
         return expectedDigit >= 10 ? 0 : expectedDigit
     }
 
