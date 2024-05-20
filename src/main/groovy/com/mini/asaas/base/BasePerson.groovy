@@ -1,5 +1,6 @@
 package com.mini.asaas.base
 
+import com.mini.asaas.enums.address.AddressState
 import com.mini.asaas.enums.person.PersonType
 
 abstract class BasePerson extends BaseEntity {
@@ -20,11 +21,11 @@ abstract class BasePerson extends BaseEntity {
 
     String complement
 
-    String neighborhood
+    String province
 
     String city
 
-    String state
+    AddressState state
 
     String zipCode
 
@@ -37,10 +38,10 @@ abstract class BasePerson extends BaseEntity {
         address blank: false
         addressNumber defaultValue: "S/N"
         complement nullable: true
-        neighborhood blank: false
+        province blank: false
         city blank: false
-        state blank: false, matches: /[A-Z]{2}/
-        zipCode blank: false, matches: /\d{8}/
+        state blank: false
+        zipCode blank: false
     }
 
 }
