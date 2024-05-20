@@ -7,6 +7,14 @@ enum PersonType {
     NATURAL,
     LEGAL
 
+    public Boolean isNatural() {
+        return this == NATURAL
+    }
+
+    public Boolean isLegal() {
+        return this == LEGAL
+    }
+
     public String getLabel() {
         String code = "personType.${this.name().toLowerCase()}.label"
         Locale locale = Locale.getDefault()
