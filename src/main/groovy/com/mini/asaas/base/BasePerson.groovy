@@ -3,7 +3,7 @@ package com.mini.asaas.base
 import com.mini.asaas.enums.address.AddressState
 import com.mini.asaas.enums.person.PersonType
 
-abstract class BasePersonData extends BaseEntity {
+abstract class BasePerson extends BaseEntity {
 
     String name
 
@@ -44,7 +44,4 @@ abstract class BasePersonData extends BaseEntity {
         zipCode blank: false
     }
 
-    static mapping = {
-        tablePerHierarchy false
-    }
 }

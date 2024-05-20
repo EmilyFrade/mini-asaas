@@ -1,12 +1,10 @@
 package com.mini.asaas.base
 
-import java.time.LocalDateTime
-
 abstract class BaseEntity {
 
-    LocalDateTime dateCreated
+    Date dateCreated
 
-    LocalDateTime lastUpdated
+    Date lastUpdated
 
     Boolean deleted = false
 
