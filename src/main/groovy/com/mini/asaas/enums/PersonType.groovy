@@ -1,7 +1,6 @@
 package com.mini.asaas.enums
 
 import com.mini.asaas.utils.CpfCnpjUtils
-import grails.compiler.GrailsCompileStatic
 import grails.util.Holders
 
 enum PersonType {
@@ -9,10 +8,10 @@ enum PersonType {
     LEGAL
 
     public String getLabel() {
-        String messageCode = "personType.${this.name()}.label"
-        return Holders.applicationContext
-                .getBean('messageSource')
-                .getMessage(messageCode, null, "", Locale.getDefault())
+        String code = "personType.${this.name().toLowerCase()}.label"
+        Locale locale = Locale.getDefault()
+        Object bean = Holders.applicationContext.getBean("messageSource")
+        return bean.getMessage(code, null, "", locale)
     }
 
     public static PersonType fromString(String value) {
@@ -24,8 +23,8 @@ enum PersonType {
     }
 
     public static PersonType fromCpfCnpj(String cpfCnpj) {
-        if (CpfCnpjUtils.isValidCPF(cpfCnpj)) return NATURAL
-        if (CpfCnpjUtils.isValidCNPJ(cpfCnpj)) return LEGAL
-        throw new IllegalArgumentException("O valor não é um CPF/CNPJ válido")
+        if (CpfCnpjUtils.isCPF(cpfCnpj)) return NATURAL
+        if (CpfCnpjUtils.isCNPJ(cpfCnpj)) return LEGAL
+        throw new IllegalArgumentException("O valor informado não é um CPF nem um CNPJ.")
     }
 }
