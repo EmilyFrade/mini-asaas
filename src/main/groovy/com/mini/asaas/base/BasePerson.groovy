@@ -1,6 +1,7 @@
 package com.mini.asaas.base
 
 import com.mini.asaas.enums.PersonType
+import com.mini.asaas.enums.address.AddressState
 
 abstract class BasePerson extends BaseEntity {
 
@@ -20,27 +21,32 @@ abstract class BasePerson extends BaseEntity {
 
     String complement
 
-    String neighborhood
+    String province
 
     String city
 
-    String state
+    AddressState state
 
     String zipCode
 
     static constraints = {
         name blank: false
-        email blank: false, email: true, unique: true
+        email blank: false, email: true
         cpfCnpj blank: false, size: 11..14
         phoneNumber blank: false
         personType blank: false
         address blank: false
         addressNumber defaultValue: "S/N"
         complement nullable: true
-        neighborhood blank: false
+        province blank: false
         city blank: false
-        state blank: false, matches: /[A-Z]{2}/
-        zipCode blank: false, matches: /\d{8}/
+        state blank: false
+        zipCode blank: false
+    }
+
+    static mappings = {
+        email unique: true
+        cpfCnpj unique: true
     }
 
 }
