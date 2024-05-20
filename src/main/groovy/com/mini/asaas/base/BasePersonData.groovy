@@ -21,7 +21,7 @@ abstract class BasePersonData extends BaseEntity {
 
     String complement
 
-    String neighborhood
+    String province
 
     String city
 
@@ -38,7 +38,7 @@ abstract class BasePersonData extends BaseEntity {
         address blank: false
         addressNumber defaultValue: "S/N"
         complement nullable: true
-        neighborhood blank: false
+        province blank: false
         city blank: false
         state blank: false
         zipCode blank: false
