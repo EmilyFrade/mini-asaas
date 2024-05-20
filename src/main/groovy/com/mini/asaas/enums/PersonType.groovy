@@ -16,7 +16,7 @@ enum PersonType {
     }
 
     public String getLabel() {
-        String code = "personType.${this.name().toLowerCase()}.label"
+        String code = "personType.${this.name()}.label"
         Locale locale = Locale.getDefault()
         Object bean = Holders.applicationContext.getBean("messageSource")
         return bean.getMessage(code, null, "", locale)
