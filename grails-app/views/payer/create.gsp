@@ -1,4 +1,4 @@
-<%@ page import="core.enums.AddressState" %>
+<%@ page import="com.mini.asaas.enums.address.AddressState" %>
 <!doctype html>
 <html>
 <head>
@@ -102,9 +102,9 @@
                       class="postal-code-element"
                       label="Logradouro"
                       type="text"
-                      name="street"
-                      id="street"
-                      value="${params.street}"
+                      name="address"
+                      id="address"
+                      value="${params.address}"
                       required >
               </atlas-input>
             </atlas-col>
@@ -113,12 +113,12 @@
                       class="postal-code-element"
                       label="Nº"
                       type="text"
-                      name="number"
-                      id="number"
+                      name="addressNumber"
+                      id="addressNumber"
                       min-value="1"
                       min-value-error-message="O valor deve ser positivo"
                       placeholder="S/N"
-                      value="${params.number}" 
+                      value="${params.addressNumber}"
                       required>
               </atlas-integer-input>
             </atlas-col>
@@ -139,9 +139,9 @@
                       class="postal-code-element"
                       label="Bairro"
                       type="text"
-                      name="neighborhood"
-                      id="neighborhood"
-                      value="${params.neighborhood}"
+                      name="province"
+                      id="province"
+                      value="${params.province}"
                       required >
               </atlas-input>
             </atlas-col>

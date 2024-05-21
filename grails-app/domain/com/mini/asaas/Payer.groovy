@@ -1,5 +1,5 @@
 package com.mini.asaas
 
-import core.entities.Person
+import com.mini.asaas.base.BasePerson
 
-class Payer extends Person {}
+class Payer extends BasePerson {}

@@ -1,4 +1,3 @@
-<%@ page import="core.entities.Person; core.valueobjects.Address" %>
 <html>
 <head>
     <title>Detalhes do Pagador</title>
@@ -71,12 +70,13 @@
                 </atlas-input>
             </atlas-col>
             <atlas-col lg="6">
-                <atlas-input
+                <atlas-postal-code
                         label="CEP"
                         name="zipCode"
-                        value="${Address.formatZipCode(payer.address.zipCode)}"
-                        required="true">
-                </atlas-input>
+                        value="${payer.zipCode}"
+                        required="true"
+                        mask="{}">
+                </atlas-postal-code>
             </atlas-col>
         </atlas-row>
 
@@ -84,16 +84,16 @@
             <atlas-col lg="4">
                 <atlas-input
                         label="Rua"
-                        name="street"
-                        value="${payer.address.street}"
+                        name="address"
+                        value="${payer.address}"
                         required="true">
                 </atlas-input>
             </atlas-col>
             <atlas-col lg="4">
                 <atlas-input
                         label="Número"
-                        name="number"
-                        value="${payer.address.number}"
+                        name="addressNumber"
+                        value="${payer.addressNumber}"
                         required="true">
                 </atlas-input>
             </atlas-col>
@@ -101,7 +101,7 @@
                 <atlas-input
                         label="Complemento"
                         name="complement"
-                        value="${payer.address.complement}">
+                        value="${payer.complement}">
                 </atlas-input>
             </atlas-col>
         </atlas-row>
@@ -110,8 +110,8 @@
             <atlas-col lg="4">
                 <atlas-input
                         label="Bairro"
-                        name="neighborhood"
-                        value="${payer.address.neighborhood}"
+                        name="province"
+                        value="${payer.province}"
                         required="true">
                 </atlas-input>
             </atlas-col>
@@ -119,7 +119,7 @@
                 <atlas-input
                         label="Cidade"
                         name="city"
-                        value="${payer.address.city}"
+                        value="${payer.city}"
                         required="true">
                 </atlas-input>
             </atlas-col>
@@ -127,7 +127,7 @@
                 <atlas-input
                         label="Estado (UF)"
                         name="state"
-                        value="${payer.address.state}"
+                        value="${payer.state}"
                         required="true">
                 </atlas-input>
             </atlas-col>
