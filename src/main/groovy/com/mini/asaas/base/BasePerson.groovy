@@ -36,7 +36,7 @@ abstract class BasePerson extends BaseEntity {
         phoneNumber blank: false
         personType blank: false
         address blank: false
-        addressNumber defaultValue: "S/N"
+        addressNumber blank: false
         complement nullable: true
         province blank: false
         city blank: false
