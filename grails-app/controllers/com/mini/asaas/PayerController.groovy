@@ -1,9 +1,6 @@
 package com.mini.asaas
 
-import core.dtos.PayerDTO
-import core.enums.AlertType
-import grails.validation.ValidationException
-
+import com.mini.asaas.enums.AlertType
 
 class PayerController {
     PayerService payerService
@@ -17,8 +14,7 @@ class PayerController {
 
     def save() {
         try {
-            PayerDTO dto = new PayerDTO(params)
-            Payer payer = payerService.save(dto)
+            Payer payer = payerService.save(params)
             flash.message = "Pagador cadastrado com sucesso"
             flash.status = AlertType.SUCCESS.getValue()
             redirect(action: "show", id: payer.id)
@@ -31,8 +27,7 @@ class PayerController {
 
     def update() {
         try {
-            PayerDTO dto = new PayerDTO(params)
-            Payer payer = payerService.update(dto, params)
+            Payer payer = payerService.update(params)
             flash.message = "Pagador atualizado com sucesso"
             flash.status = AlertType.SUCCESS.getValue()
             redirect(action: "show", id: payer.id)
