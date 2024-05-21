@@ -18,4 +18,20 @@ class StringUtilsTest extends Specification {
         null                  | null
     }
 
+    void "it should convert pascal case to camel case"() {
+        expect:
+        StringUtils.pascalToCamelCase(input) == expected
+
+        where:
+        input                 | expected
+        "PascalCase"          | "pascalCase"
+        "PascalCaseTest"      | "pascalCaseTest"
+        "Pascal"              | "pascal"
+        "camelCase"           | "camelCase"
+        "Kebab-case"          | "kebab-case"
+        "Snake_case"          | "snake_case"
+        ""                    | ""
+        null                  | null
+    }
+
 }

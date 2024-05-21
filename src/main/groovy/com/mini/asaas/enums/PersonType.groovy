@@ -1,7 +1,7 @@
 package com.mini.asaas.enums
 
 import com.mini.asaas.utils.CpfCnpjUtils
-import grails.util.Holders
+import com.mini.asaas.utils.MessageSourceUtils
 
 enum PersonType {
     NATURAL,
@@ -16,10 +16,7 @@ enum PersonType {
     }
 
     public String getLabel() {
-        String code = "personType.${this.name()}.label"
-        Locale locale = Locale.getDefault()
-        Object bean = Holders.applicationContext.getBean("messageSource")
-        return bean.getMessage(code, null, "", locale)
+        return MessageSourceUtils.getEnumLabel(this)
     }
 
     public static PersonType fromString(String value) {
