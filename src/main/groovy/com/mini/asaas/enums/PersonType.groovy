@@ -23,13 +23,13 @@ enum PersonType {
         try {
             return valueOf(value.toUpperCase())
         } catch (Exception ignored) {
-            throw new IllegalArgumentException("'${value}' não é um tipo de pessoa válido.")
+            return null
         }
     }
 
     public static PersonType parseFromCpfCnpj(String cpfCnpj) {
         if (CpfCnpjUtils.isCPF(cpfCnpj)) return NATURAL
         if (CpfCnpjUtils.isCNPJ(cpfCnpj)) return LEGAL
-        throw new IllegalArgumentException("O valor informado não é um CPF nem um CNPJ.")
+        return null
     }
 }
