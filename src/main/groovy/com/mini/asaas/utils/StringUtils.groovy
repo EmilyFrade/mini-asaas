@@ -15,4 +15,10 @@ class StringUtils {
         return value.substring(0, 1).toLowerCase() + value.substring(1)
     }
 
+    public static String ensureStringAndTrim(Object value) {
+        if (!value || !(value instanceof String)) return null
+        String trimmedValue = (value as String).trim()
+        return trimmedValue.isEmpty() ? null : trimmedValue
+    }
+
 }

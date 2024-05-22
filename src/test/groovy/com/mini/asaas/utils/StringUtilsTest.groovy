@@ -34,4 +34,21 @@ class StringUtilsTest extends Specification {
         null                  | null
     }
 
+    void "it should trim a value if it is a string"() {
+        expect:
+        StringUtils.ensureStringAndTrim(input) == expected
+
+        where:
+        input                 | expected
+        "  test  "            | "test"
+        "  test"              | "test"
+        "test  "              | "test"
+        "test"                | "test"
+        "  "                  | ""
+        ""                    | ""
+        null                  | null
+        123                   | null
+        []                    | null
+    }
+
 }
