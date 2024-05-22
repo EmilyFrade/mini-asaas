@@ -5,22 +5,22 @@ import org.springframework.validation.ObjectError
 
 class DomainErrorUtils {
 
-    public static Object addError(GormEntity entity, String message) {
+    public static GormEntity addError(GormEntity entity, String message) {
         entity.errors.reject("", null, message)
         return entity
     }
 
-    public static Object addError(GormEntity entity, String code, String message) {
+    public static GormEntity addError(GormEntity entity, String code, String message) {
         entity.errors.reject(code, null, message)
         return entity
     }
 
-    public static Object addFieldError(GormEntity entity, String field, String code, Object[] args) {
+    public static GormEntity addFieldError(GormEntity entity, String field, String code, Object[] args) {
         entity.errors.rejectValue(field, code, args, "")
         return entity
     }
 
-    public static Object addFieldError(GormEntity entity, String field, String code) {
+    public static GormEntity addFieldError(GormEntity entity, String field, String code) {
         entity.errors.rejectValue(field, code)
         return entity
     }
