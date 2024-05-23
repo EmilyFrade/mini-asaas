@@ -15,7 +15,7 @@ class StringUtils {
         return value.substring(0, 1).toLowerCase() + value.substring(1)
     }
 
-    public static Map<String, String> normalizeParams(Map params) {
+    public static Map<String, String> parseParams(Map params) {
 
         if (params == null) return [:]
 
