@@ -1,17 +1,13 @@
 package com.mini.asaas.base
 
-import com.mini.asaas.utils.StringUtils
+import com.mini.asaas.validation.BusinessValidation
 
 abstract class BaseValidator {
 
-    final String prefix
+    private BusinessValidation validationResult
 
     public BaseValidator() {
-        this.prefix = StringUtils.pascalToCamelCase(this.getClass().simpleName)
-    }
-
-    protected getErrorCode(String code) {
-        return "${prefix}.${code}.message"
+        this.validationResult = new BusinessValidation()
     }
 
 }
