@@ -44,8 +44,8 @@ class PayerAdapter {
         this.complement = params.complement
         this.province = params.province
         this.city = params.city
-        this.state = params.state as AddressState
-        this.zipCode = StringUtils.removeNonNumeric(params.zipCode as String) ?: null
+        this.state = AddressState.parseFromUFString(params.state)
+        this.zipCode = StringUtils.removeNonNumeric(params.zipCode) ?: null
     }
 
 }
