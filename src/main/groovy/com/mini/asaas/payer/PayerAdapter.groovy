@@ -3,6 +3,7 @@ package com.mini.asaas.payer
 import com.mini.asaas.enums.PersonType
 import com.mini.asaas.enums.address.AddressState
 import com.mini.asaas.utils.StringUtils
+import com.mini.asaas.utils.Utils
 
 class PayerAdapter {
 
@@ -30,18 +31,21 @@ class PayerAdapter {
 
     String zipCode
 
-    public PayerAdapter(Map params) {
+    public PayerAdapter(Map originalParams) {
+        Map<String, String> params = Utils.normalizeParams(originalParams)
+        if (!params) return
         this.name = params.name
         this.email = params.email
-        this.cpfCnpj = StringUtils.removeNonNumeric(params.cpfCnpj as String)
-        this.phoneNumber = params.phoneNumber
+        this.cpfCnpj = StringUtils.removeNonNumeric(params.cpfCnpj as String) ?: null
+        this.phoneNumber = StringUtils.removeNonNumeric(params.phoneNumber) ?: null
         this.personType = PersonType.parseFromCpfCnpj(this.cpfCnpj)
         this.address = params.address
-        this.addressNumber = params.addressNumber
+        this.addressNumber = StringUtils.removeNonNumeric(params.addressNumber) ?: "S/N"
         this.complement = params.complement
         this.province = params.province
         this.city = params.city
         this.state = params.state as AddressState
-        this.zipCode = StringUtils.removeNonNumeric(params.zipCode as String)
+        this.zipCode = StringUtils.removeNonNumeric(params.zipCode as String) ?: null
     }
+
 }
