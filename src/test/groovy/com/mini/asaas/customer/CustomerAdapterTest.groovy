@@ -22,7 +22,6 @@ class CustomerAdapterTest extends Specification {
                 state           : "SP",
                 zipCode         : "12345-678",
                 birthDate       : "01/01/2000",
-                stateInscription: "123456789123456789",
                 companyType     : "mei"
             ]
 
@@ -43,7 +42,6 @@ class CustomerAdapterTest extends Specification {
             customerAdapter.state == AddressState.SP
             customerAdapter.zipCode == "12345678"
             customerAdapter.birthDate == DateFormatUtils.format("01/01/2000")
-            customerAdapter.stateInscription == "123456789123456789"
             customerAdapter.companyType == CompanyType.MEI
     }
 
@@ -65,7 +63,6 @@ class CustomerAdapterTest extends Specification {
             customerAdapter.state == null
             customerAdapter.zipCode == null
             customerAdapter.birthDate == null
-            customerAdapter.stateInscription == null
             customerAdapter.companyType == null
     }
 
@@ -84,7 +81,6 @@ class CustomerAdapterTest extends Specification {
                 state           : "  ",
                 zipCode         : "",
                 birthDate       : "",
-                stateInscription: "",
                 companyType     : ""
             ]
 
@@ -105,7 +101,6 @@ class CustomerAdapterTest extends Specification {
             customerAdapter.state == null
             customerAdapter.zipCode == null
             customerAdapter.birthDate == null
-            customerAdapter.stateInscription == null
             customerAdapter.companyType == null
     }
 
@@ -119,13 +114,6 @@ class CustomerAdapterTest extends Specification {
         expect:
             new CustomerAdapter([birthDate: ""]).birthDate == null
             new CustomerAdapter([birthDate: null]).birthDate == null
-    }
-
-    void "it should set stateInscription to null when it is null or empty or not contain digits"() {
-        expect:
-            new CustomerAdapter([stateInscription: ""]).stateInscription == null
-            new CustomerAdapter([stateInscription: null]).stateInscription == null
-            new CustomerAdapter([stateInscription: "abc"]).stateInscription == null
     }
 
     void "it should set companyType to null when it is null or empty or not a existent CompanyType"() {

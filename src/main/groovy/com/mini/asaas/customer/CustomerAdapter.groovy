@@ -35,8 +35,6 @@ class CustomerAdapter {
 
     Date birthDate
 
-    String stateInscription
-
     CompanyType companyType
 
     public CustomerAdapter(Map originalParams) {
@@ -55,7 +53,6 @@ class CustomerAdapter {
         this.state = AddressState.parseFromUFString(params.state)
         this.zipCode = StringUtils.removeNonNumeric(params.zipCode) ?: null
         this.birthDate = DateFormatUtils.format(params.birthDate)
-        this.stateInscription = StringUtils.removeNonNumeric(params.stateInscription) ?: null
         this.companyType = CompanyType.parseFromString(params.companyType)
     }
 
