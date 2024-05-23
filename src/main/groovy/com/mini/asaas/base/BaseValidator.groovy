@@ -4,7 +4,7 @@ import com.mini.asaas.validation.BusinessValidation
 
 abstract class BaseValidator {
 
-    private BusinessValidation validationResult
+    final BusinessValidation validationResult
 
     public BaseValidator() {
         this.validationResult = new BusinessValidation()
