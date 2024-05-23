@@ -1,5 +1,6 @@
 package com.mini.asaas.utils
 
+import com.mini.asaas.validation.BusinessRuleError
 import org.grails.datastore.gorm.GormEntity
 import org.springframework.validation.ObjectError
 
@@ -15,24 +16,20 @@ class DomainErrorUtils {
         return entity
     }
 
-    public static GormEntity addFieldError(GormEntity entity, String field, String code, Object[] args) {
-        entity.errors.rejectValue(field, code, args, "")
+    public static GormEntity addBusinessRuleError(GormEntity entity, BusinessRuleError error) {
+        addError(entity, error.message)
         return entity
     }
 
-    public static GormEntity addFieldError(GormEntity entity, String field, String code) {
-        entity.errors.rejectValue(field, code)
+    public static GormEntity addBusinessRuleErrors(GormEntity entity, List<BusinessRuleError> errors) {
+        errors.forEach { addBusinessRuleError(entity, it) }
         return entity
     }
 
     public static String getFirstValidationMessage(GormEntity entity) {
-        ObjectError error = entity.errors.allErrors.first()
-        return error.defaultMessage ?: MessageSourceUtils.getMessage(error.codes.first(), error.arguments as List)
-    }
-
-    public static Boolean hasErrorCode(GormEntity entity, String code) {
-        List<ObjectError> errors = entity.errors.allErrors
-        return errors.any { it.codes.contains(code) }
+        ObjectError error = entity.errors.allErrors?.first() ?: null
+        if (error == null) return null
+        return MessageSourceUtils.getMessage(error.codes?.first(), error.arguments, error.defaultMessage)
     }
 
 }
