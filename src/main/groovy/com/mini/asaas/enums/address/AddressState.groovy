@@ -37,4 +37,12 @@ enum AddressState {
     AddressState(String label) {
         this.label = label
     }
+
+    public static AddressState parseFromUFString(String uf) {
+        try {
+            return valueOf(uf.toUpperCase())
+        } catch (Exception e) {
+            return null
+        }
+    }
 }

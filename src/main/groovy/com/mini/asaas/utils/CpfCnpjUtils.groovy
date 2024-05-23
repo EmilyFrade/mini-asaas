@@ -9,11 +9,13 @@ class CpfCnpjUtils {
     public static final Integer CNPJ_LENGTH = 14
 
     public static Boolean isCPF(String cpfCnpj) {
+        if (cpfCnpj == null) return false
         String cleanedCpfCnpj = StringUtils.removeNonNumeric(cpfCnpj)
         return cleanedCpfCnpj.length() == CPF_LENGTH
     }
 
     public static Boolean isCNPJ(String cpfCnpj) {
+        if (cpfCnpj == null) return false
         String cleanedCpfCnpj = StringUtils.removeNonNumeric(cpfCnpj)
         return cleanedCpfCnpj.length() == CNPJ_LENGTH
     }
