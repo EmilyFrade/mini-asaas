@@ -22,8 +22,6 @@ class CustomerAdapterTest extends Specification {
                 state           : "SP",
                 zipCode         : "12345-678",
                 birthDate       : "01/01/2000",
-                company         : "ACME Inc.",
-                responsibleName : "Jane Doe",
                 stateInscription: "123456789123456789",
                 companyType     : "mei"
             ]
@@ -45,8 +43,6 @@ class CustomerAdapterTest extends Specification {
             customerAdapter.state == AddressState.SP
             customerAdapter.zipCode == "12345678"
             customerAdapter.birthDate == DateFormatUtils.format("01/01/2000")
-            customerAdapter.company == "ACME Inc."
-            customerAdapter.responsibleName == "Jane Doe"
             customerAdapter.stateInscription == "123456789123456789"
             customerAdapter.companyType == CompanyType.MEI
     }
@@ -69,8 +65,6 @@ class CustomerAdapterTest extends Specification {
             customerAdapter.state == null
             customerAdapter.zipCode == null
             customerAdapter.birthDate == null
-            customerAdapter.company == null
-            customerAdapter.responsibleName == null
             customerAdapter.stateInscription == null
             customerAdapter.companyType == null
     }
@@ -90,8 +84,6 @@ class CustomerAdapterTest extends Specification {
                 state           : "  ",
                 zipCode         : "",
                 birthDate       : "",
-                company         : "",
-                responsibleName : null,
                 stateInscription: "",
                 companyType     : ""
             ]
@@ -113,8 +105,6 @@ class CustomerAdapterTest extends Specification {
             customerAdapter.state == null
             customerAdapter.zipCode == null
             customerAdapter.birthDate == null
-            customerAdapter.company == null
-            customerAdapter.responsibleName == null
             customerAdapter.stateInscription == null
             customerAdapter.companyType == null
     }
