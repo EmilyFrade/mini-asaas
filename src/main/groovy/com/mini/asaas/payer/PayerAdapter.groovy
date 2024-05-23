@@ -5,17 +5,29 @@ import com.mini.asaas.enums.address.AddressState
 import com.mini.asaas.utils.StringUtils
 
 class PayerAdapter {
+
     String name
+
     String email
+
     String cpfCnpj
+
     String phoneNumber
+
     PersonType personType
+
     String address
+
     String addressNumber
+
     String complement
+
     String province
+
     String city
+
     AddressState state
+
     String zipCode
 
     public PayerAdapter(Map params) {
