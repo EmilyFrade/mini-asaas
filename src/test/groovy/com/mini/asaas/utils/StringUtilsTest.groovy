@@ -44,8 +44,8 @@ class StringUtilsTest extends Specification {
         "  test"              | "test"
         "test  "              | "test"
         "test"                | "test"
-        "  "                  | ""
-        ""                    | ""
+        "  "                  | null
+        ""                    | null
         null                  | null
         123                   | null
         []                    | null
