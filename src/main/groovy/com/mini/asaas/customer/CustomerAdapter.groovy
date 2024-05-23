@@ -4,6 +4,7 @@ import com.mini.asaas.enums.PersonType
 import com.mini.asaas.enums.address.AddressState
 import com.mini.asaas.utils.DateFormatUtils
 import com.mini.asaas.utils.StringUtils
+import com.mini.asaas.utils.Utils
 import grails.compiler.GrailsCompileStatic
 
 @GrailsCompileStatic
@@ -38,7 +39,7 @@ class CustomerAdapter {
     CompanyType companyType
 
     public CustomerAdapter(Map originalParams) {
-        Map<String, String> params = StringUtils.parseParams(originalParams)
+        Map<String, String> params = Utils.normalizeParams(originalParams)
         if (!params) return
         this.name = params.name
         this.email = params.email
