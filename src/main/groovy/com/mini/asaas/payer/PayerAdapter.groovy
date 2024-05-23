@@ -2,6 +2,7 @@ package com.mini.asaas.payer
 
 import com.mini.asaas.enums.PersonType
 import com.mini.asaas.enums.address.AddressState
+import com.mini.asaas.utils.DateFormatUtils
 import com.mini.asaas.utils.StringUtils
 import com.mini.asaas.utils.Utils
 
@@ -31,6 +32,8 @@ class PayerAdapter {
 
     String zipCode
 
+    Date birthDate
+
     public PayerAdapter(Map originalParams) {
         Map<String, String> params = Utils.normalizeParams(originalParams)
         if (!params) return
@@ -46,6 +49,7 @@ class PayerAdapter {
         this.city = params.city
         this.state = AddressState.parseFromUFString(params.state)
         this.zipCode = StringUtils.removeNonNumeric(params.zipCode) ?: null
+        this.birthDate = DateFormatUtils.format(params.birthDate)
     }
 
 }
