@@ -29,6 +29,8 @@ abstract class BasePerson extends BaseEntity {
 
     String zipCode
 
+    Date birthDate
+
     static constraints = {
         name blank: false
         email blank: false, email: true
@@ -42,6 +44,7 @@ abstract class BasePerson extends BaseEntity {
         city blank: false
         state blank: false
         zipCode blank: false
+        birthDate blank: false
     }
 
     static mappings = {

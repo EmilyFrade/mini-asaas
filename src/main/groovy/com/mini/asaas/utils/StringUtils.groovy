@@ -20,4 +20,5 @@ class StringUtils {
         String trimmedValue = (value as String).trim()
         return trimmedValue.isEmpty() ? null : trimmedValue
     }
+
 }
