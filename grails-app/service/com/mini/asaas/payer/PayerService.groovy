@@ -13,7 +13,7 @@ class PayerService {
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
 
-        payer = validateBeforeSave(adapter, payer)
+        payer = validate(adapter, payer)
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
 
         payer = populatePayer(adapter, payer)
@@ -30,7 +30,7 @@ class PayerService {
             throw new RuntimeException("Pagador não encontrado")
         }
 
-        payer = validateBeforeSave(adapter, payer)
+        payer = validate(adapter, payer)
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
 
         payer = populatePayer(adapter, payer)
@@ -46,7 +46,7 @@ class PayerService {
         return Payer.list()
     }
 
-    private Payer validateBeforeSave(PayerAdapter adapter, Payer payer) {
+    private Payer validate(PayerAdapter adapter, Payer payer) {
         PayerValidator validator = new PayerValidator()
 
         if (adapter.email != payer.email) validator.validateEmail(adapter.email)
