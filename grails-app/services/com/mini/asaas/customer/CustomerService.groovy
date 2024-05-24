@@ -8,60 +8,42 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class CustomerService {
 
-    public Customer save(Map params) {
-        CustomerAdapter customerAdapter = new CustomerAdapter(params)
-        Customer customer = validateBeforeSave(customerAdapter)
-        if (customer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(customer))
+    public Customer save(CustomerAdapter customerAdapter) {
+        Customer validatedCustomer = validate(customerAdapter)
+        if (validatedCustomer.hasErrors()) {
+            throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(validatedCustomer))
+        }
 
-        customer = populateCustomer(customer, customerAdapter)
-        customer.validate()
-
-        if (customer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(customer))
-
+        Customer customer = buildCustomer(customerAdapter)
         customer.save(failOnError: true)
 
         return customer
     }
 
-    private Customer validateBeforeSave(CustomerAdapter customerAdapter) {
-        Customer customer = new Customer()
+    private Customer validate(CustomerAdapter customerAdapter) {
+        Customer validatedCustomer = new Customer()
         CustomerValidator validator = new CustomerValidator()
 
-        Map requiredFields = [
-            name: customerAdapter.name,
-            email: customerAdapter.email,
-            cpfCnpj: customerAdapter.cpfCnpj,
-            phoneNumber: customerAdapter.phoneNumber,
-            personType: customerAdapter.personType,
-            address: customerAdapter.address,
-            addressNumber: customerAdapter.addressNumber,
-            province: customerAdapter.province,
-            city: customerAdapter.city,
-            state: customerAdapter.state,
-            zipCode: customerAdapter.zipCode,
-            birthDate: customerAdapter.birthDate
-        ]
-
         validator
-                .validateRequiredFields(requiredFields)
-                .validateCpfCnpj(customerAdapter.cpfCnpj)
-                .validateEmail(customerAdapter.email)
-                .validateIfCpfCnpjExists(customerAdapter.cpfCnpj)
-                .validateIfEmailExists(customerAdapter.email)
-                .validateBirthDate(customerAdapter.birthDate)
-                .validatePhoneNumber(customerAdapter.phoneNumber)
-                .validateZipCode(customerAdapter.zipCode)
+            .validateCpfCnpj(customerAdapter.cpfCnpj)
+            .validateEmail(customerAdapter.email)
+            .validateIfCpfCnpjExists(customerAdapter.cpfCnpj)
+            .validateIfEmailExists(customerAdapter.email)
+            .validateBirthDate(customerAdapter.birthDate)
+            .validatePhoneNumber(customerAdapter.phoneNumber)
+            .validateZipCode(customerAdapter.zipCode)
 
         BusinessValidation validationResult = validator.validationResult
 
         if (!validationResult.isValid()) {
-            DomainErrorUtils.addBusinessRuleErrors(customer, validationResult.errors)
+            DomainErrorUtils.addBusinessRuleErrors(validatedCustomer, validationResult.errors)
         }
 
-        return customer
+        return validatedCustomer
     }
 
-    private Customer populateCustomer(Customer customer, CustomerAdapter customerAdapter) {
+    private Customer buildCustomer(CustomerAdapter customerAdapter) {
+        Customer customer = new Customer()
         customer.name = customerAdapter.name
         customer.email = customerAdapter.email
         customer.cpfCnpj = customerAdapter.cpfCnpj
