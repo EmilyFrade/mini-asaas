@@ -10,8 +10,7 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class PayerService {
 
-    public Payer save(Map params) {
-        PayerAdapter adapter = new PayerAdapter(params)
+    public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
 
         payer = validateBeforeSave(adapter, payer)
@@ -24,14 +23,12 @@ class PayerService {
         return payer.save(failOnError: true)
     }
 
-    public Payer update(Map params) {
+    public Payer update(PayerAdapter adapter) {
         Payer payer = Payer.get(params.id as Long)
 
         if (!payer) {
             throw new RuntimeException("Pagador não encontrado")
         }
-
-        PayerAdapter adapter = new PayerAdapter(params)
 
         payer = validateBeforeSave(adapter, payer)
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
