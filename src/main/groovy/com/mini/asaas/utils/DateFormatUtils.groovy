@@ -17,4 +17,10 @@ class DateFormatUtils {
     public static Date format(String date) {
         return format(date, DEFAULT_FORMAT)
     }
+
+    public static String displayFormat(Date databaseDate) {
+        if (!databaseDate) return null
+
+        return new SimpleDateFormat(DEFAULT_FORMAT).format(databaseDate)
+    }
 }
