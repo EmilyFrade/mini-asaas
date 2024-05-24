@@ -9,13 +9,13 @@ class DateFormatUtils {
 
     private static final String DEFAULT_FORMAT = "dd/MM/yyyy"
 
-    public static Date parseFromString(String date, String format) {
+    public static Date parseDateFromString(String date, String format) {
         if (!date || !format) return null
         return new SimpleDateFormat(format).parse(date)
     }
 
-    public static Date parseFromString(String date) {
-        return parseFromString(date, DEFAULT_FORMAT)
+    public static Date parseDateFromString(String date) {
+        return parseDateFromString(date, DEFAULT_FORMAT)
     }
 
     public static String format(Date databaseDate) {
