@@ -9,16 +9,16 @@ class DateFormatUtils {
 
     private static final String DEFAULT_FORMAT = "dd/MM/yyyy"
 
-    public static Date format(String date, String format) {
+    public static Date parseFromString(String date, String format) {
         if (!date || !format) return null
         return new SimpleDateFormat(format).parse(date)
     }
 
-    public static Date format(String date) {
-        return format(date, DEFAULT_FORMAT)
+    public static Date parseFromString(String date) {
+        return parseFromString(date, DEFAULT_FORMAT)
     }
 
-    public static String displayFormat(Date databaseDate) {
+    public static String format(Date databaseDate) {
         if (!databaseDate) return null
 
         return new SimpleDateFormat(DEFAULT_FORMAT).format(databaseDate)
