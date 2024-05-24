@@ -2,6 +2,7 @@ package com.mini.asaas.customer
 
 import com.mini.asaas.base.BaseValidator
 import com.mini.asaas.utils.CpfCnpjUtils
+import com.mini.asaas.utils.DateUtils
 import com.mini.asaas.utils.EmailUtils
 import com.mini.asaas.utils.ZipCodeUtils
 
@@ -16,14 +17,14 @@ class CustomerValidator extends BaseValidator {
     }
 
     public CustomerValidator validateCpfCnpj(String cpfCnpj) {
-        if (cpfCnpj && !CpfCnpjUtils.isValidCpfCnpj(cpfCnpj)) {
+        if (!CpfCnpjUtils.isValidCpfCnpj(cpfCnpj)) {
             validationResult.addError("invalid.cpfCnpj")
         }
         return this
     }
 
     public CustomerValidator validateEmail(String email) {
-        if (email && !EmailUtils.isValid(email)) {
+        if (!EmailUtils.isValid(email)) {
             validationResult.addError("invalid.email")
         }
         return this
@@ -44,14 +45,14 @@ class CustomerValidator extends BaseValidator {
     }
 
     public CustomerValidator validateZipCode(String zipCode) {
-        if (zipCode && !ZipCodeUtils.isValid(zipCode, false)) {
+        if (!ZipCodeUtils.isValid(zipCode, false)) {
             validationResult.addError("invalid.zipCode")
         }
         return this
     }
 
     public CustomerValidator validatePhoneNumber(String phoneNumber) {
-        if (phoneNumber && !phoneNumber.matches(PHONE_NUMBER_REGEX)) {
+        if (!phoneNumber || !phoneNumber.matches(PHONE_NUMBER_REGEX)) {
             validationResult.addError("invalid.phoneNumber")
         }
         return this
@@ -59,23 +60,11 @@ class CustomerValidator extends BaseValidator {
 
     public CustomerValidator validateBirthDate(Date birthDate) {
         if (birthDate) {
-            if(birthDate > new Date()){
-                validationResult.addError("future.birthDate")
-            }
-            Calendar birthCalendar = Calendar.getInstance()
-            birthCalendar.setTime(birthDate)
-
-            Calendar today = Calendar.getInstance()
-
-            Integer age = today.get(Calendar.YEAR) - birthCalendar.get(Calendar.YEAR)
-
-            Boolean todayMonthIsBeforeBirthMonth = today.get(Calendar.MONTH) < birthCalendar.get(Calendar.MONTH)
-            Boolean todayMonthIsEqualBirthMonth = today.get(Calendar.MONTH) == birthCalendar.get(Calendar.MONTH)
-            Boolean todayDayIsBeforeBirthDay = today.get(Calendar.DAY_OF_MONTH) < birthCalendar.get(Calendar.DAY_OF_MONTH)
-
-            if (todayMonthIsBeforeBirthMonth || (todayMonthIsEqualBirthMonth && todayDayIsBeforeBirthDay)) age--
-
+            if(birthDate > new Date()) validationResult.addError("future.birthDate")
+            Integer age = DateUtils.getDifferenceInYears(birthDate, new Date())
             if (age < 18) validationResult.addError("underage")
+        } else {
+            validationResult.addError("notFilled.birthDate")
         }
         return this
     }
