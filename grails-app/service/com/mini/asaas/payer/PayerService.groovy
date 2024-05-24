@@ -1,6 +1,7 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.repository.PayerRepository
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.compiler.GrailsCompileStatic
@@ -9,6 +10,8 @@ import grails.gorm.transactions.Transactional
 @GrailsCompileStatic
 @Transactional
 class PayerService {
+
+    PayerRepository payerRepository
 
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
@@ -23,8 +26,8 @@ class PayerService {
         return payer
     }
 
-    public Payer update(PayerAdapter adapter) {
-        Payer payer = Payer.get(params.id as Long)
+    public Payer update(PayerAdapter adapter, Long id) {
+        Payer payer = payerRepository.findById(id)
 
         if (!payer) {
             throw new RuntimeException("Pagador não encontrado")
@@ -39,10 +42,6 @@ class PayerService {
         if(!payer.save()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
 
         return payer
-    }
-
-    public List<Payer> listAll() {
-        return Payer.list()
     }
 
     private Payer validate(PayerAdapter adapter, Payer payer) {
