@@ -49,7 +49,7 @@ class PayerAdapter {
         this.city = params.city
         this.state = AddressState.parseFromUFString(params.state)
         this.zipCode = StringUtils.removeNonNumeric(params.zipCode) ?: null
-        this.birthDate = DateFormatUtils.parseFromString(params.birthDate)
+        this.birthDate = DateFormatUtils.parseDateFromString(params.birthDate)
     }
 
 }
