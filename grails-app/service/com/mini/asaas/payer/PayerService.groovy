@@ -16,7 +16,7 @@ class PayerService {
         payer = validate(adapter, payer)
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
 
-        payer = populatePayer(adapter, payer)
+        payer = buildPayer(adapter, payer)
 
         if(!payer.save()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
 
@@ -33,7 +33,7 @@ class PayerService {
         payer = validate(adapter, payer)
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
 
-        payer = populatePayer(adapter, payer)
+        payer = buildPayer(adapter, payer)
         payer.markDirty()
 
         if(!payer.save()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
@@ -63,7 +63,7 @@ class PayerService {
         return payer
     }
 
-    private Payer populatePayer(PayerAdapter adapter, Payer payer) {
+    private Payer buildPayer(PayerAdapter adapter, Payer payer) {
         payer.name = adapter.name
         payer.email = adapter.email
         payer.cpfCnpj = adapter.cpfCnpj
