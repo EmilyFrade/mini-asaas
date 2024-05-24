@@ -1,10 +1,8 @@
-package com.mini.asaas
+package com.mini.asaas.payer
 
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.payer.PayerAdapter
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
-import com.mini.asaas.payer.PayerValidator
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
 

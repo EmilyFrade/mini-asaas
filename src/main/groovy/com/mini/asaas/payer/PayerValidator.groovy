@@ -1,6 +1,5 @@
 package com.mini.asaas.payer
 
-import com.mini.asaas.Payer
 import com.mini.asaas.base.BaseValidator
 import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.ZipCodeUtils
