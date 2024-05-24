@@ -1,4 +1,4 @@
-<%@ page import="com.mini.asaas.utils.DateFormatUtils" %>
+<%@ page import="com.mini.asaas.enums.address.AddressState; com.mini.asaas.utils.DateFormatUtils" %>
 <html>
     <head>
         <title>Detalhes do Pagador</title>
@@ -75,12 +75,15 @@
                         </atlas-datepicker>
                     </atlas-col>
                     <atlas-col lg="4">
-                        <atlas-input
-                                label="Celular"
+                        <atlas-masked-input
+                                mask-alias="phone"
+                                label="Número de Telefone"
+                                type="tel"
                                 name="phoneNumber"
+                                id="phoneNumber"
                                 value="${payer.phoneNumber}"
                                 required="true">
-                        </atlas-input>
+                        </atlas-masked-input>
                     </atlas-col>
                     <atlas-col lg="4">
                         <atlas-postal-code
@@ -103,12 +106,15 @@
                         </atlas-input>
                     </atlas-col>
                     <atlas-col lg="4">
-                        <atlas-input
+                        <atlas-integer-input
+                                class="postal-code-element"
                                 label="Número"
                                 name="addressNumber"
+                                min-value="1"
+                                min-value-error-message="O valor deve ser positivo"
                                 value="${payer.addressNumber}"
                                 required="true">
-                        </atlas-input>
+                        </atlas-integer-input>
                     </atlas-col>
                     <atlas-col lg="4">
                         <atlas-input
@@ -137,12 +143,17 @@
                         </atlas-input>
                     </atlas-col>
                     <atlas-col lg="4">
-                        <atlas-input
-                                label="Estado (UF)"
+                        <atlas-select
+                                class="postal-code-element"
+                                label="Estado"
                                 name="state"
+                                id="state"
                                 value="${payer.state}"
                                 required="true">
-                        </atlas-input>
+                            <g:each in="${AddressState.values()}" var="state">
+                                <atlas-option label="${state.label}" value="${state.name()}"></atlas-option>
+                            </g:each>
+                        </atlas-select>
                     </atlas-col>
                 </atlas-row>
             </atlas-grid>
