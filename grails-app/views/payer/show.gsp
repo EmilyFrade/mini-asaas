@@ -68,7 +68,7 @@
                     <atlas-col lg="4">
                         <atlas-datepicker
                                 label="Data de nascimento"
-                                value="${DateFormatUtils.displayFormat(payer.birthDate)}"
+                                value="${DateFormatUtils.format(payer.birthDate)}"
                                 name="birthDate"
                                 id="birthDate"
                                 required="true">
