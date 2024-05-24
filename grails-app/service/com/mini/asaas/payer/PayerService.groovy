@@ -17,10 +17,10 @@ class PayerService {
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
 
         payer = populatePayer(adapter, payer)
-        payer.validate()
-        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
 
-        return payer.save(failOnError: true)
+        if(!payer.save()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
+
+        return payer
     }
 
     public Payer update(PayerAdapter adapter) {
@@ -34,12 +34,11 @@ class PayerService {
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
 
         payer = populatePayer(adapter, payer)
-        payer.validate()
-        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
-
         payer.markDirty()
 
-        return payer.save(failOnError: true)
+        if(!payer.save()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
+
+        return payer
     }
 
     public List<Payer> listAll() {
