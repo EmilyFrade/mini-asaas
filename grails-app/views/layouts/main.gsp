@@ -9,7 +9,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
         <asset:link rel="icon" href="logo.png" type="image/x-ico"/>
-        <asset:stylesheet rel="stylesheet" type="text/css" href="global.css"></asset:stylesheet>
 
         <link
                 rel="stylesheet"
@@ -20,6 +19,8 @@
                 src="https://atlas.asaas.com/atlas.min.js"
                 crossorigin="anonymous"
         ></script>
+
+        <asset:stylesheet rel="stylesheet" type="text/css" href="global.css"></asset:stylesheet>
 
         <g:layoutHead/>
     </head>
