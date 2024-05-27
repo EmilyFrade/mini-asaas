@@ -12,10 +12,9 @@ class PayerValidator extends BaseValidator {
     public PayerValidator validateAll(PayerAdapter adapter, Payer payer) {
         if (adapter.email != payer.email) this.validateEmail(adapter.email)
         if (adapter.cpfCnpj != payer.cpfCnpj) this.validateCpfCnpj(adapter.cpfCnpj)
-        this
-                .validatePhoneNumber(adapter.phoneNumber)
-                .validateBirthDate(adapter.birthDate)
-                .validateZipCode(adapter.zipCode)
+        this.validatePhoneNumber(adapter.phoneNumber)
+        this.validateBirthDate(adapter.birthDate)
+        this.validateZipCode(adapter.zipCode)
 
         return this
     }
