@@ -8,7 +8,7 @@
         </title>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
-        <asset:link rel="icon" href="logo.png" type="image/x-ico"/>
+        <asset:link href="logo.png"/>
 
         <link
                 rel="stylesheet"
@@ -20,7 +20,7 @@
                 crossorigin="anonymous"
         ></script>
 
-        <asset:stylesheet rel="stylesheet" type="text/css" href="global.css"></asset:stylesheet>
+        <asset:stylesheet href="global.css"></asset:stylesheet>
 
         <g:layoutHead/>
     </head>
