@@ -27,7 +27,7 @@
                         <atlas-input
                                 label="Nome"
                                 name="name"
-                                required="true"
+                                required
                                 value="${payer.name}">
                         </atlas-input>
                     </atlas-col>
@@ -38,7 +38,7 @@
                                 name="email"
                                 mask-alias="email"
                                 value="${payer.email}"
-                                required="true">
+                                required>
                         </atlas-masked-input>
                     </atlas-col>
                 </atlas-row>
@@ -50,7 +50,7 @@
                                 name="personType"
                                 readonly
                                 value="${payer.personType.getLabel()}"
-                                required="true">
+                                required>
                         </atlas-input>
                     </atlas-col>
                     <atlas-col lg="6">
@@ -59,7 +59,7 @@
                                 label="CPF/CNPJ"
                                 name="cpfCnpj"
                                 value="${payer.cpfCnpj}"
-                                required="true">
+                                required>
                         </atlas-masked-input>
                     </atlas-col>
                 </atlas-row>
@@ -71,7 +71,7 @@
                                 value="${DateFormatUtils.format(payer.birthDate)}"
                                 name="birthDate"
                                 id="birthDate"
-                                required="true">
+                                required>
                         </atlas-datepicker>
                     </atlas-col>
                     <atlas-col lg="4">
@@ -82,7 +82,7 @@
                                 name="phoneNumber"
                                 id="phoneNumber"
                                 value="${payer.phoneNumber}"
-                                required="true">
+                                required>
                         </atlas-masked-input>
                     </atlas-col>
                     <atlas-col lg="4">
@@ -90,8 +90,7 @@
                                 label="CEP"
                                 name="zipCode"
                                 value="${payer.zipCode}"
-                                required="true"
-                                mask="{}">
+                                required>
                         </atlas-postal-code>
                     </atlas-col>
                 </atlas-row>
@@ -102,7 +101,7 @@
                                 label="Rua"
                                 name="address"
                                 value="${payer.address}"
-                                required="true">
+                                required>
                         </atlas-input>
                     </atlas-col>
                     <atlas-col lg="4">
@@ -113,7 +112,7 @@
                                 min-value="1"
                                 min-value-error-message="O valor deve ser positivo"
                                 value="${payer.addressNumber}"
-                                required="true">
+                                required>
                         </atlas-integer-input>
                     </atlas-col>
                     <atlas-col lg="4">
@@ -131,7 +130,7 @@
                                 label="Bairro"
                                 name="province"
                                 value="${payer.province}"
-                                required="true">
+                                required>
                         </atlas-input>
                     </atlas-col>
                     <atlas-col lg="4">
@@ -139,7 +138,7 @@
                                 label="Cidade"
                                 name="city"
                                 value="${payer.city}"
-                                required="true">
+                                required>
                         </atlas-input>
                     </atlas-col>
                     <atlas-col lg="4">
@@ -149,7 +148,7 @@
                                 name="state"
                                 id="state"
                                 value="${payer.state}"
-                                required="true">
+                                required>
                             <g:each in="${AddressState.values()}" var="state">
                                 <atlas-option label="${state.label}" value="${state.name()}"></atlas-option>
                             </g:each>
