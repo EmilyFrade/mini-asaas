@@ -9,6 +9,17 @@ class PayerValidator extends BaseValidator {
     private static final PHONE_NUMBER_REGEX = /^(\+55)?\s?(\(?\d{2}\)?)?\s?\d{4,5}-?\d{4}$/
     private static final EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
 
+    public PayerValidator validateAll(PayerAdapter adapter, Payer payer) {
+        if (adapter.email != payer.email) this.validateEmail(adapter.email)
+        if (adapter.cpfCnpj != payer.cpfCnpj) this.validateCpfCnpj(adapter.cpfCnpj)
+        this
+                .validatePhoneNumber(adapter.phoneNumber)
+                .validateBirthDate(adapter.birthDate)
+                .validateZipCode(adapter.zipCode)
+
+        return this
+    }
+
     public PayerValidator validateCpfCnpj(String cpfCnpj) {
         if (!CpfCnpjUtils.isValidCpfCnpj(cpfCnpj)) {
             validationResult.addError("invalid.cpfCnpj")
