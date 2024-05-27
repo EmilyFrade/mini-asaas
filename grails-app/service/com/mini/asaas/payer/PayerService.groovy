@@ -11,8 +11,6 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class PayerService {
 
-    PayerRepository payerRepository
-
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
 
@@ -25,7 +23,7 @@ class PayerService {
     }
 
     public Payer update(PayerAdapter adapter, Long id) {
-        Payer payer = payerRepository.findById(id)
+        Payer payer = PayerRepository.findById(id)
 
         if (!payer) {
             throw new RuntimeException("Pagador não encontrado")
@@ -42,13 +40,7 @@ class PayerService {
 
     private Payer validate(PayerAdapter adapter, Payer payer) {
         PayerValidator validator = new PayerValidator()
-
-        if (adapter.email != payer.email) validator.validateEmail(adapter.email)
-        if (adapter.cpfCnpj != payer.cpfCnpj) validator.validateCpfCnpj(adapter.cpfCnpj)
-        validator
-                .validatePhoneNumber(adapter.phoneNumber)
-                .validateBirthDate(adapter.birthDate)
-                .validateZipCode(adapter.zipCode)
+        validator.validateAll(adapter, payer)
 
         BusinessValidation validationResult = validator.validationResult
 
