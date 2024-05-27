@@ -11,8 +11,6 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class PayerService {
 
-    PayerRepository payerRepository
-
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
 
@@ -25,7 +23,7 @@ class PayerService {
     }
 
     public Payer update(PayerAdapter adapter, Long id) {
-        Payer payer = payerRepository.findById(id)
+        Payer payer = PayerRepository.findById(id)
 
         if (!payer) {
             throw new RuntimeException("Pagador não encontrado")
