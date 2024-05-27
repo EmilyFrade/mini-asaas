@@ -45,9 +45,10 @@ class PayerService {
 
         if (adapter.email != payer.email) validator.validateEmail(adapter.email)
         if (adapter.cpfCnpj != payer.cpfCnpj) validator.validateCpfCnpj(adapter.cpfCnpj)
-        validator.validatePhoneNumber(adapter.phoneNumber)
-        validator.validateBirthDate(adapter.birthDate)
-        validator.validateZipCode(adapter.zipCode)
+        validator
+                .validatePhoneNumber(adapter.phoneNumber)
+                .validateBirthDate(adapter.birthDate)
+                .validateZipCode(adapter.zipCode)
 
         BusinessValidation validationResult = validator.validationResult
 
