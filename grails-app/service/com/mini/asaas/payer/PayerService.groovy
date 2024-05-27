@@ -21,9 +21,7 @@ class PayerService {
 
         payer = buildPayer(adapter, payer)
 
-        if(!payer.save()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
-
-        return payer
+        return payer.save(failOnError: true)
     }
 
     public Payer update(PayerAdapter adapter, Long id) {
@@ -39,9 +37,7 @@ class PayerService {
         payer = buildPayer(adapter, payer)
         payer.markDirty()
 
-        if(!payer.save()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
-
-        return payer
+        return payer.save(failOnError: true)
     }
 
     private Payer validate(PayerAdapter adapter, Payer payer) {
@@ -56,7 +52,7 @@ class PayerService {
         BusinessValidation validationResult = validator.validationResult
 
         if (!validationResult.isValid()) {
-            DomainErrorUtils.addError(payer, validationResult.getFirstErrorCode(), validationResult.getFirstErrorMessage())
+            DomainErrorUtils.addBusinessRuleErrors(payer, validationResult.errors)
         }
 
         return payer
