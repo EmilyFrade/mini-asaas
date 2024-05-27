@@ -5,10 +5,22 @@ import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.DateUtils
 import com.mini.asaas.utils.EmailUtils
 import com.mini.asaas.utils.ZipCodeUtils
+import com.mini.asaas.validation.BusinessValidation
 
 class CustomerValidator extends BaseValidator {
 
     private static final PHONE_NUMBER_REGEX = /(\d{10,11})/
+
+    public BusinessValidation validate(CustomerAdapter adapter) {
+        validateCpfCnpj(adapter.cpfCnpj)
+        validateEmail(adapter.email)
+        validateIfCpfCnpjExists(adapter.cpfCnpj)
+        validateIfEmailExists(adapter.email)
+        validateBirthDate(adapter.birthDate)
+        validatePhoneNumber(adapter.phoneNumber)
+        validateZipCode(adapter.zipCode)
+        return validationResult
+    }
 
     public CustomerValidator validateRequiredFields(Map requiredFields) {
         Boolean failed = requiredFields.any { !it.value }
@@ -60,7 +72,7 @@ class CustomerValidator extends BaseValidator {
 
     public CustomerValidator validateBirthDate(Date birthDate) {
         if (birthDate) {
-            if(birthDate > new Date()) validationResult.addError("future.birthDate")
+            if (birthDate > new Date()) validationResult.addError("future.birthDate")
             Integer age = DateUtils.getDifferenceInYears(birthDate, new Date())
             if (age < 18) validationResult.addError("underage")
         } else {

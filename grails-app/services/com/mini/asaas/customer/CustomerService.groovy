@@ -24,16 +24,7 @@ class CustomerService {
         Customer validatedCustomer = new Customer()
         CustomerValidator validator = new CustomerValidator()
 
-        validator
-            .validateCpfCnpj(customerAdapter.cpfCnpj)
-            .validateEmail(customerAdapter.email)
-            .validateIfCpfCnpjExists(customerAdapter.cpfCnpj)
-            .validateIfEmailExists(customerAdapter.email)
-            .validateBirthDate(customerAdapter.birthDate)
-            .validatePhoneNumber(customerAdapter.phoneNumber)
-            .validateZipCode(customerAdapter.zipCode)
-
-        BusinessValidation validationResult = validator.validationResult
+        BusinessValidation validationResult = validator.validate(customerAdapter)
 
         if (!validationResult.isValid()) {
             DomainErrorUtils.addBusinessRuleErrors(validatedCustomer, validationResult.errors)
