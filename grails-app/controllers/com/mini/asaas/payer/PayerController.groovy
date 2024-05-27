@@ -1,6 +1,7 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.enums.AlertType
+import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.repository.PayerRepository
 
 class PayerController {
@@ -21,8 +22,12 @@ class PayerController {
             flash.message = "Pagador cadastrado com sucesso"
             flash.status = AlertType.SUCCESS.getValue()
             redirect(action: "show", id: payer.id)
-        } catch (Exception e) {
+        } catch (BusinessException e) {
             flash.message = e.getMessage()
+            flash.status = AlertType.ERROR.getValue()
+            render view: "create"
+        } catch (Exception e) {
+            flash.message = "Ocorreu um erro durante o cadastro, aguarde um momento e tente novamente."
             flash.status = AlertType.ERROR.getValue()
             render view: "create"
         }
@@ -36,8 +41,12 @@ class PayerController {
             flash.message = "Pagador atualizado com sucesso"
             flash.status = AlertType.SUCCESS.getValue()
             redirect(action: "show", id: payer.id)
-        } catch (Exception e) {
+        } catch (BusinessException e) {
             flash.message = e.getMessage()
+            flash.status = AlertType.ERROR.getValue()
+            redirect(action: "show", id: params.id)
+        } catch (Exception e) {
+            flash.message = "Ocorreu um erro ao atualizar os dados, aguarde um momento e tente novamente."
             flash.status = AlertType.ERROR.getValue()
             redirect(action: "show", id: params.id)
         }
@@ -46,10 +55,10 @@ class PayerController {
     def show() {
         try {
             Payer payer = Payer.get(params.id)
-            if (!payer) return redirect(action: "create")
+            if (!payer) return redirect(action: "index")
             return [payer: payer]
         } catch (Exception e) {
-            redirect(action: "create")
+            redirect(action: "index")
         }
     }
 }
