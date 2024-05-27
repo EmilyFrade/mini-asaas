@@ -1,5 +1,8 @@
 package com.mini.asaas.utils
 
+import grails.compiler.GrailsCompileStatic
+
+@GrailsCompileStatic
 class Utils {
     public static Map<String, String> normalizeParams(Map params) {
 
