@@ -47,6 +47,13 @@ class CpfCnpjUtils {
         return cnpjCheckDigitsAreValid(digits, checkDigitIndexes) || cpfCheckDigitsAreValid(digits, checkDigitIndexes)
     }
 
+    public static String formatCpfCnpj(String cpfCnpj) {
+        if (isCPF(cpfCnpj)) return "${cpfCnpj[0..2]}.${cpfCnpj[3..5]}.${cpfCnpj[6..8]}-${cpfCnpj[9..10]}"
+        else if (isCNPJ(cpfCnpj)) return "${cpfCnpj[0..1]}.${cpfCnpj[2..4]}.${cpfCnpj[5..7]}/${cpfCnpj[8..11]}-${cpfCnpj[12..13]}"
+
+        return null
+    }
+
     private static Boolean simpleValidation(String cpfCnpj) {
         return cpfCnpj != null && hasOnlyDigits(cpfCnpj) && !hasOnlyRepeatedDigits(cpfCnpj)
     }
