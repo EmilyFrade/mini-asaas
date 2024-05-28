@@ -10,12 +10,12 @@ import grails.gorm.transactions.Transactional
 class CustomerService {
 
     public Customer save(CustomerAdapter customerAdapter) {
-        Customer validatedCustomer = validate(customerAdapter)
+        Customer validatedCustomer = validate(customerAdapter, new Customer())
         if (validatedCustomer.hasErrors()) {
             throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(validatedCustomer))
         }
 
-        Customer customer = buildCustomer(customerAdapter)
+        Customer customer = buildCustomer(customerAdapter, new Customer())
         customer.save(failOnError: true)
 
         return customer
@@ -56,10 +56,6 @@ class CustomerService {
         return customer
     }
 
-    private Customer validate(CustomerAdapter customerAdapter) {
-        return validate(customerAdapter, new Customer())
-    }
-
     private Customer buildCustomer(CustomerAdapter customerAdapter, Customer customer) {
         customer.name = customerAdapter.name
         customer.email = customerAdapter.email
@@ -78,7 +74,4 @@ class CustomerService {
         return customer
     }
 
-    private Customer buildCustomer(CustomerAdapter customerAdapter) {
-        return buildCustomer(customerAdapter, new Customer())
-    }
 }
