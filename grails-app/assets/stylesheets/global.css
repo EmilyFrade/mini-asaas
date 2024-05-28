@@ -1,3 +1,49 @@
-html, body{
-    height: 100%;
+:root {
+  --banner-height: 54px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+.banner {
+  width: 100%;
+  height: var(--banner-height);
+  padding: 0 1rem;
+
+  background-color: var(--atlas-primary);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  position: relative;
+}
+
+.banner--logo {
+  height: 32px;
+  margin-bottom: 0.25rem;
+  object-fit: contain;
+}
+
+.banner--close {
+  all: unset;
+
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 1rem;
+
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+
+.banner--close > atlas-link {
+  width: 2rem;
+  height: 2rem;
 }
