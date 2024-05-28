@@ -1,4 +1,4 @@
-package com.mini.asaas
+package com.mini.asaas.payer
 
 import com.mini.asaas.base.BasePerson
 
