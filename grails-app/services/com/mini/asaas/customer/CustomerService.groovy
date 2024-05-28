@@ -9,69 +9,69 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class CustomerService {
 
-    public Customer save(CustomerAdapter customerAdapter) {
-        Customer validatedCustomer = validate(customerAdapter, new Customer())
-        if (validatedCustomer.hasErrors()) {
-            throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(validatedCustomer))
-        }
-
-        Customer customer = buildCustomer(customerAdapter, new Customer())
-        customer.save(failOnError: true)
-
-        return customer
+  public Customer save(CustomerAdapter customerAdapter) {
+    Customer validatedCustomer = validate(customerAdapter, new Customer())
+    if (validatedCustomer.hasErrors()) {
+      throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(validatedCustomer))
     }
 
-    public Customer show(Long id) {
-        Customer customer = CustomerRepository.findById(id)
-        if (!customer) throw new RuntimeException("Cliente não encontrado")
-        return customer
+    Customer customer = buildCustomer(customerAdapter, new Customer())
+    customer.save(failOnError: true)
+
+    return customer
+  }
+
+  public Customer show(Long id) {
+    Customer customer = CustomerRepository.findById(id)
+    if (!customer) throw new BusinessException("Cliente não encontrado")
+    return customer
+  }
+
+  public Customer update(CustomerAdapter customerAdapter, Long id) {
+    Customer customer = CustomerRepository.findById(id)
+
+    if (!customer) throw new BusinessException("Cliente não encontrado")
+
+    customer = validate(customerAdapter, customer)
+    if (customer.hasErrors()) {
+      throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(customer))
     }
 
-    public Customer update(CustomerAdapter customerAdapter, Long id) {
-        Customer customer = CustomerRepository.findById(id)
+    customer = buildCustomer(customerAdapter, customer)
+    customer.markDirty()
+    customer.save(failOnError: true)
 
-        if (!customer) throw new RuntimeException("Cliente não encontrado")
+    return customer
+  }
 
-        customer = validate(customerAdapter, customer)
-        if (customer.hasErrors()) {
-            throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(customer))
-        }
+  private Customer validate(CustomerAdapter customerAdapter, Customer customer) {
+    CustomerValidator validator = new CustomerValidator()
 
-        customer = buildCustomer(customerAdapter, customer)
-        customer.markDirty()
-        customer.save(failOnError: true)
+    BusinessValidation validationResult = validator.validate(customerAdapter, customer)
 
-        return customer
+    if (!validationResult.isValid()) {
+      DomainErrorUtils.addBusinessRuleErrors(customer, validationResult.errors)
     }
 
-    private Customer validate(CustomerAdapter customerAdapter, Customer customer) {
-        CustomerValidator validator = new CustomerValidator()
+    return customer
+  }
 
-        BusinessValidation validationResult = validator.validate(customerAdapter, customer)
-
-        if (!validationResult.isValid()) {
-            DomainErrorUtils.addBusinessRuleErrors(customer, validationResult.errors)
-        }
-
-        return customer
-    }
-
-    private Customer buildCustomer(CustomerAdapter customerAdapter, Customer customer) {
-        customer.name = customerAdapter.name
-        customer.email = customerAdapter.email
-        customer.cpfCnpj = customerAdapter.cpfCnpj
-        customer.phoneNumber = customerAdapter.phoneNumber
-        customer.personType = customerAdapter.personType
-        customer.address = customerAdapter.address
-        customer.addressNumber = customerAdapter.addressNumber
-        customer.complement = customerAdapter.complement
-        customer.province = customerAdapter.province
-        customer.city = customerAdapter.city
-        customer.state = customerAdapter.state
-        customer.zipCode = customerAdapter.zipCode
-        customer.birthDate = customerAdapter.birthDate
-        customer.companyType = customerAdapter.companyType
-        return customer
-    }
+  private Customer buildCustomer(CustomerAdapter customerAdapter, Customer customer) {
+    customer.name = customerAdapter.name
+    customer.email = customerAdapter.email
+    customer.cpfCnpj = customerAdapter.cpfCnpj
+    customer.phoneNumber = customerAdapter.phoneNumber
+    customer.personType = customerAdapter.personType
+    customer.address = customerAdapter.address
+    customer.addressNumber = customerAdapter.addressNumber
+    customer.complement = customerAdapter.complement
+    customer.province = customerAdapter.province
+    customer.city = customerAdapter.city
+    customer.state = customerAdapter.state
+    customer.zipCode = customerAdapter.zipCode
+    customer.birthDate = customerAdapter.birthDate
+    customer.companyType = customerAdapter.companyType
+    return customer
+  }
 
 }
