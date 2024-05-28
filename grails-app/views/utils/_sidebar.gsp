@@ -1,6 +1,5 @@
 <atlas-sidebar
-        slot="sidebar"
-        home-path="${createLink(controller: "payer", action: "index")}">
+        slot="sidebar">
     <atlas-sidebar-menu slot="body">
         <atlas-sidebar-menu-item
                 icon="users"
@@ -8,11 +7,24 @@
                 text="Pagadores"
             ${ controllerName == "payer" ? "active" : "" }>
             <atlas-sidebar-menu-item
+                    icon="user"
+                    text="Cadastrar pagador"
+                    href="${createLink(controller: "payer", action: "create")}"
+                ${ controllerName == "payer" && actionName == "create" ? "active" : "" }
+            ></atlas-sidebar-menu-item>
+            <atlas-sidebar-menu-item
                     icon="users"
                     value="clients-group"
-                    text="Lista de Pagadores"
-                    href="${createLink(controller: "payer", action: "")}"
-                ${ controllerName == "payer" && actionName == "" ? "active" : "" }
+                    text="Pagadores ativos"
+                    href="${createLink(controller: "payer", action: "index")}"
+                ${ controllerName == "payer" && actionName == "index" ? "active" : "" }
+            ></atlas-sidebar-menu-item>
+            <atlas-sidebar-menu-item
+                    icon="users"
+                    value="clients-group"
+                    text="Pagadores inativos"
+                    href="${createLink(controller: "payer", action: "restore")}"
+                ${ controllerName == "payer" && actionName == "restore" ? "active" : "" }
             ></atlas-sidebar-menu-item>
         </atlas-sidebar-menu-item>
     </atlas-sidebar-menu>
