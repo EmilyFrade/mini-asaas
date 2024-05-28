@@ -19,35 +19,19 @@ class PayerRepository {
         } as Criteria
     }
 
-    static Payer findById(Long id) {
-        Payer payer = Payer.get(id)
-        if (!payer || payer.deleted) {
-            return null
-        }
-        return payer
-    }
-
-    static void delete(Long id) {
-        Payer entity = Payer.get(id)
-        if (entity && !entity.deleted) {
-            entity.deleted = true
-            entity.save(flush: true)
-        }
-    }
-
     static List<Payer> listAllNotDeleted() {
-        Payer.findAllByDeleted(false)
+        return Payer.findAllByDeleted(false)
     }
 
     static List<Payer> listAllDeleted() {
-        Payer.findAllByDeleted(true)
+        return Payer.findAllByDeleted(true)
     }
 
     static Long countAllNotDeleted() {
-        Payer.countByDeleted(false)
+        return Payer.countByDeleted(false)
     }
 
     static Long countAllDeleted() {
-        Payer.countByDeleted(true)
+        return Payer.countByDeleted(true)
     }
 }
