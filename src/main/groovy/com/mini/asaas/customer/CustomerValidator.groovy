@@ -1,6 +1,7 @@
 package com.mini.asaas.customer
 
 import com.mini.asaas.base.BaseValidator
+import com.mini.asaas.repository.CustomerRepository
 import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.DateUtils
 import com.mini.asaas.utils.EmailUtils
@@ -11,21 +12,15 @@ class CustomerValidator extends BaseValidator {
 
     private static final PHONE_NUMBER_REGEX = /(\d{10,11})/
 
-    public BusinessValidation validate(CustomerAdapter adapter) {
+    public BusinessValidation validate(CustomerAdapter adapter, Customer customer) {
         validateCpfCnpj(adapter.cpfCnpj)
         validateEmail(adapter.email)
-        validateIfCpfCnpjExists(adapter.cpfCnpj)
-        validateIfEmailExists(adapter.email)
+        if (customer.cpfCnpj != adapter.cpfCnpj) validateIfCpfCnpjExists(adapter.cpfCnpj)
+        if (customer.email != adapter.email) validateIfEmailExists(adapter.email)
         validateBirthDate(adapter.birthDate)
         validatePhoneNumber(adapter.phoneNumber)
         validateZipCode(adapter.zipCode)
         return validationResult
-    }
-
-    public CustomerValidator validateRequiredFields(Map requiredFields) {
-        Boolean failed = requiredFields.any { !it.value }
-        if (failed) validationResult.addError("notFilled.requiredFields")
-        return this
     }
 
     public CustomerValidator validateCpfCnpj(String cpfCnpj) {
@@ -43,14 +38,14 @@ class CustomerValidator extends BaseValidator {
     }
 
     public CustomerValidator validateIfCpfCnpjExists(String cpfCnpj) {
-        if (cpfCnpj && Customer.findByCpfCnpj(cpfCnpj)) {
+        if (cpfCnpj && CustomerRepository.existsByCpfCnpj(cpfCnpj)) {
             validationResult.addError("alreadyExists.cpfCnpj")
         }
         return this
     }
 
     public CustomerValidator validateIfEmailExists(String email) {
-        if (email && Customer.findByEmail(email)) {
+        if (email && CustomerRepository.existsByEmail(email)) {
             validationResult.addError("alreadyExists.email")
         }
         return this
