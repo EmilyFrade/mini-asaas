@@ -1,12 +1,15 @@
 package com.mini.asaas.enums
 
-enum AlertType {
-    INFO,
-    SUCCESS,
-    WARNING,
-    ERROR
+import grails.compiler.GrailsCompileStatic
 
-    public String getValue() {
-        return this.name().toLowerCase();
-    }
+@GrailsCompileStatic
+enum AlertType {
+  ERROR,
+  INFO,
+  SUCCESS,
+  WARNING
+
+  public String getValue() {
+    return this.name().toLowerCase();
+  }
 }
