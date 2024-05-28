@@ -5,51 +5,51 @@ import com.mini.asaas.enums.address.AddressState
 
 abstract class BasePerson extends BaseEntity {
 
-    String name
+  String name
 
-    String email
+  String email
 
-    String cpfCnpj
+  String cpfCnpj
 
-    String phoneNumber
+  String phoneNumber
 
-    PersonType personType
+  PersonType personType
 
-    String address
+  String address
 
-    String addressNumber
+  String addressNumber
 
-    String complement
+  String complement
 
-    String province
+  String province
 
-    String city
+  String city
 
-    AddressState state
+  AddressState state
 
-    String zipCode
+  String zipCode
 
-    Date birthDate
+  Date birthDate
 
-    static constraints = {
-        name blank: false
-        email blank: false, email: true
-        cpfCnpj blank: false, size: 11..14
-        phoneNumber blank: false
-        personType blank: false
-        address blank: false
-        addressNumber blank: false
-        complement nullable: true
-        province blank: false
-        city blank: false
-        state blank: false
-        zipCode blank: false
-        birthDate blank: false
-    }
+  static constraints = {
+    name blank: false
+    email blank: false, email: true
+    cpfCnpj blank: false, size: 11..14
+    phoneNumber blank: false
+    personType blank: false
+    address blank: false
+    addressNumber blank: false
+    complement nullable: true
+    province blank: false
+    city blank: false
+    state blank: false
+    zipCode blank: false
+    birthDate blank: false, nullable: true
+  }
 
-    static mappings = {
-        email unique: true
-        cpfCnpj unique: true
-    }
+  static mappings = {
+    email unique: true
+    cpfCnpj unique: true
+  }
 
 }
