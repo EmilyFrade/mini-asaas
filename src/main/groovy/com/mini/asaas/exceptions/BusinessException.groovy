@@ -2,8 +2,11 @@ package com.mini.asaas.exceptions
 
 class BusinessException extends RuntimeException {
 
-    public BusinessException(String message) {
+    public String code
+
+    public BusinessException(String message, String code) {
         super(message)
+        this.code = code
     }
 
     public BusinessException(String message, Throwable cause) {

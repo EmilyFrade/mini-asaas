@@ -10,11 +10,13 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class PayerService {
 
+    BusinessValidation validationResult
+
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
 
         payer = validate(adapter, payer)
-        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
+        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validationResult.getFirstErrorCode())
 
         payer = buildPayer(adapter, payer)
 
@@ -27,7 +29,7 @@ class PayerService {
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
         payer = validate(adapter, payer)
-        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
+        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validationResult.getFirstErrorCode())
 
         payer = buildPayer(adapter, payer)
         payer.markDirty()
@@ -49,7 +51,7 @@ class PayerService {
         PayerValidator validator = new PayerValidator()
         validator.validateAll(adapter, payer)
 
-        BusinessValidation validationResult = validator.validationResult
+        validationResult = validator.validationResult
 
         if (!validationResult.isValid()) {
             DomainErrorUtils.addBusinessRuleErrors(payer, validationResult.errors)
