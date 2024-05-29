@@ -12,13 +12,6 @@ class CustomerController {
     def postCreate() {
         try {
             Customer customer = customerService.save(new CustomerAdapter(params as Map))
-
-            if (customer.hasErrors()) {
-                flash.message = "Ocorreu um erro ao salvar os dados do cliente, corrija os campos e tente novamente."
-                flash.status = AlertType.ERROR.getValue()
-                render(view: "create", model: [errors: customer.errors, step: 3, addressOpened: true])
-            }
-
             flash.message = "Cliente salvo com sucesso."
             flash.status = AlertType.SUCCESS.getValue()
             redirect(action: "show", id: customer.id)
