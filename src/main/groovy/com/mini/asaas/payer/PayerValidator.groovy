@@ -1,6 +1,7 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.base.BaseValidator
+import com.mini.asaas.repository.PayerRepository
 import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.ZipCodeUtils
 
@@ -23,9 +24,9 @@ class PayerValidator extends BaseValidator {
         if (!CpfCnpjUtils.isValidCpfCnpj(cpfCnpj)) {
             validationResult.addError("invalid.cpfCnpj")
         }
-        if (Payer.countByCpfCnpj(cpfCnpj) > 0 && Payer.findByCpfCnpj(cpfCnpj).deleted) {
+        if (PayerRepository.existsByCpfCnpj(cpfCnpj, true)) {
             validationResult.addError("alreadyExistsAndDeleted.cpfCnpj")
-        } else if (Payer.countByCpfCnpj(cpfCnpj) > 0) {
+        } else if (PayerRepository.existsByCpfCnpj(cpfCnpj)) {
             validationResult.addError("alreadyExists.cpfCnpj")
         }
 
@@ -36,9 +37,9 @@ class PayerValidator extends BaseValidator {
         if (!email.matches(EMAIL_REGEX)) {
             validationResult.addError("invalid.email")
         }
-        if (Payer.countByEmail(email) > 0 && Payer.findByEmail(email).deleted) {
+        if (PayerRepository.existsByEmail(email, true)) {
             validationResult.addError("alreadyExistsAndDeleted.email")
-        } else if (Payer.countByEmail(email) > 0) {
+        } else if (PayerRepository.existsByEmail(email)) {
             validationResult.addError("alreadyExists.email")
         }
 

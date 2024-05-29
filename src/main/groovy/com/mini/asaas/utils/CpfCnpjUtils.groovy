@@ -48,8 +48,8 @@ class CpfCnpjUtils {
     }
 
     public static String formatCpfCnpj(String cpfCnpj) {
-        if (isCPF(cpfCnpj)) return "${cpfCnpj[0..2]}.${cpfCnpj[3..5]}.${cpfCnpj[6..8]}-${cpfCnpj[9..10]}"
-        else if (isCNPJ(cpfCnpj)) return "${cpfCnpj[0..1]}.${cpfCnpj[2..4]}.${cpfCnpj[5..7]}/${cpfCnpj[8..11]}-${cpfCnpj[12..13]}"
+        if (isCPF(cpfCnpj)) return cpfCnpj.replaceAll(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4')
+        else if (isCNPJ(cpfCnpj)) return cpfCnpj.replaceAll(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5')
 
         return null
     }
