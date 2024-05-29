@@ -6,27 +6,43 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class PayerRepository {
 
-    static Payer findById(Long id, Boolean bool) {
-        Payer.findByIdAndDeleted(id, bool)
-    }
-
-    static Payer findById(Long id) {
+    public static Payer findById(Long id) {
         Payer.findById(id)
     }
 
-    static List<Payer> listAllNotDeleted() {
+    public static Payer findById(Long id, Boolean bool) {
+        Payer.findByIdAndDeleted(id, bool)
+    }
+
+    public static Boolean existsByCpfCnpj(String cpfCnpj) {
+        return Payer.countByCpfCnpj(cpfCnpj) > 0
+    }
+
+    public static Boolean existsByCpfCnpj(String cpfCnpj, Boolean bool) {
+        return Payer.countByCpfCnpjAndDeleted(cpfCnpj, bool) > 0
+    }
+
+    public static Boolean existsByEmail(String email) {
+        return Payer.countByEmail(email) > 0
+    }
+
+    public static Boolean existsByEmail(String email, Boolean bool) {
+        return Payer.countByEmailAndDeleted(email, bool) > 0
+    }
+
+    public static List<Payer> listAllNotDeleted() {
         return Payer.findAllByDeleted(false)
     }
 
-    static List<Payer> listAllDeleted() {
+    public static List<Payer> listAllDeleted() {
         return Payer.findAllByDeleted(true)
     }
 
-    static Long countAllNotDeleted() {
+    public static Long countAllNotDeleted() {
         return Payer.countByDeleted(false)
     }
 
-    static Long countAllDeleted() {
+    public static Long countAllDeleted() {
         return Payer.countByDeleted(true)
     }
 }
