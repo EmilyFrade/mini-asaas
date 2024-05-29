@@ -1,6 +1,8 @@
 package com.mini.asaas.payer
 
+import com.mini.asaas.customer.Customer
 import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.repository.CustomerRepository
 import com.mini.asaas.repository.PayerRepository
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
@@ -13,13 +15,19 @@ class PayerService {
 
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
+        Customer customer = findCustomer(adapter.customerId)
 
-        payer = validate(adapter, payer)
+        if (!customer) throw new RuntimeException("Cliente não encontrado")
+
+        payer = validate(adapter, payer, customer)
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
 
         payer = buildPayer(adapter, payer)
 
-        return payer.save(failOnError: true)
+        customer.addToPayers(payer)
+        customer.save(failOnError: true)
+
+        return payer
     }
 
     public Payer update(PayerAdapter adapter, Long id) {
@@ -29,7 +37,7 @@ class PayerService {
             throw new RuntimeException("Pagador não encontrado")
         }
 
-        payer = validate(adapter, payer)
+        payer = validate(adapter, payer, payer.customer)
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
 
         payer = buildPayer(adapter, payer)
@@ -38,9 +46,9 @@ class PayerService {
         return payer.save(failOnError: true)
     }
 
-    private Payer validate(PayerAdapter adapter, Payer payer) {
+    private Payer validate(PayerAdapter adapter, Payer payer, Customer customer) {
         PayerValidator validator = new PayerValidator()
-        validator.validateAll(adapter, payer)
+        validator.validateAll(adapter, payer, customer)
 
         BusinessValidation validationResult = validator.validationResult
 
@@ -67,5 +75,9 @@ class PayerService {
         payer.birthDate = adapter.birthDate
 
         return payer
+    }
+
+    private Customer findCustomer(Long id) {
+        return CustomerRepository.findById(id)
     }
 }

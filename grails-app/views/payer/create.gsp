@@ -17,7 +17,16 @@
                 <atlas-form class="form" method="POST" action="${createLink(controller: "payer", action: "save")}">
                     <atlas-grid>
                         <atlas-row>
-                            <atlas-col lg="6">
+                            <atlas-col lg="2">
+                                <atlas-input
+                                        label="ID do cliente"
+                                        type="text"
+                                        name="customerId"
+                                        value="${params.customerId}"
+                                        required >
+                                </atlas-input>
+                            </atlas-col>
+                            <atlas-col lg="5">
                                 <atlas-input
                                         label="Nome"
                                         type="text"
@@ -32,7 +41,7 @@
                                     </span>
                                 </g:hasErrors>
                             </atlas-col>
-                            <atlas-col lg="6">
+                            <atlas-col lg="5">
                                 <atlas-masked-input
                                         col="2"
                                         mask-alias="email"

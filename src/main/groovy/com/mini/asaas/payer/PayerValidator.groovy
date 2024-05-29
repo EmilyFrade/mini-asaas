@@ -1,6 +1,8 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.base.BaseValidator
+import com.mini.asaas.customer.Customer
+import com.mini.asaas.repository.PayerRepository
 import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.ZipCodeUtils
 
@@ -9,9 +11,9 @@ class PayerValidator extends BaseValidator {
     private static final PHONE_NUMBER_REGEX = /^(\+55)?\s?(\(?\d{2}\)?)?\s?\d{4,5}-?\d{4}$/
     private static final EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
 
-    public PayerValidator validateAll(PayerAdapter adapter, Payer payer) {
-        if (adapter.email != payer.email) this.validateEmail(adapter.email)
-        if (adapter.cpfCnpj != payer.cpfCnpj) this.validateCpfCnpj(adapter.cpfCnpj)
+    public PayerValidator validateAll(PayerAdapter adapter, Payer payer, Customer customer) {
+        if (adapter.email != payer.email) this.validateEmail(adapter.email, customer)
+        if (adapter.cpfCnpj != payer.cpfCnpj) this.validateCpfCnpj(adapter.cpfCnpj, customer)
         this.validatePhoneNumber(adapter.phoneNumber)
         this.validateBirthDate(adapter.birthDate)
         this.validateZipCode(adapter.zipCode)
@@ -19,22 +21,22 @@ class PayerValidator extends BaseValidator {
         return this
     }
 
-    public PayerValidator validateCpfCnpj(String cpfCnpj) {
+    public PayerValidator validateCpfCnpj(String cpfCnpj, Customer customer) {
         if (!CpfCnpjUtils.isValidCpfCnpj(cpfCnpj)) {
             validationResult.addError("invalid.cpfCnpj")
         }
-        if (Payer.countByCpfCnpj(cpfCnpj) > 0) {
+        if (PayerRepository.findByCpfCnpj(cpfCnpj, customer)) {
             validationResult.addError("alreadyExists.cpfCnpj")
         }
 
         return this
     }
 
-    public PayerValidator validateEmail(String email) {
+    public PayerValidator validateEmail(String email, Customer customer) {
         if (!email.matches(EMAIL_REGEX)) {
             validationResult.addError("invalid.email")
         }
-        if (Payer.countByEmail(email) > 0) {
+        if (PayerRepository.findByEmail(email, customer)) {
             validationResult.addError("alreadyExists.email")
         }
 
