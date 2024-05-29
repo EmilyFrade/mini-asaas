@@ -1,16 +1,18 @@
-package com.mini.asaas
+package com.mini.asaas.user
 
-import core.entities.BaseEntity
+import com.mini.asaas.base.BaseEntity
+import grails.compiler.GrailsCompileStatic
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
-import grails.compiler.GrailsCompileStatic
 
 @GrailsCompileStatic
-@EqualsAndHashCode(includes='email')
-@ToString(includes='email', includeNames=true, includePackage=false)
+@EqualsAndHashCode(includes = "email")
+@ToString(includes = "email", includeNames = true, includePackage = false)
 class User extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1
+
+    String name
 
     String email
 
@@ -29,13 +31,14 @@ class User extends BaseEntity implements Serializable {
     }
 
     static constraints = {
+        name blank: false
+        email blank: false, email: true
         password blank: false, password: true
-        email blank: false, unique: true, email: true
     }
 
     static mapping = {
         table '`user`'
-	    password column: '`password`'
-        email column: '`email`'
+        password column: '`password`'
+        email unique: true
     }
 }

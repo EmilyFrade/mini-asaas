@@ -1,13 +1,13 @@
-package core.listeners
+package com.mini.asaas.user
 
-import com.mini.asaas.User
+
+import grails.events.annotation.gorm.Listener
 import grails.plugin.springsecurity.SpringSecurityService
+import groovy.transform.CompileStatic
 import org.grails.datastore.mapping.engine.event.AbstractPersistenceEvent
 import org.grails.datastore.mapping.engine.event.PreInsertEvent
 import org.grails.datastore.mapping.engine.event.PreUpdateEvent
 import org.springframework.beans.factory.annotation.Autowired
-import grails.events.annotation.gorm.Listener
-import groovy.transform.CompileStatic
 
 @CompileStatic
 class UserPasswordEncoderListener {
@@ -28,7 +28,7 @@ class UserPasswordEncoderListener {
     private void encodePasswordForEvent(AbstractPersistenceEvent event) {
         if (event.entityObject instanceof User) {
             User u = event.entityObject as User
-            if (u.password && ((event instanceof  PreInsertEvent) || (event instanceof PreUpdateEvent && u.isDirty('password')))) {
+            if (u.password && ((event instanceof PreInsertEvent) || (event instanceof PreUpdateEvent && u.isDirty('password')))) {
                 event.getEntityAccess().setProperty('password', encodePassword(u.password))
             }
         }
