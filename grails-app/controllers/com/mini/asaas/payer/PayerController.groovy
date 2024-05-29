@@ -60,8 +60,7 @@ class PayerController {
     def show() {
         try {
             Long id = params.id as Long
-            Payer payer = Payer.findByIdAndDeleted(id, false)
-            if (!payer) return redirect(action: "index")
+            Payer payer = payerService.show(id)
             return [payer: payer]
         } catch (Exception e) {
             redirect(action: "index")

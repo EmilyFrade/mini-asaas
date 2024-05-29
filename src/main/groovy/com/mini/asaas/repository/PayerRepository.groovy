@@ -2,21 +2,16 @@ package com.mini.asaas.repository
 
 import com.mini.asaas.payer.Payer
 import grails.gorm.transactions.Transactional
-import org.grails.datastore.mapping.query.api.Criteria
 
 @Transactional
 class PayerRepository {
 
-    public Criteria query(Map search) {
-        Payer.createCriteria().list {
-            if (!Boolean.valueOf(search.includeDeleted as String)) {
-                eq('deleted', false)
-            }
+    static Payer findById(Long id, Boolean bool) {
+        Payer.findByIdAndDeleted(id, bool)
+    }
 
-            if (search.containsKey('id')) {
-                eq('id', search.id)
-            }
-        } as Criteria
+    static Payer findById(Long id) {
+        Payer.findById(id)
     }
 
     static List<Payer> listAllNotDeleted() {
