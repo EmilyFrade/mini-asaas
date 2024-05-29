@@ -9,7 +9,7 @@ class CustomerController {
 
     def create() {}
 
-    def postCreate() {
+    def save() {
         try {
             Customer customer = customerService.save(new CustomerAdapter(params as Map))
             flash.message = "Cliente salvo com sucesso."
