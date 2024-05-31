@@ -15,6 +15,11 @@ class PayerController {
 
     def create() {}
 
+    def restore() {
+        def payerList = PayerRepository.listAllDeleted()
+        return [payerList: payerList]
+    }
+
     def save() {
         try {
             PayerAdapter adapter = new PayerAdapter(params)
@@ -54,9 +59,19 @@ class PayerController {
 
     def show() {
         try {
-            Payer payer = Payer.get(params.id)
-            if (!payer) return redirect(action: "index")
+            Long id = params.id as Long
+            Payer payer = payerService.show(id)
             return [payer: payer]
+        } catch (Exception e) {
+            redirect(action: "index")
+        }
+    }
+
+    def deleteOrRestore() {
+        try {
+            Long id = params.id as Long
+            payerService.deleteOrRestore(id)
+            redirect(action: "index")
         } catch (Exception e) {
             redirect(action: "index")
         }

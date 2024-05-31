@@ -23,11 +23,9 @@ class PayerService {
     }
 
     public Payer update(PayerAdapter adapter, Long id) {
-        Payer payer = PayerRepository.findById(id)
+        Payer payer = PayerRepository.findById(id, false)
 
-        if (!payer) {
-            throw new RuntimeException("Pagador não encontrado")
-        }
+        if (!payer) throw new RuntimeException("Pagador não encontrado")
 
         payer = validate(adapter, payer)
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
@@ -36,6 +34,22 @@ class PayerService {
         payer.markDirty()
 
         return payer.save(failOnError: true)
+    }
+
+    public Payer show(Long id) {
+        Payer payer = PayerRepository.findById(id, false)
+        if (!payer) throw new RuntimeException("Pagador não encontrado")
+        return payer
+    }
+
+    public void deleteOrRestore(Long id) {
+        Payer payer = PayerRepository.findById(id)
+
+        if (!payer) throw new RuntimeException("Pagador não encontrado")
+
+        payer.deleted = !payer.deleted
+        payer.markDirty()
+        payer.save(failOnError: true)
     }
 
     private Payer validate(PayerAdapter adapter, Payer payer) {

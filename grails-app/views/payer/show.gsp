@@ -18,8 +18,10 @@
                     hidden>
             </atlas-input>
 
-            <atlas-button slot="actions" description="Editar" icon="pencil"
-                          data-panel-start-editing="true"></atlas-button>
+            <atlas-button slot="actions" description="Editar" icon="pencil" data-panel-start-editing="true"></atlas-button>
+            <atlas-button slot="actions" description="Excluir" icon="trash" theme="danger"
+                          href="${createLink(controller: "payer", action: "deleteOrRestore", params: [id: payer.id])}">
+            </atlas-button>
 
             <atlas-grid>
                 <atlas-row>
