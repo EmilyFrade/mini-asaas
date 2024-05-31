@@ -13,14 +13,18 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class PayerService {
 
+    BusinessValidation validationResult
+
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
         Customer customer = findCustomer(adapter.customerId)
 
+
         if (!customer) throw new RuntimeException("Cliente não encontrado")
 
         payer = validate(adapter, payer, customer)
-        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
+
+        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validationResult.getFirstErrorCode())
 
         payer = buildPayer(adapter, payer)
 
@@ -31,14 +35,14 @@ class PayerService {
     }
 
     public Payer update(PayerAdapter adapter, Long id) {
-        Payer payer = PayerRepository.findById(id)
+        Payer payer = PayerRepository.findById(id, false)
 
-        if (!payer) {
-            throw new RuntimeException("Pagador não encontrado")
-        }
+        if (!payer) throw new RuntimeException("Pagador não encontrado")
+
 
         payer = validate(adapter, payer, payer.customer)
-        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer))
+
+        if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validationResult.getFirstErrorCode())
 
         payer = buildPayer(adapter, payer)
         payer.markDirty()
@@ -46,11 +50,27 @@ class PayerService {
         return payer.save(failOnError: true)
     }
 
+    public Payer show(Long id) {
+        Payer payer = PayerRepository.findById(id, false)
+        if (!payer) throw new RuntimeException("Pagador não encontrado")
+        return payer
+    }
+
+    public void deleteOrRestore(Long id) {
+        Payer payer = PayerRepository.findById(id)
+
+        if (!payer) throw new RuntimeException("Pagador não encontrado")
+
+        payer.deleted = !payer.deleted
+        payer.markDirty()
+        payer.save(failOnError: true)
+    }
+
     private Payer validate(PayerAdapter adapter, Payer payer, Customer customer) {
         PayerValidator validator = new PayerValidator()
         validator.validateAll(adapter, payer, customer)
 
-        BusinessValidation validationResult = validator.validationResult
+        validationResult = validator.validationResult
 
         if (!validationResult.isValid()) {
             DomainErrorUtils.addBusinessRuleErrors(payer, validationResult.errors)

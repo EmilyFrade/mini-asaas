@@ -3,53 +3,48 @@ package com.mini.asaas.repository
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.payer.Payer
 import grails.gorm.transactions.Transactional
-import org.grails.datastore.mapping.query.api.Criteria
 
 @Transactional
 class PayerRepository {
 
-    public Criteria query(Map search) {
-        Payer.createCriteria().list {
-            if (!Boolean.valueOf(search.includeDeleted as String)) {
-                eq('deleted', false)
-            }
-
-            if (search.containsKey('id')) {
-                eq('id', search.id)
-            }
-        } as Criteria
+    public static Payer findById(Long id) {
+        Payer.findById(id)
     }
 
-    static Payer findById(Long id) {
-        Payer payer = Payer.get(id)
-        if (!payer || payer.deleted) {
-            return null
-        }
-        return payer
+    public static Payer findById(Long id, Boolean deleted) {
+        Payer.findByIdAndDeleted(id, deleted)
     }
 
-    static void delete(Long id) {
-        Payer entity = Payer.get(id)
-        if (entity && !entity.deleted) {
-            entity.deleted = true
-            entity.save(flush: true)
-        }
+    public static Boolean existsByCpfCnpj(String cpfCnpj) {
+        return Payer.countByCpfCnpj(cpfCnpj) > 0
     }
 
-    static List<Payer> listAllNotDeleted() {
-        Payer.findAllByDeleted(false)
+    public static Boolean existsByCpfCnpj(String cpfCnpj, Boolean deleted) {
+        return Payer.countByCpfCnpjAndDeleted(cpfCnpj, deleted) > 0
     }
 
-    static List<Payer> listAllDeleted() {
-        Payer.findAllByDeleted(true)
+    public static Boolean existsByEmail(String email) {
+        return Payer.countByEmail(email) > 0
     }
 
-    static Long countAllNotDeleted() {
-        Payer.countByDeleted(false)
+    public static Boolean existsByEmail(String email, Boolean deleted) {
+        return Payer.countByEmailAndDeleted(email, deleted) > 0
     }
 
-    static Long countAllDeleted() {
-        Payer.countByDeleted(true)
+    public static List<Payer> listAllNotDeleted() {
+        return Payer.findAllByDeleted(false)
+    }
+
+    public static List<Payer> listAllDeleted() {
+        return Payer.findAllByDeleted(true)
+    }
+
+    public static Long countAllNotDeleted() {
+        return Payer.countByDeleted(false)
+    }
+
+    public static Long countAllDeleted() {
+        return Payer.countByDeleted(true)
     }
 
     static Payer findByCpfCnpj(String cpfCnpj, Customer customer) {

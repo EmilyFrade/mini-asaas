@@ -4,12 +4,12 @@ import com.mini.asaas.base.BaseValidator
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.repository.PayerRepository
 import com.mini.asaas.utils.CpfCnpjUtils
+import com.mini.asaas.utils.EmailUtils
 import com.mini.asaas.utils.ZipCodeUtils
 
 class PayerValidator extends BaseValidator {
 
     private static final PHONE_NUMBER_REGEX = /^(\+55)?\s?(\(?\d{2}\)?)?\s?\d{4,5}-?\d{4}$/
-    private static final EMAIL_REGEX = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/
 
     public PayerValidator validateAll(PayerAdapter adapter, Payer payer, Customer customer) {
         if (adapter.email != payer.email) this.validateEmail(adapter.email, customer)
@@ -26,6 +26,8 @@ class PayerValidator extends BaseValidator {
             validationResult.addError("invalid.cpfCnpj")
         }
         if (PayerRepository.findByCpfCnpj(cpfCnpj, customer)) {
+            validationResult.addError("alreadyExistsAndDeleted.cpfCnpj")
+        } else if (PayerRepository.existsByCpfCnpj(cpfCnpj)) {
             validationResult.addError("alreadyExists.cpfCnpj")
         }
 
@@ -33,10 +35,12 @@ class PayerValidator extends BaseValidator {
     }
 
     public PayerValidator validateEmail(String email, Customer customer) {
-        if (!email.matches(EMAIL_REGEX)) {
+        if (!EmailUtils.isValid(email)) {
             validationResult.addError("invalid.email")
         }
         if (PayerRepository.findByEmail(email, customer)) {
+            validationResult.addError("alreadyExistsAndDeleted.email")
+        } else if (PayerRepository.existsByEmail(email)) {
             validationResult.addError("alreadyExists.email")
         }
 
