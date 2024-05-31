@@ -1,8 +1,14 @@
 package com.mini.asaas
 
+import com.mini.asaas.customer.CompanyType
+import com.mini.asaas.customer.Customer
+import com.mini.asaas.enums.PersonType
+import com.mini.asaas.enums.address.AddressState
 import com.mini.asaas.user.Role
 import com.mini.asaas.user.User
+import com.mini.asaas.user.UserFunction
 import com.mini.asaas.user.UserRole
+import com.mini.asaas.utils.DateFormatUtils
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
 
@@ -11,41 +17,83 @@ class BootStrap {
     GrailsApplication grailsApplication
 
     def init = { servletContext ->
-        createBasicRoles()
-        createBasicUsers()
+        Map roles = createBasicRoles()
+        Customer customer = createDefaultCustomer()
+        createDefaultUser(customer, roles)
     }
 
     def destroy = {
     }
 
     @Transactional
-    private void createBasicRoles() {
-        String adminRole = grailsApplication.config.getProperty("security.basic.users.admin.role")
-        String userRole = grailsApplication.config.getProperty("security.basic.users.user.role")
+    private Map<String, Role> createBasicRoles() {
+        Map<String, Role> roles = [:]
 
-        if (!Role.findByAuthority(adminRole)) {
-            new Role(authority: adminRole).save(failOnError: true)
+        String adminRoleStr = UserFunction.ADMIN.getAuthority()
+        String userRoleStr = UserFunction.USER.getAuthority()
+
+        Role adminRole = Role.findByAuthority(adminRoleStr)
+        Role userRole = Role.findByAuthority(userRoleStr)
+
+        if (!adminRole) {
+            adminRole = new Role(authority: adminRoleStr).save(failOnError: true)
         }
 
-        if (!Role.findByAuthority(userRole)) {
-            new Role(authority: userRole).save(failOnError: true)
+        if (!userRole) {
+            userRole = new Role(authority: userRoleStr).save(failOnError: true)
         }
+
+        roles.put("admin", adminRole)
+        roles.put("user", userRole)
+
+        return roles
     }
 
     @Transactional
-    private void createBasicUsers() {
-        String adminEmail = grailsApplication.config.getProperty("security.basic.users.admin.email")
+    private void createDefaultUser(Customer customer, Map<String, Role> roles) {
 
-        if (User.findByEmail(adminEmail)) return
+        if (!customer || !roles) return
+        if (User.findByEmail(customer.email)) return
 
-        String adminRole = grailsApplication.config.getProperty("security.basic.users.admin.role")
-        String userRole = grailsApplication.config.getProperty("security.basic.users.user.role")
-        String adminPassword = grailsApplication.config.getProperty("security.basic.users.admin.password")
-        String adminName = grailsApplication.config.getProperty("security.basic.users.admin.name")
-        User admin = new User(name: adminName, email: adminEmail, password: adminPassword)
+        User admin = new User()
+        admin.name = customer.name
+        admin.email = customer.email
+        admin.password = grailsApplication.config.getProperty("security.basic.users.admin.password")
+        admin.customer = customer
         admin.save(failOnError: true)
-        UserRole.create admin, Role.findByAuthority(adminRole)
-        UserRole.create admin, Role.findByAuthority(userRole)
+
+        UserRole.create(admin, roles.get("admin"))
+        UserRole.create(admin, roles.get("user"))
+    }
+
+    @Transactional
+    private Customer createDefaultCustomer() {
+        String cpfCnpj = grailsApplication.config.getProperty("security.basic.customers.default.cpfCnpj")
+        Customer customer = Customer.findByCpfCnpj(cpfCnpj)
+        if (customer) return customer
+
+        String email = grailsApplication.config.getProperty("security.basic.customers.default.email")
+        customer = Customer.findByEmail(email)
+        if (customer) return customer
+
+        customer = new Customer()
+        customer.name = grailsApplication.config.getProperty("security.basic.customers.default.name")
+        customer.email = email
+        customer.cpfCnpj = cpfCnpj
+        customer.personType = PersonType.parseFromCpfCnpj(cpfCnpj)
+        customer.birthDate = DateFormatUtils.parseDateFromString("05/04/1990")
+        customer.address = "Avenida Rolf Wiest"
+        customer.addressNumber = "277"
+        customer.complement = "Sala 814"
+        customer.province = "Bom Retiro"
+        customer.city = "Joinville"
+        customer.state = AddressState.SC
+        customer.zipCode = "89223005"
+        customer.phoneNumber = "4734333333"
+        customer.companyType = CompanyType.ASSOCIATION
+        customer.save(failOnError: true)
+
+        return customer
     }
 
 }

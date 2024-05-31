@@ -1,13 +1,19 @@
 package com.mini.asaas.customer
 
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.repository.CustomerRepository
+import com.mini.asaas.user.Role
+import com.mini.asaas.user.User
+import com.mini.asaas.user.UserFunction
+import com.mini.asaas.user.UserRole
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.gorm.transactions.Transactional
+import grails.plugin.springsecurity.SpringSecurityService
 
 @Transactional
 class CustomerService {
+
+    SpringSecurityService springSecurityService
 
     public Customer save(CustomerAdapter customerAdapter) {
         Customer validatedCustomer = validate(customerAdapter, new Customer())
@@ -16,21 +22,29 @@ class CustomerService {
         }
 
         Customer customer = buildCustomer(customerAdapter, new Customer())
+
         customer.save(failOnError: true)
 
+        User user = new User()
+        user.email = customerAdapter.email
+        user.password = customerAdapter.password
+        user.name = customerAdapter.name
+        user.customer = customer
+        user.save(failOnError: true)
+
+        UserRole.create(user, Role.findByAuthority(UserFunction.ADMIN.getAuthority()))
+
         return customer
     }
 
-    public Customer show(Long id) {
-        Customer customer = CustomerRepository.findById(id)
-        if (!customer) throw new RuntimeException("Cliente não encontrado")
-        return customer
+    public Customer show() {
+        User user = getCurrentUser()
+        return user.customer
     }
 
-    public Customer update(CustomerAdapter customerAdapter, Long id) {
-        Customer customer = CustomerRepository.findById(id)
-
-        if (!customer) throw new RuntimeException("Cliente não encontrado")
+    public Customer update(CustomerAdapter customerAdapter) {
+        User user = getCurrentUser()
+        Customer customer = user.customer
 
         customer = validate(customerAdapter, customer)
         if (customer.hasErrors()) {
@@ -41,7 +55,23 @@ class CustomerService {
         customer.markDirty()
         customer.save(failOnError: true)
 
+        if (user.email == customer.email) {
+            if (customer.email !== customerAdapter.email) {
+                user.email = customerAdapter.email
+                user.save(failOnError: true)
+            }
+
+            if (customer.name !== customerAdapter.name) {
+                user.name = customerAdapter.name
+                user.save(failOnError: true)
+            }
+        }
+
         return customer
+    }
+
+    private User getCurrentUser() {
+        return springSecurityService.loadCurrentUser() as User
     }
 
     private Customer validate(CustomerAdapter customerAdapter, Customer customer) {
