@@ -20,8 +20,7 @@ class PayerService {
 
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
-        Customer customer = findCustomer(adapter.customerId)
-
+        Customer customer = getCustomer()
 
         if (!customer) throw new RuntimeException("Cliente não encontrado")
 
