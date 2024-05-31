@@ -8,6 +8,7 @@ grails.plugin.springsecurity.active = true
 grails.plugin.springsecurity.rejectIfNoRule = true
 grails.plugin.springsecurity.rememberMe.persistent = true
 grails.plugin.springsecurity.password.algorithm = 'bcrypt'
+grails.plugin.springsecurity.auth.loginFormUrl = '/auth/login'
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
         [pattern: '/error', access: ['permitAll']],
         [pattern: '/shutdown', access: ['permitAll']],
