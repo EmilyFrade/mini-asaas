@@ -38,4 +38,12 @@ class PayerRepository {
     public static List<Payer> listAllDeleted() {
         return Payer.findAllByDeleted(true)
     }
+
+    public static List<Payer> listAllByCustomerAndNotDeleted(Customer customer) {
+        return Payer.findAllByCustomerAndDeleted(customer, false)
+    }
+
+    public static List<Payer> listAllByCustomerAndDeleted(Customer customer) {
+        return Payer.findAllByCustomerAndDeleted(customer, true)
+    }
 }
