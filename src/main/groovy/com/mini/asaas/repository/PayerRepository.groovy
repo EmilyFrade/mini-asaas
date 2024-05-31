@@ -1,5 +1,6 @@
 package com.mini.asaas.repository
 
+import com.mini.asaas.customer.Customer
 import com.mini.asaas.payer.Payer
 import grails.gorm.transactions.Transactional
 
@@ -44,5 +45,13 @@ class PayerRepository {
 
     public static Long countAllDeleted() {
         return Payer.countByDeleted(true)
+    }
+
+    static Payer findByCpfCnpj(String cpfCnpj, Customer customer) {
+        return Payer.findByCpfCnpjAndCustomer(cpfCnpj, customer)
+    }
+
+    static Payer findByEmail(String email, Customer customer) {
+        return Payer.findByEmailAndCustomer(email, customer)
     }
 }
