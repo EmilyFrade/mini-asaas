@@ -39,6 +39,8 @@ class CustomerAdapter {
     CompanyType companyType
 
     public CustomerAdapter(Map originalParams) {
+        PersonType selectedPersonType = PersonType.fromString(originalParams.personType as String)
+        originalParams.cpfCnpj = selectedPersonType?.isNatural() ? originalParams.cpf : originalParams.cnpj ?: null
         Map<String, String> params = Utils.normalizeParams(originalParams)
         if (!params) return
         this.name = params.name
