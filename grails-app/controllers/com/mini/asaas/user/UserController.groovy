@@ -3,7 +3,7 @@ package com.mini.asaas.user
 
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured(["ROLE_USER"])
+@Secured(["ROLE_USER", "ROLE_ADMIN"])
 class UserController {
 
     UserService userService
@@ -17,6 +17,6 @@ class UserController {
         } catch (Exception e) {
             redirect(uri: "/logout")
         }
-    }
 
+    }
 }
