@@ -15,20 +15,20 @@ class PayerRepository {
         Payer.findByIdAndDeleted(id, deleted)
     }
 
-    public static Boolean existsByCpfCnpj(String cpfCnpj) {
-        return Payer.countByCpfCnpj(cpfCnpj) > 0
+    public static Boolean existsByCpfCnpj(String cpfCnpj, Customer customer) {
+        return Payer.countByCpfCnpjAndCustomer(cpfCnpj, customer)
     }
 
-    public static Boolean existsByCpfCnpj(String cpfCnpj, Boolean deleted) {
-        return Payer.countByCpfCnpjAndDeleted(cpfCnpj, deleted) > 0
+    public static Boolean existsByCpfCnpj(String cpfCnpj, Customer customer, Boolean deleted) {
+        return Payer.countByCpfCnpjAndCustomerAndDeleted(cpfCnpj, customer, deleted)
     }
 
-    public static Boolean existsByEmail(String email) {
-        return Payer.countByEmail(email) > 0
+    public static Boolean existsByEmail(String email, Customer customer) {
+        return Payer.countByEmailAndCustomer(email, customer)
     }
 
-    public static Boolean existsByEmail(String email, Boolean deleted) {
-        return Payer.countByEmailAndDeleted(email, deleted) > 0
+    public static Boolean existsByEmail(String email, Customer customer, Boolean deleted) {
+        return Payer.countByEmailAndCustomerAndDeleted(email, customer, deleted)
     }
 
     public static List<Payer> listAllNotDeleted() {
@@ -37,21 +37,5 @@ class PayerRepository {
 
     public static List<Payer> listAllDeleted() {
         return Payer.findAllByDeleted(true)
-    }
-
-    public static Long countAllNotDeleted() {
-        return Payer.countByDeleted(false)
-    }
-
-    public static Long countAllDeleted() {
-        return Payer.countByDeleted(true)
-    }
-
-    static Payer findByCpfCnpj(String cpfCnpj, Customer customer) {
-        return Payer.findByCpfCnpjAndCustomer(cpfCnpj, customer)
-    }
-
-    static Payer findByEmail(String email, Customer customer) {
-        return Payer.findByEmailAndCustomer(email, customer)
     }
 }

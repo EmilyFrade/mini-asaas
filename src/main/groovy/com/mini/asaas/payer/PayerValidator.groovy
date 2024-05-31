@@ -25,9 +25,9 @@ class PayerValidator extends BaseValidator {
         if (!CpfCnpjUtils.isValidCpfCnpj(cpfCnpj)) {
             validationResult.addError("invalid.cpfCnpj")
         }
-        if (PayerRepository.findByCpfCnpj(cpfCnpj, customer)) {
+        if (PayerRepository.existsByCpfCnpj(cpfCnpj, customer, true)) {
             validationResult.addError("alreadyExistsAndDeleted.cpfCnpj")
-        } else if (PayerRepository.existsByCpfCnpj(cpfCnpj)) {
+        } else if (PayerRepository.existsByCpfCnpj(cpfCnpj, customer)) {
             validationResult.addError("alreadyExists.cpfCnpj")
         }
 
@@ -38,9 +38,9 @@ class PayerValidator extends BaseValidator {
         if (!EmailUtils.isValid(email)) {
             validationResult.addError("invalid.email")
         }
-        if (PayerRepository.findByEmail(email, customer)) {
+        if (PayerRepository.existsByEmail(email, customer, true)) {
             validationResult.addError("alreadyExistsAndDeleted.email")
-        } else if (PayerRepository.existsByEmail(email)) {
+        } else if (PayerRepository.existsByEmail(email, customer)) {
             validationResult.addError("alreadyExists.email")
         }
 
