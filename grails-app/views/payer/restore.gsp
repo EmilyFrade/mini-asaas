@@ -37,7 +37,7 @@
                         header="Sem pagadores inativos">
                     Aqui você pode vizualizar os pagadores que foram deletados.
                     <atlas-button
-                            description="Lista de pagadores"
+                            description="Pagadores ativos"
                             href="${createLink(controller: "payer", action: "index")}"
                             slot="button"
                     ></atlas-button>

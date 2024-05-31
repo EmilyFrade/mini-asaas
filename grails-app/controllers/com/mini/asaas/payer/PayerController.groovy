@@ -3,6 +3,7 @@ package com.mini.asaas.payer
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.repository.PayerRepository
+import com.mini.asaas.utils.StringUtils
 
 class PayerController {
 
@@ -28,6 +29,7 @@ class PayerController {
             flash.status = AlertType.SUCCESS.getValue()
             redirect(action: "show", id: payer.id)
         } catch (BusinessException e) {
+            flash.code = e.code
             flash.message = e.getMessage()
             flash.status = AlertType.ERROR.getValue()
             render view: "create"
@@ -47,6 +49,7 @@ class PayerController {
             flash.status = AlertType.SUCCESS.getValue()
             redirect(action: "show", id: payer.id)
         } catch (BusinessException e) {
+            flash.code = e.code
             flash.message = e.getMessage()
             flash.status = AlertType.ERROR.getValue()
             redirect(action: "show", id: params.id)
@@ -60,7 +63,21 @@ class PayerController {
     def show() {
         try {
             Long id = params.id as Long
+
+            if (!id) {
+                def payerByEmail = Payer.findByEmail(params.email as String)
+                if (payerByEmail) id = payerByEmail.id
+            }
+
+            if (!id) {
+                def payerByCpfCnpj = Payer.findByCpfCnpj(StringUtils.removeNonNumeric(params.cpfCnpj as String))
+                if (payerByCpfCnpj) id = payerByCpfCnpj.id
+            }
+
+            if (!id) return redirect(action: "index")
+
             Payer payer = payerService.show(id)
+
             return [payer: payer]
         } catch (Exception e) {
             redirect(action: "index")
@@ -70,8 +87,21 @@ class PayerController {
     def deleteOrRestore() {
         try {
             Long id = params.id as Long
+
+            if (!id) {
+                def payerByEmail = Payer.findByEmail(params.email as String)
+                if (payerByEmail) id = payerByEmail.id
+            }
+
+            if (!id) {
+                def payerByCpfCnpj = Payer.findByCpfCnpj(StringUtils.removeNonNumeric(params.cpfCnpj as String))
+                if (payerByCpfCnpj) id = payerByCpfCnpj.id
+            }
+
+            if (!id) return redirect(action: "restore")
+
             payerService.deleteOrRestore(id)
-            redirect(action: "index")
+            redirect(action: "show", id: id)
         } catch (Exception e) {
             redirect(action: "index")
         }
