@@ -24,8 +24,8 @@ class PayerService {
 
         payer = buildPayer(adapter, payer)
 
-        customer.addToPayers(payer)
-        customer.save(failOnError: true)
+        payer.customer = customer
+        payer.save(failOnError: true)
 
         return payer
     }
