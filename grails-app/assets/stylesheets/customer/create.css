@@ -1,0 +1,57 @@
+:root {
+    --create-customer-header-height: 108px;
+}
+
+.create-customer-header {
+    width: 100%;
+    position: fixed;
+    z-index: 99;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: var(--create-customer-header-height);
+}
+
+.create-customer-container {
+    width: 100%;
+    height: fit-content;
+    padding: calc(var(--create-customer-header-height) + 2rem) 2rem 2rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-customer-main {
+    width: 100%;
+    max-width: 1040px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.create-customer-form {
+    width: 100%;
+    max-width: 360px;
+}
+
+.create-customer-form .form-step-actions {
+    margin-top: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.create-customer-form .form-step-single-action {
+    margin-top: 2rem;
+    text-align: right;
+}
+
+.create-customer-form .controlled-section[data-active="false"] {
+    display: none;
+}
+
+.create-customer-form .controlled-section[data-active="true"] {
+    display: block;
+}
