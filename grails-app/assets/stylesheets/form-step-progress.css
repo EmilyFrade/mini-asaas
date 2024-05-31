@@ -1,0 +1,78 @@
+.progress-area {
+    width: 100%;
+    height: 54px;
+    padding: 0 1rem;
+
+    background-color: var(--atlas-contrast-highlight);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border-bottom: 1px solid var(--atlas-secondary-200);
+}
+
+.progress {
+    width: 100%;
+    max-width: 400px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 4px;
+    accent-color: var(--atlas-primary);
+    -webkit-transition: width 5s ease;
+    -moz-transition: width 5s ease;
+    -o-transition: width 5s ease;
+    transition: width 5s ease;
+}
+
+.progress-checkpoint {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    padding: 1px;
+    border: 1px solid var(--atlas-primary-200);
+
+    background-color: var(--atlas-contrast-highlight);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    z-index: 10;
+}
+
+.progress-checkpoint::before {
+    content: "";
+    box-sizing: border-box;
+    border: 1px solid var(--atlas-contrast-highlight);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: var(--atlas-contrast-highlight);
+}
+
+.progress-checkpoint[data-active="true"] {
+    border-color: var(--atlas-primary);
+}
+
+.progress-checkpoint[data-active="true"]::before {
+    background-color: var(--atlas-primary);
+    border-color: var(--atlas-primary);
+}
+
+.progress > .progress-checkpoint:first-of-type {
+    left: 0;
+}
+
+.progress > .progress-checkpoint:last-of-type {
+    right: 0;
+}

@@ -12,6 +12,8 @@ class User extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1
 
+    String name
+
     String email
 
     String password
@@ -29,8 +31,9 @@ class User extends BaseEntity implements Serializable {
     }
 
     static constraints = {
-        password blank: false, password: true
+        name blank: false
         email blank: false, email: true
+        password blank: false, password: true
     }
 
     static mapping = {

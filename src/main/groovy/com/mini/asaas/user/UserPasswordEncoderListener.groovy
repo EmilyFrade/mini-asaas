@@ -1,5 +1,6 @@
 package com.mini.asaas.user
 
+
 import grails.events.annotation.gorm.Listener
 import grails.plugin.springsecurity.SpringSecurityService
 import groovy.transform.CompileStatic
