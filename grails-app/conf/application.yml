@@ -6,9 +6,14 @@ security:
         role: ${ROLE_USER}
       admin:
         role: ${ROLE_ADMIN}
-        name: ${ADMIN_NAME}
-        email: ${ADMIN_EMAIL}
+        name: ${DEFAULT_CUSTOMER_NAME}
+        email: ${DEFAULT_CUSTOMER_EMAIL}
         password: ${ADMIN_PASSWORD}
+    customers:
+      default:
+        name: ${DEFAULT_CUSTOMER_NAME}
+        email: ${DEFAULT_CUSTOMER_EMAIL}
+        cpfCnpj: ${DEFAULT_CUSTOMER_CPF_CNPJ}
 grails:
   profile: web
   codegen:
