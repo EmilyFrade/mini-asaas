@@ -20,12 +20,10 @@ class CustomerController {
             flash.status = AlertType.SUCCESS.getValue()
             redirect(controller: "auth", action: "login")
         } catch (BusinessException e) {
-            e.printStackTrace()
             flash.message = e.message
             flash.status = AlertType.ERROR.getValue()
             render(view: "create", model: [step: 3, addressOpened: true])
         } catch (Exception e) {
-            e.printStackTrace()
             flash.message = "Ocorreu um erro ao salvar os dados do cliente, tente novamente mais tarde."
             flash.status = AlertType.ERROR.getValue()
             render(view: "create", model: [step: 3, addressOpened: true])
