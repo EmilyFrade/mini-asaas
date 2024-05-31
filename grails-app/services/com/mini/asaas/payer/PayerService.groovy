@@ -2,16 +2,19 @@ package com.mini.asaas.payer
 
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.repository.CustomerRepository
 import com.mini.asaas.repository.PayerRepository
+import com.mini.asaas.user.User
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
+import grails.plugin.springsecurity.SpringSecurityService
 
 @GrailsCompileStatic
 @Transactional
 class PayerService {
+
+    SpringSecurityService springSecurityService
 
     BusinessValidation validationResult
 
@@ -66,6 +69,16 @@ class PayerService {
         payer.save(failOnError: true)
     }
 
+    public List<Payer> listAllNotDeleted() {
+        Customer customer = getCustomer()
+        return PayerRepository.listAllByCustomerAndNotDeleted(customer)
+    }
+
+    public List<Payer> listAllDeleted() {
+        Customer customer = getCustomer()
+        return PayerRepository.listAllByCustomerAndDeleted(customer)
+    }
+
     private Payer validate(PayerAdapter adapter, Payer payer, Customer customer) {
         PayerValidator validator = new PayerValidator()
         validator.validateAll(adapter, payer, customer)
@@ -97,7 +110,8 @@ class PayerService {
         return payer
     }
 
-    private Customer findCustomer(Long id) {
-        return CustomerRepository.findById(id)
+    private Customer getCustomer() {
+        return (springSecurityService.loadCurrentUser() as User)?.customer
     }
+
 }

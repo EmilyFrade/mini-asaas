@@ -2,24 +2,23 @@ package com.mini.asaas.payer
 
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.repository.PayerRepository
 import com.mini.asaas.utils.StringUtils
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured(["ROLE_USER"])
+@Secured(["ROLE_USER", "ROLE_ADMIN"])
 class PayerController {
 
     PayerService payerService
 
     def index() {
-        def payerList = PayerRepository.listAllNotDeleted()
+        def payerList = payerService.listAllNotDeleted()
         return [payerList: payerList]
     }
 
     def create() {}
 
     def restore() {
-        def payerList = PayerRepository.listAllDeleted()
+        def payerList = payerService.listAllDeleted()
         return [payerList: payerList]
     }
 
