@@ -18,7 +18,13 @@ class UserService {
         return user
     }
 
-    public User validateBeforeLogin(LoginUserAdapter adapter) {
+    public User show() {
+        User user = springSecurityService.loadCurrentUser() as User
+        if (!user) throw new RuntimeException("Usuário não encontrado")
+        return user
+    }
+
+    private User validateBeforeLogin(LoginUserAdapter adapter) {
         User validatedUser = UserRepository.findByEmail(adapter.email)
 
         if (!validatedUser) {
@@ -32,12 +38,6 @@ class UserService {
         }
 
         return validatedUser
-    }
-
-    public User show() {
-        User user = springSecurityService.loadCurrentUser() as User
-        if (!user) throw new RuntimeException("Usuário não encontrado")
-        return user
     }
 
 }
