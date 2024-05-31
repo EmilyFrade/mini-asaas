@@ -38,6 +38,8 @@ class CustomerAdapter {
 
     CompanyType companyType
 
+    String password
+
     public CustomerAdapter(Map originalParams) {
         PersonType selectedPersonType = PersonType.fromString(originalParams.personType as String)
         originalParams.cpfCnpj = selectedPersonType?.isNatural() ? originalParams.cpf : originalParams.cnpj ?: null
@@ -57,6 +59,7 @@ class CustomerAdapter {
         this.zipCode = StringUtils.removeNonNumeric(params.zipCode) ?: null
         this.birthDate = DateFormatUtils.parseDateFromString(params.birthDate)
         this.companyType = CompanyType.parseFromString(params.companyType)
+        this.password = params.password
     }
 
 }
