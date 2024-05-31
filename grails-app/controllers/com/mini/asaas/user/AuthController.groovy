@@ -1,5 +1,6 @@
 package com.mini.asaas.user
 
+
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
 import grails.plugin.springsecurity.annotation.Secured
@@ -17,8 +18,8 @@ class AuthController {
 
     def postLogin() {
         try {
-            User user = userService.login(new LoginUserAdapter(params))
-            redirect(controller: "user", action: "show", id: user.id)
+            userService.login(new LoginUserAdapter(params))
+            redirect(controller: "user", action: "show")
         } catch (BusinessException e) {
             flash.message = e.message
             flash.status = AlertType.ERROR.getValue()
@@ -29,4 +30,5 @@ class AuthController {
             redirect(action: "login")
         }
     }
+
 }
