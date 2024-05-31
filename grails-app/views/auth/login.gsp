@@ -32,8 +32,8 @@
 						</atlas-text>
 					</atlas-layout>
 					<atlas-form method="POST" action="${createLink(controller: "auth", action: "postLogin")}">
-						<g:if test="${flash.message}">
-							<atlas-alert type="error" message="${flash.message}"></atlas-alert>
+						<g:if test="${flash.status}">
+							<atlas-alert type="${flash.status}" message="${flash.message}"></atlas-alert>
 						</g:if>
 						<atlas-layout gap="4">
 							<atlas-masked-input
