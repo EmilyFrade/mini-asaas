@@ -1,6 +1,7 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.base.BaseValidator
+import com.mini.asaas.customer.Customer
 import com.mini.asaas.repository.PayerRepository
 import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.EmailUtils
@@ -10,9 +11,9 @@ class PayerValidator extends BaseValidator {
 
     private static final PHONE_NUMBER_REGEX = /^(\+55)?\s?(\(?\d{2}\)?)?\s?\d{4,5}-?\d{4}$/
 
-    public PayerValidator validateAll(PayerAdapter adapter, Payer payer) {
-        if (adapter.email != payer.email) this.validateEmail(adapter.email)
-        if (adapter.cpfCnpj != payer.cpfCnpj) this.validateCpfCnpj(adapter.cpfCnpj)
+    public PayerValidator validateAll(PayerAdapter adapter, Payer payer, Customer customer) {
+        if (adapter.email != payer.email) this.validateEmail(adapter.email, customer)
+        if (adapter.cpfCnpj != payer.cpfCnpj) this.validateCpfCnpj(adapter.cpfCnpj, customer)
         this.validatePhoneNumber(adapter.phoneNumber)
         this.validateBirthDate(adapter.birthDate)
         this.validateZipCode(adapter.zipCode)
@@ -20,26 +21,26 @@ class PayerValidator extends BaseValidator {
         return this
     }
 
-    public PayerValidator validateCpfCnpj(String cpfCnpj) {
+    public PayerValidator validateCpfCnpj(String cpfCnpj, Customer customer) {
         if (!CpfCnpjUtils.isValidCpfCnpj(cpfCnpj)) {
             validationResult.addError("invalid.cpfCnpj")
         }
-        if (PayerRepository.existsByCpfCnpj(cpfCnpj, true)) {
+        if (PayerRepository.existsByCpfCnpj(cpfCnpj, customer, true)) {
             validationResult.addError("alreadyExistsAndDeleted.cpfCnpj")
-        } else if (PayerRepository.existsByCpfCnpj(cpfCnpj)) {
+        } else if (PayerRepository.existsByCpfCnpj(cpfCnpj, customer)) {
             validationResult.addError("alreadyExists.cpfCnpj")
         }
 
         return this
     }
 
-    public PayerValidator validateEmail(String email) {
+    public PayerValidator validateEmail(String email, Customer customer) {
         if (!EmailUtils.isValid(email)) {
             validationResult.addError("invalid.email")
         }
-        if (PayerRepository.existsByEmail(email, true)) {
+        if (PayerRepository.existsByEmail(email, customer, true)) {
             validationResult.addError("alreadyExistsAndDeleted.email")
-        } else if (PayerRepository.existsByEmail(email)) {
+        } else if (PayerRepository.existsByEmail(email, customer)) {
             validationResult.addError("alreadyExists.email")
         }
 
