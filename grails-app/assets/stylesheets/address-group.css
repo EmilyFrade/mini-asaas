@@ -1,0 +1,27 @@
+.address-zip-code-area {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    position: relative;
+}
+
+.address-zip-code-area > atlas-postal-code {
+    flex: 2;
+}
+
+.address-zip-code-area > atlas-link {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+#address-group[opened='false'] {
+    display: none;
+}
+
+#address-group[opened='true'] {
+    display: block;
+}

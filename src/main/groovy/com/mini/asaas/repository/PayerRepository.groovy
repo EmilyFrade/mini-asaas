@@ -10,24 +10,24 @@ class PayerRepository {
         Payer.findById(id)
     }
 
-    public static Payer findById(Long id, Boolean bool) {
-        Payer.findByIdAndDeleted(id, bool)
+    public static Payer findById(Long id, Boolean deleted) {
+        Payer.findByIdAndDeleted(id, deleted)
     }
 
     public static Boolean existsByCpfCnpj(String cpfCnpj) {
         return Payer.countByCpfCnpj(cpfCnpj) > 0
     }
 
-    public static Boolean existsByCpfCnpj(String cpfCnpj, Boolean bool) {
-        return Payer.countByCpfCnpjAndDeleted(cpfCnpj, bool) > 0
+    public static Boolean existsByCpfCnpj(String cpfCnpj, Boolean deleted) {
+        return Payer.countByCpfCnpjAndDeleted(cpfCnpj, deleted) > 0
     }
 
     public static Boolean existsByEmail(String email) {
         return Payer.countByEmail(email) > 0
     }
 
-    public static Boolean existsByEmail(String email, Boolean bool) {
-        return Payer.countByEmailAndDeleted(email, bool) > 0
+    public static Boolean existsByEmail(String email, Boolean deleted) {
+        return Payer.countByEmailAndDeleted(email, deleted) > 0
     }
 
     public static List<Payer> listAllNotDeleted() {
