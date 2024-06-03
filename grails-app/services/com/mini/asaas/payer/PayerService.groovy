@@ -1,9 +1,8 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.customer.Customer
+import com.mini.asaas.customer.CustomerService
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.repository.CustomerRepository
-import com.mini.asaas.repository.PayerRepository
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.compiler.GrailsCompileStatic
@@ -13,14 +12,13 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class PayerService {
 
+    CustomerService customerService
+
     BusinessValidation validationResult
 
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
-        Customer customer = findCustomer(adapter.customerId)
-
-
-        if (!customer) throw new RuntimeException("Cliente não encontrado")
+        Customer customer = customerService.show(adapter.customerId)
 
         payer = validate(adapter, payer, customer)
 
@@ -35,10 +33,9 @@ class PayerService {
     }
 
     public Payer update(PayerAdapter adapter, Long id) {
-        Payer payer = PayerRepository.findById(id, false)
+        Payer payer = PayerRepository.get(id)
 
         if (!payer) throw new RuntimeException("Pagador não encontrado")
-
 
         payer = validate(adapter, payer, payer.customer)
 
@@ -51,13 +48,13 @@ class PayerService {
     }
 
     public Payer show(Long id) {
-        Payer payer = PayerRepository.findById(id, false)
+        Payer payer = PayerRepository.get(id)
         if (!payer) throw new RuntimeException("Pagador não encontrado")
         return payer
     }
 
     public void deleteOrRestore(Long id) {
-        Payer payer = PayerRepository.findById(id)
+        Payer payer = PayerRepository.query([includeDeleted: true, id: id]).get()
 
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
@@ -97,7 +94,4 @@ class PayerService {
         return payer
     }
 
-    private Customer findCustomer(Long id) {
-        return CustomerRepository.findById(id)
-    }
 }
