@@ -37,7 +37,7 @@ class PaymentAdapter {
         this.discountValue = params.discountValue as BigDecimal
         this.description = params.description
         this.billingType = BillingType.parseFromString(params.billingType)
-        this.status = PaymentStatus.parseFromString(params.status)
+        this.status = PaymentStatus.PENDING
         this.dueDate = DateFormatUtils.parseDateFromString(params.dueDate)
     }
 }
