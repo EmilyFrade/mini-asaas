@@ -24,6 +24,26 @@ class UserService {
         return user
     }
 
+    public User save(SaveUserAdapter adapter) {
+        User user = new User()
+        user.email = adapter.email
+        user.password = adapter.password
+        user.name = adapter.name
+        user.customer = adapter.customer
+        user.save(failOnError: true)
+        UserRole.create(user, Role.findByAuthority(adapter.authority))
+        return user
+    }
+
+    public User update(UpdateUserAdapter adapter) {
+        User user = show()
+        user.email = adapter.email
+        user.name = adapter.name
+        user.markDirty()
+        user.save(failOnError: true)
+        return user
+    }
+
     private User validateBeforeLogin(LoginUserAdapter adapter) {
         User validatedUser = UserRepository.findByEmail(adapter.email)
 
