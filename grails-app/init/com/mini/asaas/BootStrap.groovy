@@ -5,8 +5,8 @@ import com.mini.asaas.customer.Customer
 import com.mini.asaas.enums.PersonType
 import com.mini.asaas.enums.address.AddressState
 import com.mini.asaas.user.Role
+import com.mini.asaas.user.RoleAuthority
 import com.mini.asaas.user.User
-import com.mini.asaas.user.UserFunction
 import com.mini.asaas.user.UserRole
 import com.mini.asaas.utils.DateFormatUtils
 import grails.core.GrailsApplication
@@ -29,8 +29,8 @@ class BootStrap {
     private Map<String, Role> createBasicRoles() {
         Map<String, Role> roles = [:]
 
-        String adminRoleStr = UserFunction.ADMIN.getAuthority()
-        String userRoleStr = UserFunction.USER.getAuthority()
+        String adminRoleStr = RoleAuthority.ADMIN.getAuthority()
+        String userRoleStr = RoleAuthority.USER.getAuthority()
 
         Role adminRole = Role.findByAuthority(adminRoleStr)
         Role userRole = Role.findByAuthority(userRoleStr)

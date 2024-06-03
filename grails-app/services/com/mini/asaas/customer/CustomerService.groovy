@@ -1,10 +1,10 @@
 package com.mini.asaas.customer
 
 import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.user.RoleAuthority
 import com.mini.asaas.user.SaveUserAdapter
 import com.mini.asaas.user.UpdateUserAdapter
 import com.mini.asaas.user.User
-import com.mini.asaas.user.UserFunction
 import com.mini.asaas.user.UserService
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
@@ -30,7 +30,7 @@ class CustomerService {
                 email: customerAdapter.email,
                 password: customerAdapter.password,
                 customer: customer,
-                authority: UserFunction.ADMIN.getAuthority()
+                authority: RoleAuthority.ADMIN.getAuthority()
         ))
 
         return customer

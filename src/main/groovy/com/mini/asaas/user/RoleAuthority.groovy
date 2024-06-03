@@ -3,7 +3,7 @@ package com.mini.asaas.user
 import com.mini.asaas.utils.MessageSourceUtils
 import grails.util.Holders
 
-enum UserFunction {
+enum RoleAuthority {
     ADMIN,
     USER
 
