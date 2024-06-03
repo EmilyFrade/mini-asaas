@@ -1,26 +1,25 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.customer.Customer
+import com.mini.asaas.customer.CustomerService
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.repository.PayerRepository
-import com.mini.asaas.user.User
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
-import grails.plugin.springsecurity.SpringSecurityService
 
 @GrailsCompileStatic
 @Transactional
 class PayerService {
 
-    SpringSecurityService springSecurityService
+    CustomerService customerService
 
     BusinessValidation validationResult
 
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
-        Customer customer = getCustomer()
+        Customer customer = customerService.show()
 
         if (!customer) throw new RuntimeException("Cliente não encontrado")
 
@@ -69,12 +68,12 @@ class PayerService {
     }
 
     public List<Payer> listAllNotDeleted() {
-        Customer customer = getCustomer()
+        Customer customer = customerService.show()
         return PayerRepository.listAllByCustomerAndNotDeleted(customer)
     }
 
     public List<Payer> listAllDeleted() {
-        Customer customer = getCustomer()
+        Customer customer = customerService.show()
         return PayerRepository.listAllByCustomerAndDeleted(customer)
     }
 
@@ -107,10 +106,6 @@ class PayerService {
         payer.birthDate = adapter.birthDate
 
         return payer
-    }
-
-    private Customer getCustomer() {
-        return (springSecurityService.loadCurrentUser() as User)?.customer
     }
 
 }
