@@ -13,7 +13,11 @@ enum BillingType {
     }
 
     public static BillingType parseFromString(String type) {
-        return valueOf(type.toUpperCase())
+        try {
+            return valueOf(type.toUpperCase())
+        } catch (Exception e) {
+            return null
+        }
     }
 
     public Boolean isValid() {

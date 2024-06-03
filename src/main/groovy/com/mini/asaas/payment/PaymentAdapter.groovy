@@ -1,15 +1,14 @@
 package com.mini.asaas.payment
 
-import com.mini.asaas.customer.Customer
-import com.mini.asaas.payer.Payer
+
 import com.mini.asaas.utils.DateFormatUtils
 import com.mini.asaas.utils.Utils
 
 class PaymentAdapter {
 
-    Customer customer
+    Long customerId
 
-    Payer payer
+    Long payerId
 
     BigDecimal netValue
 
@@ -30,8 +29,8 @@ class PaymentAdapter {
     public PaymentAdapter(Map originalParams) {
         Map<String, String> params = Utils.normalizeParams(originalParams)
         if (!params) return
-        this.customer = params.customer as Customer
-        this.payer = params.payer as Payer
+        this.customerId = params.customerId as Long
+        this.payerId = params.payerId as Long
         this.netValue = params.netValue as BigDecimal
         this.originalValue = params.originalValue as BigDecimal
         this.interestValue = params.interestValue as BigDecimal

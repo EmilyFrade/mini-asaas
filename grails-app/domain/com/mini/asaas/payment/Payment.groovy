@@ -36,8 +36,8 @@ class Payment extends BaseEntity {
         interestValue nullable: true, scale: 2
         discountValue nullable: true, scale: 2
         description blank: false, maxSize: 255
-        billingType blank: false, inList: BillingType.values().collect { it.toString() }
-        status blank: false, inList: PaymentStatus.values().collect { it.toString() }
+        billingType blank: false
+        status blank: false
         dueDate blank: false
         paymentDate nullable: true
     }

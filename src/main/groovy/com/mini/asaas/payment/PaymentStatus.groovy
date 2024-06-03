@@ -14,7 +14,11 @@ enum PaymentStatus {
     }
 
     public static PaymentStatus parseFromString(String status) {
-        return valueOf(status.toUpperCase())
+        try {
+            return valueOf(status.toUpperCase())
+        } catch (Exception e) {
+            return null
+        }
     }
 
     public Boolean isValid() {
