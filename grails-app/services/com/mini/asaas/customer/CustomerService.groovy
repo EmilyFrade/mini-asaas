@@ -1,19 +1,19 @@
 package com.mini.asaas.customer
 
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.user.Role
+import com.mini.asaas.user.SaveUserAdapter
+import com.mini.asaas.user.UpdateUserAdapter
 import com.mini.asaas.user.User
 import com.mini.asaas.user.UserFunction
-import com.mini.asaas.user.UserRole
+import com.mini.asaas.user.UserService
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.gorm.transactions.Transactional
-import grails.plugin.springsecurity.SpringSecurityService
 
 @Transactional
 class CustomerService {
 
-    SpringSecurityService springSecurityService
+    UserService userService
 
     public Customer save(CustomerAdapter customerAdapter) {
         Customer validatedCustomer = validate(customerAdapter, new Customer())
@@ -25,25 +25,24 @@ class CustomerService {
 
         customer.save(failOnError: true)
 
-        User user = new User()
-        user.email = customerAdapter.email
-        user.password = customerAdapter.password
-        user.name = customerAdapter.name
-        user.customer = customer
-        user.save(failOnError: true)
-
-        UserRole.create(user, Role.findByAuthority(UserFunction.ADMIN.getAuthority()))
+        userService.save(new SaveUserAdapter(
+                name: customerAdapter.name,
+                email: customerAdapter.email,
+                password: customerAdapter.password,
+                customer: customer,
+                authority: UserFunction.ADMIN.getAuthority()
+        ))
 
         return customer
     }
 
     public Customer show() {
-        User user = getCurrentUser()
+        User user = userService.show()
         return user.customer
     }
 
     public Customer update(CustomerAdapter customerAdapter) {
-        User user = getCurrentUser()
+        User user = userService.show()
         Customer customer = user.customer
 
         customer = validate(customerAdapter, customer)
@@ -56,22 +55,13 @@ class CustomerService {
         customer.save(failOnError: true)
 
         if (user.email == customer.email) {
-            if (customer.email !== customerAdapter.email) {
-                user.email = customerAdapter.email
-                user.save(failOnError: true)
-            }
-
-            if (customer.name !== customerAdapter.name) {
-                user.name = customerAdapter.name
-                user.save(failOnError: true)
-            }
+            userService.update(new UpdateUserAdapter(
+                    name: customerAdapter.name,
+                    email: customerAdapter.email
+            ))
         }
 
         return customer
-    }
-
-    private User getCurrentUser() {
-        return springSecurityService.loadCurrentUser() as User
     }
 
     private Customer validate(CustomerAdapter customerAdapter, Customer customer) {
