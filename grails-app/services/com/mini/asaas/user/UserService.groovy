@@ -3,6 +3,7 @@ package com.mini.asaas.user
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.user.adapters.SaveUserAdapter
 import com.mini.asaas.user.adapters.UpdateUserAdapter
+import com.mini.asaas.user.adapters.UpdateUserPasswordAdapter
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.gorm.transactions.Transactional
@@ -52,6 +53,20 @@ class UserService {
         return user
     }
 
+    public User updatePassword(UpdateUserPasswordAdapter adapter) {
+        User user = show()
+        user = validateBeforeUpdatePassword(adapter, user)
+        if (user.hasErrors()) {
+            throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(user))
+        }
+
+        user.password = adapter.newPassword
+        user.markDirty()
+        user.save(failOnError: true)
+
+        return user
+    }
+
     private User validateBeforeSave(SaveUserAdapter adapter) {
         User user = new User();
         UserValidator validator = new UserValidator()
@@ -66,6 +81,16 @@ class UserService {
     private User validateBeforeUpdate(UpdateUserAdapter adapter, User user) {
         UserValidator validator = new UserValidator()
         BusinessValidation validationResult = validator.validateBeforeUpdate(adapter, user)
+        if (!validationResult.isValid()) {
+            DomainErrorUtils.addBusinessRuleErrors(user, validationResult.errors)
+        }
+
+        return user
+    }
+
+    private User validateBeforeUpdatePassword(UpdateUserPasswordAdapter adapter, User user) {
+        UserValidator validator = new UserValidator()
+        BusinessValidation validationResult = validator.validateBeforeUpdatePassword(adapter, user)
         if (!validationResult.isValid()) {
             DomainErrorUtils.addBusinessRuleErrors(user, validationResult.errors)
         }

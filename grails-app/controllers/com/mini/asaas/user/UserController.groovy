@@ -6,6 +6,7 @@ import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.user.adapters.LoginUserAdapter
 import com.mini.asaas.user.adapters.SaveUserAdapter
 import com.mini.asaas.user.adapters.UpdateUserAdapter
+import com.mini.asaas.user.adapters.UpdateUserPasswordAdapter
 import grails.plugin.springsecurity.annotation.Secured
 
 class UserController {
@@ -43,6 +44,27 @@ class UserController {
             redirect(action: "show")
         } finally {
             flash.section = "update"
+        }
+    }
+
+    @Secured(["ROLE_ADMIN", "ROLE_SELLER"])
+    def updatePassword() {
+        try {
+            userService.updatePassword(new UpdateUserPasswordAdapter(params))
+            flash.status = AlertType.SUCCESS.getValue()
+            flash.message = "Senha atualizada com sucesso!"
+            redirect(action: "show")
+        } catch (BusinessException e) {
+            flash.message = e.message
+            flash.status = AlertType.ERROR.getValue()
+            redirect(action: "show")
+        } catch (Exception e) {
+            e.printStackTrace()
+            flash.message = "Ocorreu um erro durante a atualização dos dados, aguarde um momento e tente novamente."
+            flash.status = AlertType.ERROR.getValue()
+            redirect(action: "show")
+        } finally {
+            flash.section = "update-password"
         }
     }
 
