@@ -1,5 +1,14 @@
-<atlas-sidebar
-        slot="sidebar">
+<atlas-sidebar slot="sidebar">
+    <atlas-sidebar-header slot="header">
+        <atlas-button
+                block=""
+                icon="plus"
+                description="Criar cobrança"
+                href="${createLink(controller: "payment", action: "create")}"
+                slot="actions">
+        </atlas-button>
+    </atlas-sidebar-header>
+
     <atlas-sidebar-menu slot="body">
         <atlas-sidebar-menu-item
                 icon="users"

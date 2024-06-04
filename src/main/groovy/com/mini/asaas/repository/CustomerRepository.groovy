@@ -18,4 +18,8 @@ class CustomerRepository {
         return Customer.countByCpfCnpjAndDeleted(cpfCnpj, false) > 0
     }
 
+    public static List<Customer> listAllNotDeleted() {
+        return Customer.findAllByDeleted(false)
+    }
+
 }
