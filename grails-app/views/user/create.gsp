@@ -26,15 +26,6 @@
 							<atlas-alert type=${flash.status} message="${flash.message}"></atlas-alert>
 						</g:if>
 						<atlas-layout gap="4">
-							<atlas-input
-								class="input"
-								label="Nome"
-								name="name"
-								type="text"
-								size="sm"
-								value="${params.name}"
-								required="">
-							</atlas-input>
 							<atlas-masked-input
 								class="input"
 								mask-alias="email"
