@@ -35,7 +35,7 @@ class Payment extends BaseEntity {
         originalValue blank: false, scale: 2
         interestValue nullable: true, scale: 2
         discountValue nullable: true, scale: 2
-        description blank: false, maxSize: 255
+        description nullable: true, maxSize: 255
         billingType blank: false
         status blank: false
         dueDate blank: false

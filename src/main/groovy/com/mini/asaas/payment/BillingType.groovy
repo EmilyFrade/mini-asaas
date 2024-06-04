@@ -19,11 +19,4 @@ enum BillingType {
             return null
         }
     }
-
-    public Boolean isValid() {
-        return [BANKSLIP,
-                CREDIT_CARD,
-                DEBIT_CARD,
-                PIX].contains(this)
-    }
 }

@@ -20,12 +20,4 @@ enum PaymentStatus {
             return null
         }
     }
-
-    public Boolean isValid() {
-        return [CANCELED,
-                OVERDUE,
-                PENDING,
-                RECEIVED,
-                RECEIVED_IN_CASH].contains(this)
-    }
 }
