@@ -22,7 +22,7 @@ class UserValidator extends BaseValidator {
     public BusinessValidation validateBeforeUpdate(UpdateUserAdapter adapter, User user) {
         validateEmail(adapter.email)
         if (user.email != adapter.email) validateIfEmailExists(adapter.email)
-        if (user.getMainAuthority() != adapter.roleAuthority) validateIfCanUpdateAuthority(adapter.roleAuthority, user)
+        if (user.getMainAuthority() != adapter.roleAuthority) validateIfCanUpdateAuthority(user)
 
         return validationResult
     }
@@ -45,7 +45,7 @@ class UserValidator extends BaseValidator {
 
     private UserValidator validateAuthority(RoleAuthority authority) {
         if (!authority) {
-            validationResult.addError("user.invalid.authority")
+            validationResult.addError("user.authority.invalid")
         }
 
         return this
@@ -74,7 +74,7 @@ class UserValidator extends BaseValidator {
         return this
     }
 
-    private UserValidator validateIfCanUpdateAuthority(RoleAuthority authority, User user) {
+    private UserValidator validateIfCanUpdateAuthority(User user) {
         if (!user.isAdmin()) {
             validationResult.addError("user.authority.update.not.allowed")
         }
