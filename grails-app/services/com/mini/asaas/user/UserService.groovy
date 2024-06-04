@@ -1,5 +1,6 @@
 package com.mini.asaas.user
 
+import com.mini.asaas.customer.Customer
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.user.adapters.SaveUserAdapter
 import com.mini.asaas.utils.DomainErrorUtils
@@ -33,6 +34,13 @@ class UserService {
         userRoleService.assignAUserRole(adapter.roleAuthority, user)
 
         return user
+    }
+
+    public User associateWithCustomer(Customer customer) {
+        User user = show()
+        user.name = customer.name
+        user.customer = customer
+        user.save(failOnError: true)
     }
 
     private User validateBeforeSave(SaveUserAdapter adapter) {
