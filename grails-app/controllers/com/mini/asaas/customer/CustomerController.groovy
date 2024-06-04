@@ -4,7 +4,7 @@ import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured(["ROLE_USER"])
+@Secured(["ROLE_ADMIN"])
 class CustomerController {
 
     CustomerService customerService

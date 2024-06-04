@@ -3,7 +3,7 @@ package com.mini.asaas.user
 
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured(["ROLE_USER"])
+@Secured(["ROLE_ADMIN", "ROLE_SELLER"])
 class UserController {
 
     UserService userService
