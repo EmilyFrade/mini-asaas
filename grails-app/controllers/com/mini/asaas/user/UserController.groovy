@@ -32,11 +32,9 @@ class UserController {
     def save() {
         try {
             userService.save(new SaveUserAdapter(params))
-            flash.status = AlertType.SUCCESS.getValue()
-            flash.message = "Usuário cadastrado com sucesso!"
             authService.login(new LoginUserAdapter(params))
 
-            redirect(action: "show")
+            redirect(controller: "customer", action: "create")
         } catch (BusinessException e) {
             flash.message = e.message
             flash.status = AlertType.ERROR.getValue()
