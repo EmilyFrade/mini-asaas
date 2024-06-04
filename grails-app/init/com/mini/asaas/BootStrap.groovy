@@ -1,9 +1,14 @@
 package com.mini.asaas
 
+import com.mini.asaas.customer.CompanyType
+import com.mini.asaas.customer.Customer
+import com.mini.asaas.enums.PersonType
+import com.mini.asaas.enums.address.AddressState
 import com.mini.asaas.user.Role
 import com.mini.asaas.user.RoleAuthority
 import com.mini.asaas.user.User
 import com.mini.asaas.user.UserRole
+import com.mini.asaas.utils.DateFormatUtils
 import grails.core.GrailsApplication
 import grails.gorm.transactions.Transactional
 
@@ -13,7 +18,8 @@ class BootStrap {
 
     def init = { servletContext ->
         Map roles = createDefaultRoles()
-        createDefaultAdminUser(roles)
+        User adminUser = createDefaultAdminUser(roles)
+        createDefaultCustomer(adminUser)
     }
 
     def destroy = {
@@ -44,19 +50,55 @@ class BootStrap {
     }
 
     @Transactional
-    private void createDefaultAdminUser(Map<RoleAuthority, Role> roles) {
+    private User createDefaultAdminUser(Map<RoleAuthority, Role> roles) {
         String adminEmail = grailsApplication.config.getProperty("security.basic.users.admin.email")
 
-        if (User.findByEmail(adminEmail)) return
+        User user = User.findByEmail(adminEmail)
+        if (user) return user
 
         String adminPassword = grailsApplication.config.getProperty("security.basic.users.admin.password")
-        String adminName = grailsApplication.config.getProperty("security.basic.users.admin.name")
 
-        User admin = new User(name: adminName, email: adminEmail, password: adminPassword)
-        admin.save(failOnError: true)
+        User adminUser = new User(email: adminEmail, password: adminPassword)
+        adminUser.save(failOnError: true)
 
-        new UserRole(user: admin, role: roles.get(RoleAuthority.ADMIN)).save(failOnError: true)
-        new UserRole(user: admin, role: roles.get(RoleAuthority.SELLER)).save(failOnError: true)
+        new UserRole(user: adminUser, role: roles.get(RoleAuthority.ADMIN)).save(failOnError: true)
+        new UserRole(user: adminUser, role: roles.get(RoleAuthority.SELLER)).save(failOnError: true)
+
+        return adminUser
+    }
+
+    @Transactional
+    private void createDefaultCustomer(User user) {
+        if (!user) throw new RuntimeException("Não foi possível encontrar o usuário administrador da conta a ser criada")
+
+        String cpfCnpj = grailsApplication.config.getProperty("security.basic.customers.default.cpfCnpj")
+        Customer customer = Customer.findByCpfCnpj(cpfCnpj)
+        if (customer) return
+
+        String email = grailsApplication.config.getProperty("security.basic.users.admin.email")
+        customer = Customer.findByEmail(email)
+        if (customer) return
+
+        customer = new Customer()
+        customer.name = grailsApplication.config.getProperty("security.basic.customers.default.name")
+        customer.email = email
+        customer.cpfCnpj = cpfCnpj
+        customer.personType = PersonType.parseFromCpfCnpj(cpfCnpj)
+        customer.birthDate = DateFormatUtils.parseDateFromString("05/04/1990")
+        customer.address = "Avenida Rolf Wiest"
+        customer.addressNumber = "277"
+        customer.complement = "Sala 814"
+        customer.province = "Bom Retiro"
+        customer.city = "Joinville"
+        customer.state = AddressState.SC
+        customer.zipCode = "89223005"
+        customer.phoneNumber = "4734333333"
+        customer.companyType = CompanyType.ASSOCIATION
+        customer.save(failOnError: true)
+
+        user.name = customer.name
+        user.customer = customer
+        user.save(failOnError: true)
     }
 
 }

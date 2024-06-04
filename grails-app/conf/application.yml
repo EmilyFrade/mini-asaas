@@ -3,9 +3,12 @@ security:
   basic:
     users:
       admin:
-        name: ${ADMIN_NAME}
         email: ${ADMIN_EMAIL}
         password: ${ADMIN_PASSWORD}
+    customers:
+      default:
+        name: ${DEFAULT_CUSTOMER_NAME}
+        cpfCnpj: ${DEFAULT_CUSTOMER_CPF_CNPJ}
 grails:
   profile: web
   codegen:
