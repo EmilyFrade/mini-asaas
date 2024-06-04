@@ -43,8 +43,7 @@ class User extends BaseEntity implements Serializable {
     public RoleAuthority getMainAuthority() {
         if (this.isAdmin()) return RoleAuthority.ADMIN
         Role mainRole = this.getAuthorities().stream().findFirst().get()
-
-        return RoleAuthority.parseFromString(mainRole.authority)
+        return RoleAuthority.parseFromString(mainRole.authority.split("_")[1])
     }
 
     static constraints = {
