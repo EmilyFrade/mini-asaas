@@ -1,6 +1,8 @@
 package com.mini.asaas.customer
 
 import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.user.User
+import com.mini.asaas.user.UserService
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.gorm.transactions.Transactional
@@ -8,7 +10,12 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class CustomerService {
 
+    UserService userService
+
     public Customer save(CustomerAdapter customerAdapter) {
+        User user = userService.show()
+        customerAdapter.email = user.email
+
         Customer validatedCustomer = validate(customerAdapter, new Customer())
         if (validatedCustomer.hasErrors()) {
             throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(validatedCustomer))
@@ -17,18 +24,20 @@ class CustomerService {
         Customer customer = buildCustomer(customerAdapter, new Customer())
         customer.save(failOnError: true)
 
+        userService.associateWithCustomer(customer)
+
         return customer
     }
 
-    public Customer show(Long id) {
-        Customer customer = CustomerRepository.get(id)
+    public Customer show() {
+        Customer customer = userService.show()?.customer
         if (!customer) throw new RuntimeException("Cliente não encontrado")
+
         return customer
     }
 
-    public Customer update(CustomerAdapter customerAdapter, Long id) {
-        Customer customer = CustomerRepository.get(id)
-
+    public Customer update(CustomerAdapter customerAdapter) {
+        Customer customer = userService.show()?.customer
         if (!customer) throw new RuntimeException("Cliente não encontrado")
 
         customer = validate(customerAdapter, customer)
@@ -70,6 +79,7 @@ class CustomerService {
         customer.zipCode = customerAdapter.zipCode
         customer.birthDate = customerAdapter.birthDate
         customer.companyType = customerAdapter.companyType
+
         return customer
     }
 
