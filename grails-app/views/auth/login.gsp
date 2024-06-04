@@ -10,17 +10,7 @@
 
 	<body>
 		<header class="header">
-			<asset:image
-					class="header--logo"
-					src="asaas-white.svg"
-					alt="Logomarca Asaas"
-					title="Asaas Gestão Financeira"
-			/>
-			<a class="header--link" href="/" title="Voltar à Página Inicial">
-				<i>
-					<asset:image src="close-icon.svg" alt="X" />
-				</i>
-			</a>
+			<g:render template="/templates/banner" />
 		</header>
 		<div class="container">
 			<main>
@@ -37,42 +27,47 @@
 						</g:if>
 						<atlas-layout gap="4">
 							<atlas-masked-input
-									class="input"
-									mask-alias="email"
-									label="Email"
-									name="email"
-									type="email"
-									size="sm"
-									value="${params.email}"
-									required=""></atlas-masked-input>
+								class="input"
+								mask-alias="email"
+								label="Email"
+								name="email"
+								type="email"
+								size="sm"
+								value="${params.email}"
+								required="">
+							</atlas-masked-input>
 							<atlas-password-input
-									label="Senha"
-									name="password"
-									type="password"
-									size="sm"
-									value="${params.password}"
-									required=""></atlas-password-input>
+								label="Senha"
+								name="password"
+								type="password"
+								size="sm"
+								value="${params.password}"
+								required="">
+							</atlas-password-input>
 						</atlas-layout>
 						<atlas-button
-								type="filled"
-								size="sm"
-								theme="success"
-								description="Acessar conta"
-								submit=""
-								block=""></atlas-button>
+							type="filled"
+							size="sm"
+							theme="success"
+							description="Acessar conta"
+							submit=""
+							block="">
+						</atlas-button>
 					</atlas-form>
 					<hr class="divider" />
 					<atlas-layout gap="4">
-						<atlas-text class="subtitle" theme="secondary"
-									size="xsm">Ainda não possui uma conta?</atlas-text>
+						<atlas-text class="subtitle" theme="secondary" size="xsm">
+							Ainda não possui uma conta?
+						</atlas-text>
 						<div>
 							<atlas-button
-									class="btn__link"
-									type="outlined"
-									size="sm"
-									theme="secondary"
-									description="Criar conta"
-									href="/customer/create"></atlas-button>
+								class="btn__link"
+								type="outlined"
+								size="sm"
+								theme="secondary"
+								description="Criar conta"
+								href="/user/create">
+							</atlas-button>
 						</div>
 					</atlas-layout>
 				</section>
