@@ -32,19 +32,9 @@ abstract class BasePerson extends BaseEntity {
     Date birthDate
 
     static constraints = {
-        name blank: false
-        email blank: false, email: true
-        cpfCnpj blank: false, size: 11..14
-        phoneNumber blank: false
-        personType blank: false
-        address blank: false
-        addressNumber blank: false
+        email email: true
+        cpfCnpj size: 11..14
         complement nullable: true
-        province blank: false
-        city blank: false
-        state blank: false
-        zipCode blank: false
-        birthDate blank: false
     }
 
     static mappings = {

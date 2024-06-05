@@ -31,9 +31,8 @@ class User extends BaseEntity implements Serializable {
     }
 
     static constraints = {
-        name blank: false
-        email blank: false, email: true
-        password blank: false, password: true
+        email email: true
+        password password: true
     }
 
     static mapping = {

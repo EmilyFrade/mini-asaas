@@ -7,6 +7,6 @@ class Customer extends BasePerson {
     CompanyType companyType
 
     static constraints = {
-        companyType blank: false, nullable: true
+        companyType nullable: true
     }
 }
