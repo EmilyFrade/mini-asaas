@@ -12,7 +12,13 @@ class StringUtils {
 
     public static String formatFromCommaToDot(String value) {
         if (value == null) return null
-        return value.replaceAll("[^0-9]", ".")
+        value.replace(".", "")
+        return value.replace(",", ".")
+    }
+
+    public static String formatFromDotToComma(String value) {
+        if (value == null) return null
+        return value.replace(".", ",")
     }
 
     public static String pascalToCamelCase(String value) {

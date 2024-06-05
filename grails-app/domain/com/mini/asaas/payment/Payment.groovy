@@ -14,7 +14,11 @@ class Payment extends BaseEntity {
 
     BigDecimal originalValue
 
+    BigDecimal interestPercentual
+
     BigDecimal interestValue
+
+    BigDecimal discountPercentual
 
     BigDecimal discountValue
 
