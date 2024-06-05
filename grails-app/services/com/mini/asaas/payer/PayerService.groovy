@@ -1,7 +1,7 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.customer.Customer
-import com.mini.asaas.customer.CustomerService
+import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
@@ -12,13 +12,12 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class PayerService {
 
-    CustomerService customerService
-
     BusinessValidation validationResult
 
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
-        Customer customer = customerService.show(adapter.customerId)
+        Customer customer = CustomerRepository.get(adapter.customerId)
+        if (!customer) throw new BusinessException("Cliente não encontrado")
 
         payer = validate(adapter, payer, customer)
 
