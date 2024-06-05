@@ -66,7 +66,7 @@
 								size="sm"
 								theme="secondary"
 								description="Criar conta"
-								href="/user/create">
+								href="/customer/create">
 							</atlas-button>
 						</div>
 					</atlas-layout>
