@@ -10,17 +10,7 @@ class Payment extends BaseEntity {
 
     Payer payer
 
-    BigDecimal netValue
-
-    BigDecimal originalValue
-
-    BigDecimal interestPercentual
-
-    BigDecimal interestValue
-
-    BigDecimal discountPercentual
-
-    BigDecimal discountValue
+    BigDecimal value
 
     String description
 
@@ -35,10 +25,7 @@ class Payment extends BaseEntity {
     static constraints = {
         customer blank: false
         payer blank: false
-        netValue blank: false, scale: 2
-        originalValue blank: false, scale: 2
-        interestValue nullable: true, scale: 2
-        discountValue nullable: true, scale: 2
+        value blank: false, scale: 2
         description nullable: true, maxSize: 255
         billingType blank: false
         status blank: false

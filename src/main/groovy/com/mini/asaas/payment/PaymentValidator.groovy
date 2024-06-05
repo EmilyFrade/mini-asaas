@@ -9,7 +9,7 @@ class PaymentValidator extends BaseValidator {
     public PaymentValidator validateAll(PaymentAdapter adapter) {
         this.validateCustomer(adapter.customerId)
         this.validatePayer(adapter.payerId)
-        this.validateValues(adapter)
+        this.validateValue(adapter.value)
         this.validateDueDate(adapter.dueDate)
         this.validateEnum(adapter)
 
@@ -34,11 +34,8 @@ class PaymentValidator extends BaseValidator {
         return this
     }
 
-    public PaymentValidator validateValues(PaymentAdapter adapter) {
-        if (adapter.netValue <= 0 || adapter.originalValue <= 0) {
-            validationResult.addError("invalid.value")
-        }
-        if (adapter.interestValue < 0 || adapter.discountValue < 0) {
+    public PaymentValidator validateValue(BigDecimal value) {
+        if (value <= 0) {
             validationResult.addError("invalid.value")
         }
 
