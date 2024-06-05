@@ -18,8 +18,8 @@ class BootStrap {
 
     def init = { servletContext ->
         Map roles = createDefaultRoles()
-        User adminUser = createDefaultAdminUser(roles)
-        createDefaultCustomer(adminUser)
+        Customer defaultCustomer = createDefaultCustomer()
+        createDefaultAdminUser(roles, defaultCustomer)
     }
 
     def destroy = {
@@ -37,10 +37,12 @@ class BootStrap {
 
         if (!adminRole) {
             adminRole = new Role(authority: adminAuthority.getAuthority()).save(failOnError: true)
+            log.info("Role de administrador criada com sucesso")
         }
 
         if (!sellerRole) {
             sellerRole = new Role(authority: sellerAuthority.getAuthority()).save(failOnError: true)
+            log.info("Role de vendedor criada com sucesso")
         }
 
         roles.put(adminAuthority, adminRole)
@@ -50,34 +52,36 @@ class BootStrap {
     }
 
     @Transactional
-    private User createDefaultAdminUser(Map<RoleAuthority, Role> roles) {
-        String adminEmail = grailsApplication.config.getProperty("security.basic.users.admin.email")
+    private void createDefaultAdminUser(Map<RoleAuthority, Role> roles, Customer customer) {
+        if (!customer) throw new RuntimeException("Não foi possível encontrar a conta administrativa padrão")
 
-        User user = User.findByEmail(adminEmail)
-        if (user) return user
+        String adminEmail = grailsApplication.config.getProperty("security.basic.users.admin.email")
+        if (User.findByEmail(adminEmail)) return
 
         String adminPassword = grailsApplication.config.getProperty("security.basic.users.admin.password")
 
-        User adminUser = new User(email: adminEmail, password: adminPassword)
+        User adminUser = new User()
+        adminUser.name = customer.name
+        adminUser.email = customer.email
+        adminUser.password = adminPassword
+        adminUser.customer = customer
         adminUser.save(failOnError: true)
 
         new UserRole(user: adminUser, role: roles.get(RoleAuthority.ADMIN)).save(failOnError: true)
         new UserRole(user: adminUser, role: roles.get(RoleAuthority.SELLER)).save(failOnError: true)
 
-        return adminUser
+        log.info("Usuário administrador padrão criado com sucesso")
     }
 
     @Transactional
-    private void createDefaultCustomer(User user) {
-        if (!user) throw new RuntimeException("Não foi possível encontrar o usuário administrador da conta a ser criada")
-
+    private Customer createDefaultCustomer() {
         String cpfCnpj = grailsApplication.config.getProperty("security.basic.customers.default.cpfCnpj")
         Customer customer = Customer.findByCpfCnpj(cpfCnpj)
-        if (customer) return
+        if (customer) return customer
 
         String email = grailsApplication.config.getProperty("security.basic.users.admin.email")
         customer = Customer.findByEmail(email)
-        if (customer) return
+        if (customer) return customer
 
         customer = new Customer()
         customer.name = grailsApplication.config.getProperty("security.basic.customers.default.name")
@@ -96,9 +100,8 @@ class BootStrap {
         customer.companyType = CompanyType.ASSOCIATION
         customer.save(failOnError: true)
 
-        user.name = customer.name
-        user.customer = customer
-        user.save(failOnError: true)
+        log.info("Conta administrativa padrão criada com sucesso")
+        return customer
     }
 
 }
