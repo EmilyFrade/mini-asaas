@@ -38,7 +38,9 @@ class UserService {
     }
 
     public User update(UpdateUserAdapter adapter) {
-        User user = show()
+        User user = springSecurityService.loadCurrentUser() as User
+        if (!user) throw new RuntimeException("Usuário não encontrado")
+
         user = validateBeforeUpdate(adapter, user)
         if (user.hasErrors()) {
             throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(user))
@@ -54,7 +56,9 @@ class UserService {
     }
 
     public User updatePassword(UpdateUserPasswordAdapter adapter) {
-        User user = show()
+        User user = springSecurityService.loadCurrentUser() as User
+        if (!user) throw new RuntimeException("Usuário não encontrado")
+        
         user = validateBeforeUpdatePassword(adapter, user)
         if (user.hasErrors()) {
             throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(user))
