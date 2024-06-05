@@ -5,8 +5,7 @@ import grails.gorm.transactions.Transactional
 @Transactional
 class UserRoleService {
 
-    public void assignAUserRole(RoleAuthority roleAuthority, User user) {
-
+    public void save(RoleAuthority roleAuthority, User user) {
         if (roleAuthority.isAdmin()) {
             addAllUserRoles(user)
             return

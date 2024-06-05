@@ -20,5 +20,4 @@ class UpdateUserAdapter {
         this.name = params.name
         this.email = params.email
     }
-
 }
