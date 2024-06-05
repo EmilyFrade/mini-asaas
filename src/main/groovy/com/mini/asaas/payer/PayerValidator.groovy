@@ -37,12 +37,17 @@ class PayerValidator extends BaseValidator {
         if (!EmailUtils.isValid(email)) {
             validationResult.addError("invalid.email")
         }
-        if (PayerRepository.query([email: email, customerId: customer.id, deletedOnly: true]).exists()) {
+
+        Payer payer = PayerRepository.query([email: email, customerId: customer.id, includeDeleted: true]).get()
+
+        if (!payer) return this
+
+        if (payer.deleted) {
             validationResult.addError("alreadyExistsAndDeleted.email")
-        } else if (PayerRepository.query([email: email, customerId: customer.id]).exists()) {
+        } else {
             validationResult.addError("alreadyExists.email")
         }
-
+        
         return this
     }
 
