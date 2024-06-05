@@ -11,7 +11,7 @@ class PaymentValidator extends BaseValidator {
         this.validatePayer(adapter.payerId)
         this.validateValue(adapter.value)
         this.validateDueDate(adapter.dueDate)
-        this.validateEnum(adapter)
+        this.validateBillingType(adapter.billingType)
 
         return this
     }
@@ -50,12 +50,9 @@ class PaymentValidator extends BaseValidator {
         return this
     }
 
-    public PaymentValidator validateEnum(PaymentAdapter adapter) {
-        if (!(adapter.billingType in BillingType.values())) {
+    public PaymentValidator validateBillingType(BillingType billingType) {
+        if (!(billingType in BillingType.values())) {
             validationResult.addError("invalid.billingType")
-        }
-        if (!(adapter.status in PaymentStatus.values())) {
-            validationResult.addError("invalid.paymentStatus")
         }
 
         return this

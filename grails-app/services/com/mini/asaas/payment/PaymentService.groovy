@@ -5,34 +5,35 @@ import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
+import grails.gorm.transactions.Transactional
 
+@Transactional
 class PaymentService {
 
     BusinessValidation validationResult
 
     public Payment save(PaymentAdapter adapter) {
-        Payment payment = new Payment()
+        Payment validatedPayment = validate(adapter)
 
-        payment = validate(adapter, payment)
+        if (validatedPayment.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(validatedPayment))
 
-        if (payment.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payment))
+        validatedPayment = buildPayment(adapter, validatedPayment)
 
-        payment = buildPayment(adapter, payment)
-
-        return payment.save(failOnError: true)
+        return validatedPayment.save(failOnError: true)
     }
 
-    private Payment validate(PaymentAdapter adapter, Payment payment) {
+    private Payment validate(PaymentAdapter adapter) {
+        Payment validatedPayment = new Payment()
         PaymentValidator validator = new PaymentValidator()
-        validator.validateAll(adapter)
 
+        validator.validateAll(adapter)
         validationResult = validator.validationResult
 
         if (!validationResult.isValid()) {
-            DomainErrorUtils.addBusinessRuleErrors(payment, validationResult.errors)
+            DomainErrorUtils.addBusinessRuleErrors(validatedPayment, validationResult.errors)
         }
 
-        return payment
+        return validatedPayment
     }
 
     private Payment buildPayment(PaymentAdapter adapter, Payment payment) {
