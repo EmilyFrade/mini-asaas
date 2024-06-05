@@ -3,6 +3,7 @@ package com.mini.asaas.payment
 import com.mini.asaas.utils.MessageSourceUtils
 
 enum PaymentStatus {
+
     CANCELED,
     OVERDUE,
     PENDING,
@@ -13,10 +14,10 @@ enum PaymentStatus {
         return MessageSourceUtils.getEnumLabel(this)
     }
 
-    public static PaymentStatus parseFromString(String status) {
+    public static PaymentStatus convert(status) {
         try {
             return valueOf(status.toUpperCase())
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             return null
         }
     }
