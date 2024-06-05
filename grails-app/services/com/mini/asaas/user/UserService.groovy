@@ -31,7 +31,7 @@ class UserService {
         User user = buildUser(adapter, new User())
         user.save(failOnError: true)
 
-        userRoleService.assignAUserRole(adapter.roleAuthority, user)
+        userRoleService.save(adapter.roleAuthority, user)
 
         return user
     }
