@@ -19,7 +19,7 @@ class PayerRepository implements Repository<Payer, PayerRepository> {
             }
 
             if (search.containsKey("customerId")) {
-                eq("customer.id", search.customerId)
+                eq("customer.id", Long.valueOf(search.customerId.toString()))
             }
 
         }
