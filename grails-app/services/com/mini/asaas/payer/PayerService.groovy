@@ -45,7 +45,6 @@ class PayerService {
         if (payer.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payer), validationResult.getFirstErrorCode())
 
         payer = buildPayer(adapter, payer)
-        payer.markDirty()
 
         return payer.save(failOnError: true)
     }
