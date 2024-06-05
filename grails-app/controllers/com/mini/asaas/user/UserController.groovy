@@ -37,14 +37,15 @@ class UserController {
             authService.login(new LoginUserAdapter(params))
 
             redirect(action: "show")
-        } catch (BusinessException e) {
-            flash.message = e.message
+        } catch (BusinessException businessException) {
+            flash.message = businessException.message
             flash.status = AlertType.ERROR.getValue()
+
             redirect(action: "create")
-        } catch (Exception e) {
-            e.printStackTrace()
+        } catch (Exception exception) {
             flash.message = "Ocorreu um erro durante o cadastro, aguarde um momento e tente novamente."
             flash.status = AlertType.ERROR.getValue()
+
             redirect(action: "create")
         }
     }
