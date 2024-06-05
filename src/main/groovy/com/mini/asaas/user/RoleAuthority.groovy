@@ -25,7 +25,7 @@ enum RoleAuthority {
     public static RoleAuthority parseFromString(String value) {
         try {
             return valueOf(value.toUpperCase())
-        } catch (Exception e) {
+        } catch (Exception exception) {
             return null
         }
     }
