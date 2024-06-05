@@ -16,8 +16,11 @@ class UserController {
     def show() {
         try {
             User user = userService.show()
+
             render(view: "show", model: [user: user])
         } catch (Exception exception) {
+            log.error(exception)
+
             redirect(uri: "/logout")
         }
     }
@@ -52,15 +55,18 @@ class UserController {
             userService.updatePassword(new UpdateUserPasswordAdapter(params))
             flash.status = AlertType.SUCCESS.getValue()
             flash.message = "Senha atualizada com sucesso!"
+
             redirect(action: "show")
-        } catch (BusinessException e) {
-            flash.message = e.message
+        } catch (BusinessException businessException) {
+            flash.message = businessException.message
             flash.status = AlertType.ERROR.getValue()
+
             redirect(action: "show")
-        } catch (Exception e) {
-            e.printStackTrace()
+        } catch (Exception exception) {
+            log.error(exception)
             flash.message = "Ocorreu um erro durante a atualização dos dados, aguarde um momento e tente novamente."
             flash.status = AlertType.ERROR.getValue()
+
             redirect(action: "show")
         } finally {
             flash.section = "update-password"
