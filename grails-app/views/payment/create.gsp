@@ -48,9 +48,9 @@
                             <atlas-col lg="2">
                                 <atlas-money
                                         label="Valor da cobrança"
-                                        name="originalValue"
-                                        id="originalValue"
-                                        value="${params.originalValue}"
+                                        name="value"
+                                        id="value"
+                                        value="${params.value}"
                                         required>
                                 </atlas-money>
                             </atlas-col>
@@ -86,74 +86,11 @@
                                 </atlas-select>
                             </atlas-col>
                         </atlas-row>
-
-                        <atlas-row>
-                            <atlas-col lg="6">
-                                <atlas-percentage
-                                        decimal-precision="0"
-                                        label="Valor percentual da multa"
-                                        name="interestPercentual"
-                                        id="interestPercentual"
-                                        value="${params.interestPercentual}">
-                                </atlas-percentage>
-                                <atlas-caption muted="">A multa será somada ao valor da parcela caso o pagamento seja feito após a data do vencimento.</atlas-caption>
-                            </atlas-col>
-                            <atlas-col lg="6">
-                                <atlas-percentage
-                                        decimal-precision="0"
-                                        label="Valor percentual do desconto"
-                                        name="discountPercentual"
-                                        id="discountPercentual"
-                                        value="${params.discountPercentual}">
-                                </atlas-percentage>
-                                <atlas-caption muted="">Conceda desconto para incentivar seu cliente a realizar o pagamento antes do vencimento. </atlas-caption>
-                            </atlas-col>
-                        </atlas-row>
-                    </atlas-grid>
-
-                    <atlas-button id="calculateButton" description="Calcular"></atlas-button>
-
-                    <atlas-grid>
-                        <atlas-row>
-                            <atlas-col lg="4">
-                                <atlas-money
-                                        label="Valor da multa"
-                                        name="interestValue"
-                                        id="interestValue"
-                                        value="${params.interestValue}"
-                                        readonly
-                                        required>
-                                </atlas-money>
-                            </atlas-col>
-                            <atlas-col lg="4">
-                                <atlas-money
-                                        label="Valor do desconto"
-                                        name="discountValue"
-                                        id="discountValue"
-                                        value="${params.discountValue}"
-                                        readonly
-                                        required>
-                                </atlas-money>
-                            </atlas-col>
-                            <atlas-col lg="4">
-                                <atlas-money
-                                        label="Valor final"
-                                        name="netValue"
-                                        id="netValue"
-                                        value="${params.netValue}"
-                                        readonly
-                                        required>
-                                </atlas-money>
-                            </atlas-col>
-                        </atlas-row>
                     </atlas-grid>
 
                     <atlas-button submit="true" description="Finalizar"></atlas-button>
                 </atlas-form>
             </atlas-page-content>
-
         </atlas-page>
-
-        <asset:javascript src="calculate-values-payment.js" />
     </body>
 </html>

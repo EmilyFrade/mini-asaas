@@ -25,11 +25,11 @@ class PaymentController {
             flash.message = "Cobrança criada com sucesso"
             flash.status = AlertType.SUCCESS.getValue()
             redirect(action: "show", id: payment.id)
-        } catch (BusinessException e) {
-            flash.message = e.getMessage()
+        } catch (BusinessException exception) {
+            flash.message = exception.getMessage()
             flash.status = AlertType.ERROR.getValue()
             render view: "create"
-        } catch (Exception e) {
+        } catch (Exception exception) {
             flash.message = "Ocorreu um erro durante a criação, aguarde um momento e tente novamente."
             flash.status = AlertType.ERROR.getValue()
             render view: "create"

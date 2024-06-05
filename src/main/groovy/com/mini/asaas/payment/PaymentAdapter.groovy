@@ -25,7 +25,7 @@ class PaymentAdapter {
         if (!params) return
         this.customerId = params.customerId as Long
         this.payerId = params.payerId as Long
-        this.value = BigDecimalUtils.fromFormattedString(params.originalValue)
+        this.value = BigDecimalUtils.fromFormattedString(params.value)
         this.description = params.description
         this.billingType = BillingType.convert(params.billingType)
         this.status = PaymentStatus.PENDING
