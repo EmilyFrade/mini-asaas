@@ -1,4 +1,8 @@
-<%@ page import="com.mini.asaas.user.RoleAuthority; com.mini.asaas.user.UserRole; com.mini.asaas.enums.address.AddressState; com.mini.asaas.utils.DateFormatUtils" %>
+<%@ page import="com.mini.asaas.user.RoleAuthority" %>
+<%@ page import="com.mini.asaas.user.UserRole" %>
+<%@ page import="com.mini.asaas.enums.address.AddressState" %>
+<%@ page import="com.mini.asaas.utils.DateFormatUtils" %>
+
 <html>
 	<head>
 		<meta name="layout" content="main">
