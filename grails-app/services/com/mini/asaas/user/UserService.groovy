@@ -47,7 +47,7 @@ class UserService {
         user.email = adapter.email
         user.save(failOnError: true)
 
-        userRoleService.assignAUserRole(adapter.roleAuthority, user)
+        userRoleService.save(adapter.roleAuthority, user)
 
         return user
     }
