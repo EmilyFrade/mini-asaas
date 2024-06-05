@@ -22,13 +22,14 @@ class UserService {
         return user
     }
 
-    public User save(SaveUserAdapter adapter) {
+    public User save(SaveUserAdapter adapter, Customer customer) {
         User validatedUser = validateBeforeSave(adapter)
         if (validatedUser.hasErrors()) {
             throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(validatedUser))
         }
 
         User user = buildUser(adapter, new User())
+        user.customer = customer
         user.save(failOnError: true)
 
         userRoleService.save(adapter.roleAuthority, user)
@@ -36,14 +37,7 @@ class UserService {
         return user
     }
 
-    public User associateWithCustomer(Customer customer) {
-        User user = show()
-        user.name = customer.name
-        user.customer = customer
-        user.save(failOnError: true)
-    }
-
-    private User validateBeforeSave(SaveUserAdapter adapter) {
+    public User validateBeforeSave(SaveUserAdapter adapter) {
         User user = new User();
         UserValidator validator = new UserValidator()
         BusinessValidation validationResult = validator.validateBeforeSave(adapter)

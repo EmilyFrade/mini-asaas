@@ -15,6 +15,24 @@
 					required>
 				</atlas-input>
 				<atlas-masked-input
+					class="input"
+					mask-alias="email"
+					label="Email"
+					name="email"
+					type="email"
+					size="sm"
+					value="${params.email}"
+					required="">
+				</atlas-masked-input>
+				<atlas-password-input
+					label="Senha"
+					name="password"
+					type="password"
+					size="sm"
+					value="${params.password}"
+					required="">
+				</atlas-password-input>
+				<atlas-masked-input
 					mask-alias="cell-phone"
 					name="phoneNumber"
 					label="Celular"

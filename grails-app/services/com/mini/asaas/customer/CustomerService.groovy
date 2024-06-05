@@ -3,19 +3,20 @@ package com.mini.asaas.customer
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.user.User
 import com.mini.asaas.user.UserService
+import com.mini.asaas.user.adapters.SaveUserAdapter
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.gorm.transactions.Transactional
+import grails.plugin.springsecurity.SpringSecurityService
 
 @Transactional
 class CustomerService {
 
     UserService userService
 
-    public Customer save(CustomerAdapter customerAdapter) {
-        User user = userService.show()
-        customerAdapter.email = user.email
+    SpringSecurityService springSecurityService
 
+    public Customer save(CustomerAdapter customerAdapter, SaveUserAdapter saveUserAdapter) {
         Customer validatedCustomer = validate(customerAdapter, new Customer())
         if (validatedCustomer.hasErrors()) {
             throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(validatedCustomer))
@@ -24,20 +25,20 @@ class CustomerService {
         Customer customer = buildCustomer(customerAdapter, new Customer())
         customer.save(failOnError: true)
 
-        userService.associateWithCustomer(customer)
+        userService.save(saveUserAdapter, customer)
 
         return customer
     }
 
     public Customer show() {
-        Customer customer = userService.show()?.customer
+        Customer customer = (springSecurityService.loadCurrentUser() as User)?.customer
         if (!customer) throw new RuntimeException("Cliente não encontrado")
 
         return customer
     }
 
     public Customer update(CustomerAdapter customerAdapter) {
-        Customer customer = userService.show()?.customer
+        Customer customer = (springSecurityService.loadCurrentUser() as User)?.customer
         if (!customer) throw new RuntimeException("Cliente não encontrado")
 
         customer = validate(customerAdapter, customer)
