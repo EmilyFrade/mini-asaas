@@ -38,10 +38,7 @@ class PaymentService {
     private Payment buildPayment(PaymentAdapter adapter, Payment payment) {
         payment.customer = Customer.get(adapter.customerId)
         payment.payer = Payer.get(adapter.payerId)
-        payment.netValue = adapter.netValue
-        payment.originalValue = adapter.originalValue
-        payment.interestValue = adapter.interestValue
-        payment.discountValue = adapter.discountValue
+        payment.value = adapter.value
         payment.description = adapter.description
         payment.billingType = adapter.billingType
         payment.status = adapter.status
