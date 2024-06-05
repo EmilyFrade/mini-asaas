@@ -1,6 +1,6 @@
 package com.mini.asaas.utils
 
-class PaymentUtils {
+class BigDecimalUtils {
 
     public static BigDecimal calculateInterestValue(BigDecimal originalValue, BigDecimal interestPercentual) {
         if (!originalValue || !interestPercentual) return null
@@ -15,5 +15,13 @@ class PaymentUtils {
     public static BigDecimal calculateNetValue(BigDecimal originalValue, BigDecimal discountValue) {
         if (!originalValue || !discountValue) return null
         return originalValue - discountValue
+    }
+
+    public static BigDecimal fromFormattedString(String value) {
+        try {
+            return value ? new BigDecimal(value.replaceAll('\\.', "").replaceAll(',', ".")) : null
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Unparseable bigDecimal: \"${value}\" ")
+        }
     }
 }

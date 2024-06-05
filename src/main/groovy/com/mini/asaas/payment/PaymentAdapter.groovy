@@ -1,8 +1,7 @@
 package com.mini.asaas.payment
 
+import com.mini.asaas.utils.BigDecimalUtils
 import com.mini.asaas.utils.DateFormatUtils
-import com.mini.asaas.utils.PaymentUtils
-import com.mini.asaas.utils.StringUtils
 import com.mini.asaas.utils.Utils
 
 class PaymentAdapter {
@@ -36,12 +35,12 @@ class PaymentAdapter {
         if (!params) return
         this.customerId = params.customerId as Long
         this.payerId = params.payerId as Long
-        this.originalValue = StringUtils.formatFromCommaToDot(params.originalValue) as BigDecimal
-        this.interestPercentual = params.interestPercentual as BigDecimal
-        this.interestValue = PaymentUtils.calculateInterestValue(originalValue, interestPercentual)
-        this.discountPercentual = params.discountPercentual as BigDecimal
-        this.discountValue = PaymentUtils.calculateDiscountValue(originalValue, discountPercentual)
-        this.netValue = PaymentUtils.calculateNetValue(originalValue, discountValue)
+        this.originalValue = BigDecimalUtils.fromFormattedString(params.originalValue)
+        this.interestPercentual = BigDecimalUtils.fromFormattedString(params.interestPercentual)
+        this.interestValue = BigDecimalUtils.calculateInterestValue(originalValue, interestPercentual)
+        this.discountPercentual = BigDecimalUtils.fromFormattedString(params.discountPercentual)
+        this.discountValue = BigDecimalUtils.calculateDiscountValue(originalValue, discountPercentual)
+        this.netValue = BigDecimalUtils.calculateNetValue(originalValue, discountValue)
         this.description = params.description
         this.billingType = BillingType.parseFromString(params.billingType)
         this.status = PaymentStatus.PENDING
