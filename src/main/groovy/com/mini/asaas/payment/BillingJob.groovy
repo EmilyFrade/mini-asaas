@@ -5,12 +5,11 @@ import org.quartz.Job
 import org.quartz.JobExecutionContext
 
 class BillingJob implements Job {
+
+    PaymentService paymentService
+
     @Transactional
     void execute(JobExecutionContext context) {
-        def overdueBillings = Payment.findAllByDueDateLessThanAndStatus(new Date(), PaymentStatus.PENDING)
-        overdueBillings.each { billing ->
-            billing.status = PaymentStatus.OVERDUE
-            billing.save(flush: true)
-        }
+        paymentService.executeBillingJob()
     }
 }
