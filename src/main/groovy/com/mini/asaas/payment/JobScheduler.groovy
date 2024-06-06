@@ -5,6 +5,8 @@ import org.quartz.SimpleScheduleBuilder
 import org.quartz.TriggerBuilder
 import org.quartz.impl.StdSchedulerFactory
 
+import java.util.concurrent.TimeUnit
+
 class JobScheduler {
     static void startScheduler() {
         def scheduler = StdSchedulerFactory.getDefaultScheduler()
@@ -18,7 +20,7 @@ class JobScheduler {
                 .withIdentity("billingTrigger", "group1")
                 .startNow()
                 .withSchedule(SimpleScheduleBuilder.simpleSchedule()
-                        .withIntervalInSeconds(86400)
+                        .withIntervalInSeconds(TimeUnit.DAYS.toSeconds(1) as Integer)
                         .repeatForever())
                 .build()
 
