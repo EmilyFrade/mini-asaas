@@ -13,17 +13,18 @@ class PaymentService {
     BusinessValidation validationResult
 
     public Payment save(PaymentAdapter adapter) {
-        Payment validatedPayment = validate(adapter)
+        Payment payment = new Payment()
 
-        if (validatedPayment.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(validatedPayment))
+        payment = validate(adapter, payment)
 
-        validatedPayment = buildPayment(adapter, validatedPayment)
+        if (payment.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payment))
 
-        return validatedPayment.save(failOnError: true)
+        payment = buildPayment(adapter, payment)
+
+        return payment.save(failOnError: true)
     }
 
-    private Payment validate(PaymentAdapter adapter) {
-        Payment validatedPayment = new Payment()
+    private Payment validate(PaymentAdapter adapter, Payment validatedPayment) {
         PaymentValidator validator = new PaymentValidator()
 
         validator.validateAll(adapter)
