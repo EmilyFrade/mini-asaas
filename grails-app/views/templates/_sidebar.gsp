@@ -36,5 +36,17 @@
                 ${ controllerName == "payer" && actionName == "restore" ? "active" : "" }
             ></atlas-sidebar-menu-item>
         </atlas-sidebar-menu-item>
+
+        <atlas-sidebar-menu-item
+                icon="money"
+                text="Cobranças"
+            ${ controllerName == "payment" ? "active" : "" }>
+            <atlas-sidebar-menu-item
+                    icon="files"
+                    text="Todas"
+                    href="${createLink(controller: "payment", action: "index")}"
+                ${ controllerName == "payment" && actionName == "index" ? "active" : "" }
+            ></atlas-sidebar-menu-item>
+        </atlas-sidebar-menu-item>
     </atlas-sidebar-menu>
 </atlas-sidebar>
