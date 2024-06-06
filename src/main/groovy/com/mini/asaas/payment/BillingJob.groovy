@@ -10,6 +10,6 @@ class BillingJob implements Job {
 
     @Transactional
     void execute(JobExecutionContext context) {
-        paymentService.executeBillingJob()
+        paymentService.processOverduePayments()
     }
 }

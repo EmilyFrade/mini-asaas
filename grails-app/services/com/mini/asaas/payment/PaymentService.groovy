@@ -24,7 +24,7 @@ class PaymentService {
         return payment.save(failOnError: true)
     }
 
-    public void executeBillingJob() {
+    public void processOverduePayments() {
         def overdueBillings = Payment.findAllByDueDateLessThanAndStatus(new Date(), PaymentStatus.PENDING)
         overdueBillings.each { billing ->
             billing.status = PaymentStatus.OVERDUE
