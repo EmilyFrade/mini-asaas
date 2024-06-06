@@ -7,8 +7,7 @@ enum PaymentStatus {
     CANCELED,
     OVERDUE,
     PENDING,
-    RECEIVED,
-    RECEIVED_IN_CASH
+    RECEIVED
 
     public String getLabel() {
         return MessageSourceUtils.getEnumLabel(this)
