@@ -41,7 +41,7 @@
                 id="${naturalPerson}-section"
                 data-active="${initialPersonType.isNatural()}">
                 <atlas-masked-input
-                    ${initialPersonType.isNatural() ? 'disabled' : ''}
+                    ${initialPersonType.isNatural() ?: 'disabled'}
                     data-field="true"
                     mask-alias="cpf"
                     name="cpf"
@@ -51,7 +51,7 @@
                     required>
                 </atlas-masked-input>
                 <atlas-datepicker
-                    ${initialPersonType.isNatural() ? 'disabled' : ''}
+                    ${initialPersonType.isNatural() ?: 'disabled'}
                     data-field="true"
                     label="Data de nascimento"
                     name="birthDate"
@@ -65,7 +65,7 @@
                 id="${legalPerson}-section"
                 data-active="${initialPersonType.isLegal()}">
                 <atlas-masked-input
-                    ${initialPersonType.isLegal() ? 'disabled' : ''}
+                    ${initialPersonType.isLegal() ?: 'disabled'}
                     data-field="true"
                     mask-alias="cnpj"
                     name="cnpj"
@@ -75,7 +75,7 @@
                     required>
                 </atlas-masked-input>
                 <atlas-select
-                    ${initialPersonType.isLegal() ? 'disabled' : ''}
+                    ${initialPersonType.isLegal() ?: 'disabled'}
                     data-field="true"
                     label="Qual o tipo da empresa?"
                     placeholder="Selecione um tipo"
