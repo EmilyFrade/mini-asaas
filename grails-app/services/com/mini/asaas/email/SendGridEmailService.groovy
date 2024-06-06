@@ -16,14 +16,14 @@ import groovy.util.logging.Slf4j
 @CompileStatic
 class SendGridEmailService implements EmailService, GrailsConfigurationAware {
 
-    String api
+    String apiKey
 
     String from
 
     @Override
     void send(EmailAdapter adapter) {
         Mail mail = buildMail(adapter)
-        SendGrid sendGrid = new SendGrid(this.api)
+        SendGrid sendGrid = new SendGrid(this.apiKey)
         Request request = new Request()
 
         try {
@@ -41,8 +41,8 @@ class SendGridEmailService implements EmailService, GrailsConfigurationAware {
 
     @Override
     void setConfiguration(Config config) {
-        this.api = config.getProperty("sendgrid.api")
-        if (!this.api) throw new IllegalStateException("A configuração 'sendgrid.api' não foi encontrada")
+        this.apiKey = config.getProperty("sendgrid.api")
+        if (!this.apiKey) throw new IllegalStateException("A configuração 'sendgrid.api' não foi encontrada")
 
         this.from = config.getProperty("sendgrid.from")
         if (!this.from) throw new IllegalStateException("A configuração 'sendgrid.from' não foi encontrada")
@@ -70,22 +70,6 @@ class SendGridEmailService implements EmailService, GrailsConfigurationAware {
 
         Email toEmail = new Email(adapter.to)
         personalization.addTo(toEmail)
-
-        if (adapter.ccList) {
-            for (String cc : adapter.ccList) {
-                Email ccEmail = new Email()
-                ccEmail.email = cc
-                personalization.addCc(ccEmail)
-            }
-        }
-
-        if (adapter.bccList) {
-            for (String bcc : adapter.bccList) {
-                Email bccEmail = new Email()
-                bccEmail.email = bcc
-                personalization.addBcc(bccEmail)
-            }
-        }
 
         return personalization
     }

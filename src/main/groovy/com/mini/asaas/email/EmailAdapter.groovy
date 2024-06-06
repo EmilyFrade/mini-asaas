@@ -15,10 +15,6 @@ class EmailAdapter {
 
     String replyTo
 
-    List<String> ccList = []
-
-    List<String> bccList = []
-
     String subject
 
     String body
