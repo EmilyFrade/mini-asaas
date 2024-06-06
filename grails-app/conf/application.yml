@@ -9,6 +9,9 @@ security:
         name: ${ADMIN_NAME}
         email: ${ADMIN_EMAIL}
         password: ${ADMIN_PASSWORD}
+sendgrid:
+  api: ${SENDGRID_API_KEY}
+  from: ${SENDGRID_FROM_EMAIL}
 grails:
   profile: web
   codegen:
