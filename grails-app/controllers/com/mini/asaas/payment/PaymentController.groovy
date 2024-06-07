@@ -1,18 +1,19 @@
 package com.mini.asaas.payment
 
+import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
-
+import com.mini.asaas.payer.PayerRepository
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured(["ROLE_USER"])
+@Secured(["ROLE_ADMIN", "ROLE_SELLER"])
 class PaymentController {
 
     PaymentService paymentService
 
     def create() {
-        def customerList = CustomerRepository.listAllNotDeleted()
-        def payerList = PayerRepository.listAllNotDeleted()
+        def customerList = CustomerRepository.query().list()
+        def payerList = PayerRepository.query().list()
 
         return [customerList: customerList, payerList: payerList]
     }
