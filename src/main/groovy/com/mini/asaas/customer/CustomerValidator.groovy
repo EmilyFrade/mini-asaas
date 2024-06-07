@@ -1,7 +1,6 @@
 package com.mini.asaas.customer
 
 import com.mini.asaas.base.BaseValidator
-import com.mini.asaas.repository.CustomerRepository
 import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.DateUtils
 import com.mini.asaas.utils.EmailUtils
@@ -38,14 +37,14 @@ class CustomerValidator extends BaseValidator {
     }
 
     public CustomerValidator validateIfCpfCnpjExists(String cpfCnpj) {
-        if (cpfCnpj && CustomerRepository.existsByCpfCnpj(cpfCnpj)) {
+        if (cpfCnpj && CustomerRepository.query([cpfCnpj: cpfCnpj]).exists()) {
             validationResult.addError("alreadyExists.cpfCnpj")
         }
         return this
     }
 
     public CustomerValidator validateIfEmailExists(String email) {
-        if (email && CustomerRepository.existsByEmail(email)) {
+        if (email && CustomerRepository.query([email: email]).exists()) {
             validationResult.addError("alreadyExists.email")
         }
         return this

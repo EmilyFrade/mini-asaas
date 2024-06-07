@@ -1,7 +1,6 @@
 package com.mini.asaas.customer
 
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.repository.CustomerRepository
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.gorm.transactions.Transactional
@@ -22,13 +21,13 @@ class CustomerService {
     }
 
     public Customer show(Long id) {
-        Customer customer = CustomerRepository.findById(id)
+        Customer customer = CustomerRepository.get(id)
         if (!customer) throw new RuntimeException("Cliente não encontrado")
         return customer
     }
 
     public Customer update(CustomerAdapter customerAdapter, Long id) {
-        Customer customer = CustomerRepository.findById(id)
+        Customer customer = CustomerRepository.get(id)
 
         if (!customer) throw new RuntimeException("Cliente não encontrado")
 
@@ -38,7 +37,6 @@ class CustomerService {
         }
 
         customer = buildCustomer(customerAdapter, customer)
-        customer.markDirty()
         customer.save(failOnError: true)
 
         return customer
