@@ -48,7 +48,10 @@ class PaymentService {
     public void delete(Long id) {
         Payment payment = PaymentRepository.get(id)
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
+        if (payment.status == PaymentStatus.RECEIVED) throw new BusinessException("Cobranças com status 'Recebida' não podem ser deletadas")
+
         payment.deleted = true
+        payment.status = PaymentStatus.CANCELED
 
         payment.save(failOnError: true)
     }
@@ -56,7 +59,21 @@ class PaymentService {
     public void restore(Long id) {
         Payment payment = PaymentRepository.query([deletedOnly: true, id: id]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
+        if (payment.dueDate < new Date()) throw new BusinessException("A data de vencimento não pode ser uma data passada")
+
         payment.deleted = false
+        payment.status = PaymentStatus.PENDING
+
+        payment.save(failOnError: true)
+    }
+
+    public void receive(Long id) {
+        Payment payment = PaymentRepository.get(id)
+        if (!payment) throw new RuntimeException("Cobrança não encontrada")
+        if (payment.status != PaymentStatus.PENDING) throw new BusinessException("Apenas cobranças com status 'Aguardando pagamento' podem ser recebidas")
+
+        payment.status = PaymentStatus.RECEIVED
+        payment.paymentDate = new Date()
 
         payment.save(failOnError: true)
     }

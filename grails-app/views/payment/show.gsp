@@ -1,4 +1,4 @@
-<%@ page import="com.mini.asaas.utils.StringUtils; com.mini.asaas.payment.BillingType; com.mini.asaas.utils.DateFormatUtils" %>
+<%@ page import="com.mini.asaas.payment.PaymentStatus; com.mini.asaas.utils.StringUtils; com.mini.asaas.payment.BillingType; com.mini.asaas.utils.DateFormatUtils" %>
 <html>
     <head>
         <title>Detalhes da cobrança</title>
@@ -19,17 +19,23 @@
                     hidden>
             </atlas-input>
 
-            <g:if test="${!payment.deleted}">
+            <g:if test="${!payment.deleted && payment.status != PaymentStatus.RECEIVED}">
+                <g:if test="${payment.status == PaymentStatus.PENDING}">
+                    <atlas-button slot="actions" description="Receber" icon="money" theme="success"
+                                  href="${createLink(controller: "payment", action: "receive", params: [id: payment.id])}">
+                    </atlas-button>
+                </g:if>
                 <atlas-button slot="actions" description="Editar" icon="pencil" data-panel-start-editing="true"></atlas-button>
                 <atlas-button slot="actions" description="Excluir" icon="trash" theme="danger"
                               href="${createLink(controller: "payment", action: "delete", params: [id: payment.id])}">
                 </atlas-button>
             </g:if>
-            <g:else>
+            <g:elseif test="${payment.deleted}">
+                <atlas-button slot="actions" description="Editar" icon="pencil" data-panel-start-editing="true"></atlas-button>
                 <atlas-button slot="actions" description="Restaurar" icon="refresh" theme="danger"
                               href="${createLink(controller: "payment", action: "restore", params: [id: payment.id])}">
                 </atlas-button>
-            </g:else>
+            </g:elseif>
 
             <atlas-grid>
                 <atlas-row>
@@ -97,6 +103,26 @@
                                 <atlas-option label="${type.getLabel()}" value="${type.name()}"></atlas-option>
                             </g:each>
                         </atlas-select>
+                    </atlas-col>
+                </atlas-row>
+
+                <atlas-row>
+                    <atlas-col lg="6">
+                        <atlas-input
+                                label="Status"
+                                value="${payment.status.getLabel()}"
+                                name="status"
+                                required
+                                readonly>
+                        </atlas-input>
+                    </atlas-col>
+                    <atlas-col lg="6">
+                        <atlas-input
+                                label="Data de pagamento"
+                                name="paymentDate"
+                                value="${DateFormatUtils.format(payment.paymentDate)}"
+                                readonly>
+                        </atlas-input>
                     </atlas-col>
                 </atlas-row>
             </atlas-grid>

@@ -1,4 +1,4 @@
-<%@ page import="com.mini.asaas.utils.StringUtils" %>
+<%@ page import="com.mini.asaas.utils.DateFormatUtils; com.mini.asaas.utils.StringUtils" %>
 <html>
     <head>
         <title>Minhas Cobranças</title>
@@ -21,6 +21,7 @@
                         <atlas-table-col>Nome do pagador</atlas-table-col>
                         <atlas-table-col>Valor</atlas-table-col>
                         <atlas-table-col>Forma de pagamento</atlas-table-col>
+                        <atlas-table-col>Data de vencimento</atlas-table-col>
                         <atlas-table-col>Status</atlas-table-col>
                     </atlas-table-header>
 
@@ -30,19 +31,9 @@
                                 <atlas-table-col>${payment.payer.name}</atlas-table-col>
                                 <atlas-table-col>R$${StringUtils.fromBigDecimal(payment.value)}</atlas-table-col>
                                 <atlas-table-col>${payment.billingType.getLabel()}</atlas-table-col>
-                                <atlas-table-col><atlas-badge text="${payment.status.getLabel()}" theme="warning"></atlas-badge></atlas-table-col>
+                                <atlas-table-col>${DateFormatUtils.format(payment.dueDate)}</atlas-table-col>
                                 <atlas-table-col>
-                                    <g:if test="${!payment.deleted}">
-                                        <atlas-button-group>
-                                            <atlas-button icon="pencil" type="ghost" size="sm"></atlas-button>
-                                            <atlas-button icon="trash" type="ghost" size="sm" theme="danger"
-                                                          href="${createLink(controller: "payment", action: "delete", params: [id: payment.id])}"></atlas-button>
-                                        </atlas-button-group>
-                                    </g:if>
-                                    <g:else>
-                                        <atlas-button icon="refresh" type="ghost" size="sm" theme="danger"
-                                                      href="${createLink(controller: "payment", action: "restore", params: [id: payment.id])}"></atlas-button>
-                                    </g:else>
+                                    <atlas-badge text="${payment.status.getLabel()}" theme="${payment.status.theme}"></atlas-badge>
                                 </atlas-table-col>
                             </atlas-table-row>
                         </g:each>

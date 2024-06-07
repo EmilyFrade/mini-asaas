@@ -4,10 +4,16 @@ import com.mini.asaas.utils.MessageSourceUtils
 
 enum PaymentStatus {
 
-    CANCELED,
-    OVERDUE,
-    PENDING,
-    RECEIVED
+    CANCELED("secondary"),
+    OVERDUE("danger"),
+    PENDING("warning"),
+    RECEIVED("success")
+
+    String theme
+
+    PaymentStatus(String theme) {
+        this.theme = theme
+    }
 
     public String getLabel() {
         return MessageSourceUtils.getEnumLabel(this)
