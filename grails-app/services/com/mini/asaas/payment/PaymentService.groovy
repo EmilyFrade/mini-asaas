@@ -3,7 +3,6 @@ package com.mini.asaas.payment
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
-import com.mini.asaas.repository.PaymentRepository
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.gorm.transactions.Transactional
@@ -26,7 +25,7 @@ class PaymentService {
     }
 
     public Payment update(PaymentAdapter adapter, Long id) {
-        Payment payment = PaymentRepository.findById(id, false)
+        Payment payment = PaymentRepository.query([includeDeleted: true, id: id]).get()
 
         if (!payment) throw new RuntimeException("Pagador não encontrado")
 
@@ -35,30 +34,30 @@ class PaymentService {
         if (payment.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payment))
 
         payment = buildPayment(adapter, payment)
-        payment.markDirty()
 
         return payment.save(failOnError: true)
     }
 
     public Payment show(Long id) {
-        Payment payment = PaymentRepository.findById(id)
+        Payment payment = PaymentRepository.query([includeDeleted: true, id: id]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
+
         return payment
     }
 
     public void delete(Long id) {
-        Payment payment = PaymentRepository.findById(id, false)
+        Payment payment = PaymentRepository.get(id)
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
         payment.deleted = true
-        payment.markDirty()
+
         payment.save(failOnError: true)
     }
 
     public void restore(Long id) {
-        Payment payment = PaymentRepository.findById(id, true)
+        Payment payment = PaymentRepository.query([deletedOnly: true, id: id]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
         payment.deleted = false
-        payment.markDirty()
+
         payment.save(failOnError: true)
     }
 

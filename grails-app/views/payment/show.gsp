@@ -43,15 +43,17 @@
                         </atlas-input>
                     </atlas-col>
                     <atlas-col lg="6">
-                        <atlas-select
-                                label="Pagador"
+                        <atlas-input
                                 name="payerId"
                                 value="${payment.payerId}"
-                                required>
-                            <g:each in="${payerList}" var="payer">
-                                <atlas-option label="${payer.name}" value="${payer.id}"></atlas-option>
-                            </g:each>
-                        </atlas-select>
+                                hidden>
+                        </atlas-input>
+                        <atlas-input
+                                label="Pagador"
+                                value="${payment.payer.name}"
+                                required
+                                readonly>
+                        </atlas-input>
                     </atlas-col>
                 </atlas-row>
 

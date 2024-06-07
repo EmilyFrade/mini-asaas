@@ -12,7 +12,7 @@ class PaymentController {
     PaymentService paymentService
 
     def index() {
-        def paymentList = PaymentRepository.listAll()
+        def paymentList = PaymentRepository.query([includeDeleted: true]).list()
         return [paymentList: paymentList]
     }
 
@@ -35,6 +35,7 @@ class PaymentController {
             flash.status = AlertType.ERROR.getValue()
             render view: "create"
         } catch (Exception exception) {
+            log.error(exception)
             flash.message = "Ocorreu um erro durante a criação, aguarde um momento e tente novamente."
             flash.status = AlertType.ERROR.getValue()
             render view: "create"
@@ -54,6 +55,7 @@ class PaymentController {
             flash.status = AlertType.ERROR.getValue()
             redirect(action: "show", id: params.id)
         } catch (Exception exception) {
+            log.error(exception)
             flash.message = "Ocorreu um erro ao atualizar os dados, aguarde um momento e tente novamente."
             flash.status = AlertType.ERROR.getValue()
             redirect(action: "show", id: params.id)
@@ -61,13 +63,12 @@ class PaymentController {
     }
 
     def show() {
-        def payerList = PayerRepository.listAllNotDeleted()
-
         try {
             Long id = params.id as Long
             Payment payment = paymentService.show(id)
-            return [payment: payment, payerList: payerList]
+            return [payment: payment]
         } catch (Exception exception) {
+            log.error(exception)
             redirect(action: "index")
         }
     }
@@ -78,6 +79,7 @@ class PaymentController {
             paymentService.delete(id)
             redirect(action: "index", id: id)
         } catch (Exception exception) {
+            log.error(exception)
             redirect(action: "index")
         }
     }
@@ -88,6 +90,7 @@ class PaymentController {
             paymentService.restore(id)
             redirect(action: "show", id: id)
         } catch (Exception exception) {
+            log.error(exception)
             redirect(action: "index")
         }
     }
