@@ -2,7 +2,6 @@ package com.mini.asaas.payer
 
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.repository.PayerRepository
 import com.mini.asaas.utils.StringUtils
 import grails.plugin.springsecurity.annotation.Secured
 
@@ -12,14 +11,14 @@ class PayerController {
     PayerService payerService
 
     def index() {
-        def payerList = PayerRepository.listAllNotDeleted()
+        def payerList = PayerRepository.query().list()
         return [payerList: payerList]
     }
 
     def create() {}
 
     def restore() {
-        def payerList = PayerRepository.listAllDeleted()
+        def payerList = PayerRepository.query([deletedOnly: true]).list()
         return [payerList: payerList]
     }
 

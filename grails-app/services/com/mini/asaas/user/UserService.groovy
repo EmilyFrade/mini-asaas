@@ -1,7 +1,6 @@
 package com.mini.asaas.user
 
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.repository.UserRepository
 import com.mini.asaas.utils.MessageSourceUtils
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.SpringSecurityService
@@ -19,7 +18,7 @@ class UserService {
     }
 
     public User validateBeforeLogin(LoginUserAdapter adapter) {
-        User validatedUser = UserRepository.findByEmail(adapter.email)
+        User validatedUser = UserRepository.query([email: adapter.email]).get()
 
         if (!validatedUser) {
             throw new BusinessException(MessageSourceUtils.getMessage("login.not.found"))
