@@ -37,7 +37,6 @@ class CustomerService {
         }
 
         customer = buildCustomer(customerAdapter, customer)
-        customer.markDirty()
         customer.save(failOnError: true)
 
         return customer
