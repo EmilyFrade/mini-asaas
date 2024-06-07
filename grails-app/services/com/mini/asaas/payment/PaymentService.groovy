@@ -24,14 +24,6 @@ class PaymentService {
         return payment.save(failOnError: true)
     }
 
-    public void processOverduePayments() {
-        def overdueBillings = Payment.findAllByDueDateLessThanAndStatus(new Date(), PaymentStatus.PENDING)
-        overdueBillings.each { billing ->
-            billing.status = PaymentStatus.OVERDUE
-            billing.save(flush: true)
-        }
-    }
-
     public Payment update(PaymentAdapter adapter, Long id) {
         Payment payment = PaymentRepository.query([includeDeleted: true, id: id]).get()
 
@@ -67,6 +59,11 @@ class PaymentService {
         payment.deleted = false
 
         payment.save(failOnError: true)
+    }
+
+    public static void setPaymentAsOverdue(Payment payment) {
+        payment.status = PaymentStatus.OVERDUE
+        payment.save(flush: true)
     }
 
     private Payment validate(PaymentAdapter adapter, Payment validatedPayment) {

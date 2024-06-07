@@ -12,7 +12,7 @@ class JobScheduler {
         def scheduler = StdSchedulerFactory.getDefaultScheduler()
         scheduler.start()
 
-        def job = JobBuilder.newJob(BillingJob)
+        def job = JobBuilder.newJob(ProcessOverduePayments)
                 .withIdentity("billingJob", "group1")
                 .build()
 
