@@ -2,7 +2,6 @@ package com.mini.asaas.payer
 
 import com.mini.asaas.base.BaseValidator
 import com.mini.asaas.customer.Customer
-import com.mini.asaas.repository.PayerRepository
 import com.mini.asaas.utils.CpfCnpjUtils
 import com.mini.asaas.utils.EmailUtils
 import com.mini.asaas.utils.ZipCodeUtils
@@ -25,9 +24,14 @@ class PayerValidator extends BaseValidator {
         if (!CpfCnpjUtils.isValidCpfCnpj(cpfCnpj)) {
             validationResult.addError("invalid.cpfCnpj")
         }
-        if (PayerRepository.existsByCpfCnpj(cpfCnpj, customer, true)) {
+
+        Payer payer = PayerRepository.query([cpfCnpj: cpfCnpj, customerId: customer.id, includeDeleted: true]).get()
+
+        if (!payer) return this
+
+        if (payer.deleted) {
             validationResult.addError("alreadyExistsAndDeleted.cpfCnpj")
-        } else if (PayerRepository.existsByCpfCnpj(cpfCnpj, customer)) {
+        } else {
             validationResult.addError("alreadyExists.cpfCnpj")
         }
 
@@ -38,9 +42,14 @@ class PayerValidator extends BaseValidator {
         if (!EmailUtils.isValid(email)) {
             validationResult.addError("invalid.email")
         }
-        if (PayerRepository.existsByEmail(email, customer, true)) {
+
+        Payer payer = PayerRepository.query([email: email, customerId: customer.id, includeDeleted: true]).get()
+
+        if (!payer) return this
+
+        if (payer.deleted) {
             validationResult.addError("alreadyExistsAndDeleted.email")
-        } else if (PayerRepository.existsByEmail(email, customer)) {
+        } else {
             validationResult.addError("alreadyExists.email")
         }
 
@@ -48,7 +57,7 @@ class PayerValidator extends BaseValidator {
     }
 
     public PayerValidator validatePhoneNumber(String phoneNumber) {
-        if(!phoneNumber.matches(PHONE_NUMBER_REGEX)) {
+        if (!phoneNumber.matches(PHONE_NUMBER_REGEX)) {
             validationResult.addError("invalid.phoneNumber")
         }
 

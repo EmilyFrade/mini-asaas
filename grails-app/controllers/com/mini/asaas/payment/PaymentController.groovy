@@ -2,8 +2,7 @@ package com.mini.asaas.payment
 
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.repository.CustomerRepository
-import com.mini.asaas.repository.PayerRepository
+
 import grails.plugin.springsecurity.annotation.Secured
 
 @Secured(["ROLE_USER"])
