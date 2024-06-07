@@ -9,6 +9,9 @@ security:
       default:
         name: ${DEFAULT_CUSTOMER_NAME}
         cpfCnpj: ${DEFAULT_CUSTOMER_CPF_CNPJ}
+sendgrid:
+  api: ${SENDGRID_API_KEY}
+  from: ${SENDGRID_FROM_EMAIL}
 grails:
   profile: web
   codegen:
@@ -107,6 +110,7 @@ hibernate:
     queries: false
     use_second_level_cache: false
     use_query_cache: false
+  hibernateDirtyChecking: true
 dataSource:
   pooled: true
   jmxExport: true
