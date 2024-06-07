@@ -32,6 +32,43 @@ class PaymentService {
         }
     }
 
+    public Payment update(PaymentAdapter adapter, Long id) {
+        Payment payment = PaymentRepository.query([includeDeleted: true, id: id]).get()
+
+        if (!payment) throw new RuntimeException("Pagador não encontrado")
+
+        payment = validate(adapter, payment)
+
+        if (payment.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payment))
+
+        payment = buildPayment(adapter, payment)
+
+        return payment.save(failOnError: true)
+    }
+
+    public Payment show(Long id) {
+        Payment payment = PaymentRepository.query([includeDeleted: true, id: id]).get()
+        if (!payment) throw new RuntimeException("Cobrança não encontrada")
+
+        return payment
+    }
+
+    public void delete(Long id) {
+        Payment payment = PaymentRepository.get(id)
+        if (!payment) throw new RuntimeException("Cobrança não encontrada")
+        payment.deleted = true
+
+        payment.save(failOnError: true)
+    }
+
+    public void restore(Long id) {
+        Payment payment = PaymentRepository.query([deletedOnly: true, id: id]).get()
+        if (!payment) throw new RuntimeException("Cobrança não encontrada")
+        payment.deleted = false
+
+        payment.save(failOnError: true)
+    }
+
     private Payment validate(PaymentAdapter adapter, Payment validatedPayment) {
         PaymentValidator validator = new PaymentValidator()
 
