@@ -5,7 +5,7 @@ import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.utils.StringUtils
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured(["ROLE_USER"])
+@Secured(["ROLE_ADMIN", "ROLE_SELLER"])
 class PayerController {
 
     PayerService payerService
