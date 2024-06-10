@@ -11,7 +11,7 @@ class PaymentRepository implements Repository<Payment, PaymentRepository> {
     void buildCriteria() {
         addCriteria {
             if (search.containsKey("customerId")) {
-                eq("customerId", search.customerId)
+                eq("customerId", Long.valueOf(search.customerId.toString()))
             }
         }
 
