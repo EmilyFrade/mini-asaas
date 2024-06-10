@@ -17,15 +17,15 @@
 </style>
 
 <div class="notification-item">
-    <atlas-notification-card
-        id="${notification.id}"
-        icon="${icon.getValue()}"
-        overlay-icon="${overlayIcon.getValue()}"
-        overlay-theme="${overlayTheme.getValue()}"
-        header="${notification.title}"
-        description="${notification.message}"
-        link-path="${notification.link.getPath()}"
-        link-text="Ver mais"
-        data-read="${notification.isRead}">
-    </atlas-notification-card>
+	<atlas-notification-card
+		id="${notification.id}"
+		icon="${icon.getValue()}"
+		${overlayIcon ? "overlay-icon=${overlayIcon.getValue()}" : ""}
+		overlay-theme="${overlayTheme.getValue()}"
+		header="${notification.title}"
+		description="${notification.message}"
+		${notification.link ? "link-path=${notification.link.getPath()}" : ""}
+		${notification.link ? "link-text=Ver mais" : ""}
+		data-read="${notification.isRead}">
+	</atlas-notification-card>
 </div>
