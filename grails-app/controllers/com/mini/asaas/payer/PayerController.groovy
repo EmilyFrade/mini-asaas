@@ -11,14 +11,14 @@ class PayerController {
     PayerService payerService
 
     def index() {
-        def payerList = PayerRepository.query().list()
+        List<Payer> payerList = payerService.list()
         return [payerList: payerList]
     }
 
     def create() {}
 
     def restore() {
-        def payerList = PayerRepository.query([deletedOnly: true]).list()
+        List<Payer> payerList = payerService.listForRestoration()
         return [payerList: payerList]
     }
 
