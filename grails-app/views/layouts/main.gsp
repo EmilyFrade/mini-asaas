@@ -29,6 +29,7 @@
 				</atlas-page-header>
 
 				<atlas-page-content slot="content" class="js-atlas-content">
+					<notificationTagLib:dropdown />
 					<g:layoutBody />
 				</atlas-page-content>
 			</atlas-page>
