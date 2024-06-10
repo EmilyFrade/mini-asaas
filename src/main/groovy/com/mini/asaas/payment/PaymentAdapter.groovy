@@ -1,0 +1,34 @@
+package com.mini.asaas.payment
+
+import com.mini.asaas.utils.BigDecimalUtils
+import com.mini.asaas.utils.DateFormatUtils
+import com.mini.asaas.utils.Utils
+
+class PaymentAdapter {
+
+    Long customerId
+
+    Long payerId
+
+    BigDecimal value
+
+    String description
+
+    BillingType billingType
+
+    PaymentStatus status
+
+    Date dueDate
+
+    public PaymentAdapter(Map originalParams) {
+        Map<String, String> params = Utils.normalizeParams(originalParams)
+        if (!params) return
+        this.customerId = params.customerId as Long
+        this.payerId = params.payerId as Long
+        this.value = BigDecimalUtils.fromFormattedString(params.originalValue)
+        this.description = params.description
+        this.billingType = BillingType.convert(params.billingType)
+        this.status = PaymentStatus.PENDING
+        this.dueDate = DateFormatUtils.parseDateFromString(params.dueDate)
+    }
+}
