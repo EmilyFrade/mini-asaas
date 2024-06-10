@@ -62,7 +62,7 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    public static void setPaymentAsOverdue() {
+    public static void setPaymentsAsOverdue() {
         Map params = [
                 dueDate: DateFormatUtils.getDateWithoutTimeUsingCalendar(),
                 status: PaymentStatus.PENDING

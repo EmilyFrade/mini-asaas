@@ -9,7 +9,7 @@ class ProcessOverduePayments implements Job {
     @Transactional
     void execute(JobExecutionContext context) {
         try {
-            PaymentService.setPaymentAsOverdue()
+            PaymentService.setPaymentsAsOverdue()
         } catch (Exception exception) {
             log.error(exception)
         }
