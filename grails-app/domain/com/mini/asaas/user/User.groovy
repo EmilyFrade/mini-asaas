@@ -26,8 +26,25 @@ class User extends BaseEntity implements Serializable {
 
     boolean passwordExpired = false
 
-    Set<Role> getAuthorities() {
+    public Set<Role> getAuthorities() {
         (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
+    }
+
+    public Boolean hasRole(Role role) {
+        return this.getAuthorities().contains(role)
+    }
+
+    public Boolean isAdmin() {
+        Role adminRole = Role.findByAuthority(RoleAuthority.ADMIN.getAuthority())
+
+        return this.hasRole(adminRole)
+    }
+
+    public RoleAuthority getMainAuthority() {
+        if (this.isAdmin()) return RoleAuthority.ADMIN
+        Role mainRole = this.getAuthorities().stream().findFirst().get()
+
+        return RoleAuthority.parseFromString(mainRole.authority)
     }
 
     static constraints = {

@@ -1,15 +1,14 @@
 package com.mini.asaas.user
 
-
 import grails.plugin.springsecurity.annotation.Secured
 
-@Secured(["ROLE_USER"])
 class UserController {
 
     UserService userService
 
     static allowedMethods = [show: "GET"]
 
+    @Secured(["ROLE_ADMIN", "ROLE_SELLER"])
     def show() {
         try {
             User user = userService.show()
