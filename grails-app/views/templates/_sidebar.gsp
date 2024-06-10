@@ -36,7 +36,6 @@
                 ${ controllerName == "payer" && actionName == "restore" ? "active" : "" }
             ></atlas-sidebar-menu-item>
         </atlas-sidebar-menu-item>
-
         <atlas-sidebar-menu-item
                 icon="money"
                 text="Cobranças"
@@ -48,5 +47,17 @@
                 ${ controllerName == "payment" && actionName == "index" ? "active" : "" }
             ></atlas-sidebar-menu-item>
         </atlas-sidebar-menu-item>
+        <atlas-sidebar-menu-item
+              icon="cog"
+              value="profile-group"
+              text="Meu Perfil"
+              ${controllerName == "user" ? "active" : ""}>
+              <atlas-sidebar-menu-item
+                icon="user"
+                text="Ver Perfil"
+                href="${createLink(controller: "user", action: "show")}"
+                ${controllerName == "user" && actionName == "show" ? "active" : ""}>
+              </atlas-sidebar-menu-item>
+            </atlas-sidebar-menu-item>
     </atlas-sidebar-menu>
 </atlas-sidebar>

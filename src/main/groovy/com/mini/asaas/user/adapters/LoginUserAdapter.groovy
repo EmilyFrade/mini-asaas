@@ -1,4 +1,4 @@
-package com.mini.asaas.user
+package com.mini.asaas.user.adapters
 
 import com.mini.asaas.utils.Utils
 import grails.compiler.GrailsCompileStatic
