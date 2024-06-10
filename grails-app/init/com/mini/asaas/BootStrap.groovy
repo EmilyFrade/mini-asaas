@@ -37,12 +37,10 @@ class BootStrap {
 
         if (!adminRole) {
             adminRole = new Role(authority: adminAuthority.getAuthority()).save(failOnError: true)
-            log.info("Role de administrador criada com sucesso")
         }
 
         if (!sellerRole) {
             sellerRole = new Role(authority: sellerAuthority.getAuthority()).save(failOnError: true)
-            log.info("Role de vendedor criada com sucesso")
         }
 
         roles.put(adminAuthority, adminRole)
@@ -69,8 +67,6 @@ class BootStrap {
 
         new UserRole(user: adminUser, role: roles.get(RoleAuthority.ADMIN)).save(failOnError: true)
         new UserRole(user: adminUser, role: roles.get(RoleAuthority.SELLER)).save(failOnError: true)
-
-        log.info("Usuário administrador padrão criado com sucesso")
     }
 
     @Transactional
@@ -100,7 +96,6 @@ class BootStrap {
         customer.companyType = CompanyType.ASSOCIATION
         customer.save(failOnError: true)
 
-        log.info("Conta administrativa padrão criada com sucesso")
         return customer
     }
 
