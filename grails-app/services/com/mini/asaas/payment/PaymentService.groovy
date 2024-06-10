@@ -49,7 +49,7 @@ class PaymentService {
     public void delete(Long id) {
         Payment payment = PaymentRepository.get(id)
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
-        if (payment.status == PaymentStatus.RECEIVED) throw new BusinessException("Cobranças com status 'Recebida' não podem ser deletadas")
+        if (!(payment.status in PaymentStatus.canBeDeleted())) throw new BusinessException("Cobrança não pode ser deletada")
 
         payment.deleted = true
         payment.status = PaymentStatus.CANCELED

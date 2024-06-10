@@ -26,4 +26,8 @@ enum PaymentStatus {
             return null
         }
     }
+
+    public static List<PaymentStatus> canBeDeleted() {
+        return [OVERDUE, PENDING]
+    }
 }
