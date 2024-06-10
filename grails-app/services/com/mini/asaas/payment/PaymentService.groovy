@@ -3,6 +3,7 @@ package com.mini.asaas.payment
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
+import com.mini.asaas.utils.DateFormatUtils
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.gorm.transactions.Transactional
@@ -63,7 +64,7 @@ class PaymentService {
 
     public static void setPaymentAsOverdue() {
         Map params = [
-                dueDate: new Date(),
+                dueDate: DateFormatUtils.getDateWithoutTimeUsingCalendar(),
                 status: PaymentStatus.PENDING
         ]
 
