@@ -1,11 +1,13 @@
-package com.mini.asaas.user
+package com.mini.asaas.user.adapters
 
-
+import com.mini.asaas.user.RoleAuthority
 import com.mini.asaas.utils.Utils
 import grails.compiler.GrailsCompileStatic
 
 @GrailsCompileStatic
-class UserAdapter {
+class SaveUserAdapter {
+
+    private static final RoleAuthority DEFAULT_ROLE_AUTHORITY = RoleAuthority.ADMIN
 
     String name
 
@@ -13,12 +15,12 @@ class UserAdapter {
 
     String password
 
-    String role
+    RoleAuthority roleAuthority
 
-    public UserAdapter(Map originalParams) {
+    public SaveUserAdapter(Map originalParams) {
         Map<String, String> params = Utils.normalizeParams(originalParams)
         if (!params) return
-        this.role = params.role
+        this.roleAuthority = RoleAuthority.parseFromString(params.roleAuthority) ?: DEFAULT_ROLE_AUTHORITY
         this.name = params.name
         this.email = params.email
         this.password = params.password
