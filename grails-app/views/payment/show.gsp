@@ -19,23 +19,24 @@
                     hidden>
             </atlas-input>
 
-            <g:if test="${!payment.deleted && payment.status != PaymentStatus.RECEIVED}">
-                <g:if test="${payment.status == PaymentStatus.PENDING}">
-                    <atlas-button slot="actions" description="Receber" icon="money" theme="success"
-                                  href="${createLink(controller: "payment", action: "receive", params: [id: payment.id])}">
-                    </atlas-button>
-                </g:if>
+            <g:if test="${payment.status.canBeReceived()}">
+                <atlas-button slot="actions" description="Receber" icon="money" theme="success"
+                              href="${createLink(controller: "payment", action: "receive", params: [id: payment.id])}">
+                </atlas-button>
+            </g:if>
+            <g:if test="${payment.status != PaymentStatus.RECEIVED}">
                 <atlas-button slot="actions" description="Editar" icon="pencil" data-panel-start-editing="true"></atlas-button>
+            </g:if>
+            <g:if test="${payment.status.canBeDeleted()}">
                 <atlas-button slot="actions" description="Excluir" icon="trash" theme="danger"
                               href="${createLink(controller: "payment", action: "delete", params: [id: payment.id])}">
                 </atlas-button>
             </g:if>
-            <g:elseif test="${payment.deleted}">
-                <atlas-button slot="actions" description="Editar" icon="pencil" data-panel-start-editing="true"></atlas-button>
+            <g:if test="${payment.deleted}">
                 <atlas-button slot="actions" description="Restaurar" icon="refresh" theme="danger"
                               href="${createLink(controller: "payment", action: "restore", params: [id: payment.id])}">
                 </atlas-button>
-            </g:elseif>
+            </g:if>
 
             <atlas-grid>
                 <atlas-row>
