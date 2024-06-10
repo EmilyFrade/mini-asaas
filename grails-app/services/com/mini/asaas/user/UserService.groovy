@@ -64,7 +64,6 @@ class UserService {
         }
 
         user.password = adapter.newPassword
-        user.markDirty()
         user.save(failOnError: true)
 
         return user
@@ -105,7 +104,6 @@ class UserService {
         user.name = adapter.name
         user.email = adapter.email
         user.password = adapter.password
-        user.markDirty()
 
         return user
     }
