@@ -22,7 +22,7 @@ class UserValidator extends BaseValidator {
     public BusinessValidation validateBeforeUpdate(UpdateUserAdapter adapter, User user) {
         validateEmail(adapter.email)
         if (user.email != adapter.email) validateIfEmailExists(adapter.email)
-        if (user.getMainAuthority() != adapter.roleAuthority) validateIfCanUpdateAuthority(user)
+        if (user.getRoleAuthority() != adapter.roleAuthority) validateIfCanUpdateAuthority(user)
 
         return validationResult
     }

@@ -57,7 +57,7 @@
 								placeholder="Selecione uma função"
 								name="roleAuthority"
 								id="roleAuthority"
-								value="${user.getMainAuthority().name()}"
+								value="${user.getRoleAuthority().name()}"
 								required>
 								<g:each in="${RoleAuthority.values()}" var="authority">
 									<atlas-option
