@@ -61,9 +61,25 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    public static void setPaymentAsOverdue(Payment payment) {
-        payment.status = PaymentStatus.OVERDUE
-        payment.save(flush: true)
+    public static void setPaymentAsOverdue() {
+        Map params = [
+                dueDate: new Date(),
+                status: PaymentStatus.PENDING
+        ]
+
+        List<Payment> paymentList = PaymentRepository.query(params).list()
+
+        for (Long id : paymentList.id) {
+            Payment.withNewTransaction { status ->
+                try {
+                    Payment payment = Payment.get(id)
+                    payment.status = PaymentStatus.OVERDUE
+                    payment.save(failOnError: true)
+                } catch (Exception exception) {
+                    status.setRollbackOnly()
+                }
+            }
+        }
     }
 
     private Payment validate(PaymentAdapter adapter, Payment validatedPayment) {
