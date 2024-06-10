@@ -3,6 +3,7 @@ package com.mini.asaas.payment
 import com.mini.asaas.customer.Customer
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
+import com.mini.asaas.utils.DateFormatUtils
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.gorm.transactions.Transactional
@@ -78,9 +79,25 @@ class PaymentService {
         payment.save(failOnError: true)
     }
 
-    public static void setPaymentAsOverdue(Payment payment) {
-        payment.status = PaymentStatus.OVERDUE
-        payment.save(flush: true)
+    public static void setPaymentsAsOverdue() {
+        Map params = [
+                dueDate: DateFormatUtils.getDateWithoutTimeUsingCalendar(),
+                status: PaymentStatus.PENDING
+        ]
+
+        List<Payment> paymentList = PaymentRepository.query(params).list()
+
+        for (Long id : paymentList.id) {
+            Payment.withNewTransaction { status ->
+                try {
+                    Payment payment = Payment.get(id)
+                    payment.status = PaymentStatus.OVERDUE
+                    payment.save(failOnError: true)
+                } catch (Exception exception) {
+                    status.setRollbackOnly()
+                }
+            }
+        }
     }
 
     private Payment validate(PaymentAdapter adapter, Payment validatedPayment) {

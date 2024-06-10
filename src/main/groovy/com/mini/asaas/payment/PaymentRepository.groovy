@@ -11,8 +11,9 @@ class PaymentRepository implements Repository<Payment, PaymentRepository> {
     void buildCriteria() {
         addCriteria {
             if (search.containsKey("status")) {
-                eq("status", search.status)
+                eq("status", PaymentStatus.valueOf(search.status as String))
             }
+
             if (search.containsKey("dueDate")) {
                 lt("dueDate", search.dueDate)
             }
