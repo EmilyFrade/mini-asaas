@@ -1,41 +1,57 @@
 package com.mini.asaas.user
 
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.utils.MessageSourceUtils
+import com.mini.asaas.user.adapters.SaveUserAdapter
+import com.mini.asaas.utils.DomainErrorUtils
+import com.mini.asaas.validation.BusinessValidation
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.SpringSecurityService
-import org.springframework.security.crypto.password.PasswordEncoder
 
 @Transactional
 class UserService {
 
     SpringSecurityService springSecurityService
 
-    public User login(LoginUserAdapter adapter) {
-        User user = validateBeforeLogin(adapter)
-        springSecurityService.reauthenticate(user.email, user.password)
-        return user
-    }
-
-    public User validateBeforeLogin(LoginUserAdapter adapter) {
-        User validatedUser = UserRepository.query([email: adapter.email]).get()
-
-        if (!validatedUser) {
-            throw new BusinessException(MessageSourceUtils.getMessage("login.not.found"))
-        }
-
-        PasswordEncoder passwordEncoder = springSecurityService.passwordEncoder as PasswordEncoder
-
-        if (!passwordEncoder.matches(adapter.password, validatedUser.password)) {
-            throw new BusinessException(MessageSourceUtils.getMessage("login.not.found"))
-        }
-
-        return validatedUser
-    }
+    UserRoleService userRoleService
 
     public User show() {
         User user = springSecurityService.loadCurrentUser() as User
         if (!user) throw new RuntimeException("Usuário não encontrado")
+
+        return user
+    }
+
+    public User save(SaveUserAdapter adapter) {
+        User validatedUser = validateBeforeSave(adapter)
+        if (validatedUser.hasErrors()) {
+            throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(validatedUser))
+        }
+
+        User user = buildUser(adapter, new User())
+        user.save(failOnError: true)
+
+        userRoleService.save(adapter.roleAuthority, user)
+
+        return user
+    }
+
+    private User validateBeforeSave(SaveUserAdapter adapter) {
+        User user = new User();
+        UserValidator validator = new UserValidator()
+        BusinessValidation validationResult = validator.validateBeforeSave(adapter)
+        if (!validationResult.isValid()) {
+            DomainErrorUtils.addBusinessRuleErrors(user, validationResult.errors)
+        }
+
+        return user
+    }
+
+    private User buildUser(SaveUserAdapter adapter, User user) {
+        user.name = adapter.name
+        user.email = adapter.email
+        user.password = adapter.password
+        user.markDirty()
+
         return user
     }
 
