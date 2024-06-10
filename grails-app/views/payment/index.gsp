@@ -33,7 +33,7 @@
                                 <atlas-table-col>${payment.billingType.getLabel()}</atlas-table-col>
                                 <atlas-table-col>${DateFormatUtils.format(payment.dueDate)}</atlas-table-col>
                                 <atlas-table-col>
-                                    <atlas-badge text="${payment.status.getLabel()}" theme="${payment.status.theme}"></atlas-badge>
+                                    <paymentTagLib:atlasBadge status="${payment.status}" />
                                 </atlas-table-col>
                             </atlas-table-row>
                         </g:each>
