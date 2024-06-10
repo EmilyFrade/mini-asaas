@@ -20,7 +20,11 @@ enum PaymentStatus {
         }
     }
 
-    public static List<PaymentStatus> canBeDeleted() {
-        return [OVERDUE, PENDING]
+    public Boolean canBeDeleted() {
+        return [OVERDUE, PENDING].contains(this)
+    }
+
+    public Boolean canBeReceived() {
+        return [PENDING].contains(this)
     }
 }
