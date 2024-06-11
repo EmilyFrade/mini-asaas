@@ -18,19 +18,7 @@
                 <atlas-form class="form" method="POST" action="${createLink(controller: "payment", action: "save")}">
                     <atlas-grid>
                         <atlas-row>
-                            <atlas-col lg="6">
-                                <atlas-select
-                                        label="Cliente"
-                                        placeholder="Selecione um cliente"
-                                        name="customerId"
-                                        value="${params.customerId}"
-                                        required>
-                                    <g:each in="${customerList}" var="customer">
-                                        <atlas-option label="${customer.name}" value="${customer.id}"></atlas-option>
-                                    </g:each>
-                                </atlas-select>
-                            </atlas-col>
-                            <atlas-col lg="6">
+                            <atlas-col lg="7">
                                 <atlas-select
                                         label="Pagador"
                                         placeholder="Selecione um pagador"
@@ -42,10 +30,7 @@
                                     </g:each>
                                 </atlas-select>
                             </atlas-col>
-                        </atlas-row>
-
-                        <atlas-row>
-                            <atlas-col lg="2">
+                            <atlas-col lg="5">
                                 <atlas-money
                                         label="Valor da cobrança"
                                         name="value"
@@ -54,7 +39,10 @@
                                         required>
                                 </atlas-money>
                             </atlas-col>
-                            <atlas-col lg="10">
+                        </atlas-row>
+
+                        <atlas-row>
+                            <atlas-col lg="12">
                                 <atlas-input
                                         label="Descrição"
                                         type="text"

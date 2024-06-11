@@ -6,8 +6,6 @@ import com.mini.asaas.utils.Utils
 
 class PaymentAdapter {
 
-    Long customerId
-
     Long payerId
 
     BigDecimal value
@@ -23,7 +21,6 @@ class PaymentAdapter {
     public PaymentAdapter(Map originalParams) {
         Map<String, String> params = Utils.normalizeParams(originalParams)
         if (!params) return
-        this.customerId = params.customerId as Long
         this.payerId = params.payerId as Long
         this.value = BigDecimalUtils.fromFormattedString(params.value)
         this.description = params.description
