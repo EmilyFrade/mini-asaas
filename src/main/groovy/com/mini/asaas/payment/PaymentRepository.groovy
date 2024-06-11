@@ -18,8 +18,8 @@ class PaymentRepository implements Repository<Payment, PaymentRepository> {
                 eq("status", PaymentStatus.valueOf(search.status as String))
             }
 
-            if (search.containsKey("dueDate")) {
-                lt("dueDate", search.dueDate)
+            if (search.containsKey("dueDate[lt]")) {
+                lt("dueDate", search["dueDate[lt]"])
             }
         }
 
@@ -35,7 +35,7 @@ class PaymentRepository implements Repository<Payment, PaymentRepository> {
         return [
                 "customerId",
                 "status",
-                "dueDate",
+                "dueDate[lt]",
         ]
     }
 }
