@@ -12,8 +12,8 @@ class PaymentController {
     PaymentService paymentService
 
     def create() {
-        def customerList = CustomerRepository.query().list()
-        def payerList = PayerRepository.query().list()
+        List<Customer> customerList = CustomerRepository.query().list()
+        List<Payer> payerList = PayerRepository.query().list()
 
         return [customerList: customerList, payerList: payerList]
     }
