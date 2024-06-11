@@ -28,7 +28,7 @@ class PaymentService {
     public Payment update(PaymentAdapter adapter, Long id) {
         Payment payment = PaymentRepository.query([includeDeleted: true, id: id]).get()
 
-        if (!payment) throw new RuntimeException("Pagador não encontrado")
+        if (!payment) throw new RuntimeException("Cobrança não encontrada")
 
         payment = validate(adapter, payment)
 
