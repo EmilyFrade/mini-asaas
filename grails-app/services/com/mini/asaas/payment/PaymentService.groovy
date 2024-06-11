@@ -32,7 +32,7 @@ class PaymentService {
 
     public Payment update(PaymentAdapter adapter, Long id) {
         Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
-        Payment payment = PaymentRepository.query([includeDeleted: true, id: id, "customer.id": customerId]).get()
+        Payment payment = PaymentRepository.query([includeDeleted: true, id: id, "customerId": customerId]).get()
 
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
 
@@ -47,7 +47,7 @@ class PaymentService {
 
     public Payment show(Long id) {
         Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
-        Payment payment = PaymentRepository.query([includeDeleted: true, id: id, "customer.id": customerId]).get()
+        Payment payment = PaymentRepository.query([includeDeleted: true, id: id, "customerId": customerId]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
 
         return payment
@@ -55,7 +55,7 @@ class PaymentService {
 
     public void delete(Long id) {
         Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
-        Payment payment = PaymentRepository.query([id: id, "customer.id": customerId]).get()
+        Payment payment = PaymentRepository.query([id: id, "customerId": customerId]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
         payment.deleted = true
 
@@ -64,7 +64,7 @@ class PaymentService {
 
     public void restore(Long id) {
         Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
-        Payment payment = PaymentRepository.query([deletedOnly: true, id: id, "customer.id": customerId]).get()
+        Payment payment = PaymentRepository.query([deletedOnly: true, id: id, "customerId": customerId]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
         payment.deleted = false
 
@@ -73,7 +73,7 @@ class PaymentService {
 
     public List<Payment> list() {
         Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
-        return PaymentRepository.query(["customer.id": customerId, includeDeleted: true]).list()
+        return PaymentRepository.query(["customerId": customerId, includeDeleted: true]).list()
     }
 
     private Payment validate(PaymentAdapter adapter, Payment validatedPayment) {
