@@ -24,7 +24,7 @@ class DateFormatUtils {
         return new SimpleDateFormat(DEFAULT_FORMAT).format(databaseDate)
     }
 
-    public static Date getDateWithoutTimeUsingCalendar() {
+    public static Date getDateWithoutTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
