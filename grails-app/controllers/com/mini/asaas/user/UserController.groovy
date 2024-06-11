@@ -15,6 +15,7 @@ class UserController {
     def show() {
         try {
             User user = userService.loadLoggedUser()
+          
             render(view: "show", model: [user: user])
         } catch (Exception exception) {
             redirect(uri: "/logout")

@@ -1,6 +1,7 @@
 package com.mini.asaas.user
 
 import com.mini.asaas.base.BaseEntity
+import com.mini.asaas.customer.Customer
 import grails.compiler.GrailsCompileStatic
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
@@ -17,6 +18,8 @@ class User extends BaseEntity implements Serializable {
     String email
 
     String password
+
+    Customer customer
 
     boolean enabled = true
 
@@ -52,7 +55,7 @@ class User extends BaseEntity implements Serializable {
     }
 
     static constraints = {
-        name blank: false
+        name nullable: true, blank: false
         email blank: false, email: true
         password blank: false, password: true
     }
