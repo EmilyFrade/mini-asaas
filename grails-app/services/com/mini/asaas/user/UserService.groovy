@@ -15,7 +15,7 @@ class UserService {
 
     UserRoleService userRoleService
 
-    public User show() {
+    public User loadLoggedUser() {
         User user = springSecurityService.loadCurrentUser() as User
         if (!user) throw new RuntimeException("Usuário não encontrado")
 
@@ -37,7 +37,7 @@ class UserService {
     }
 
     public User update(UpdateUserAdapter adapter) {
-        User user = show()
+        User user = loadLoggedUser()
         user = validateBeforeUpdate(adapter, user)
         if (user.hasErrors()) {
             throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(user))
@@ -77,7 +77,6 @@ class UserService {
         user.name = adapter.name
         user.email = adapter.email
         user.password = adapter.password
-        user.markDirty()
 
         return user
     }
