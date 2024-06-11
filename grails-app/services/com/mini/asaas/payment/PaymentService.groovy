@@ -1,17 +1,20 @@
 package com.mini.asaas.payment
 
-import com.mini.asaas.customer.Customer
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
 import com.mini.asaas.utils.DateFormatUtils
+import com.mini.asaas.user.User
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.gorm.transactions.Transactional
+import grails.plugin.springsecurity.SpringSecurityService
 
 @Transactional
 class PaymentService {
 
     BusinessValidation validationResult
+
+    SpringSecurityService springSecurityService
 
     public Payment save(PaymentAdapter adapter) {
         Payment payment = new Payment()
@@ -26,7 +29,8 @@ class PaymentService {
     }
 
     public Payment update(PaymentAdapter adapter, Long id) {
-        Payment payment = PaymentRepository.query([includeDeleted: true, id: id]).get()
+        Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
+        Payment payment = PaymentRepository.query([includeDeleted: true, id: id, "customer.id": customerId]).get()
 
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
 
@@ -40,14 +44,16 @@ class PaymentService {
     }
 
     public Payment show(Long id) {
-        Payment payment = PaymentRepository.query([includeDeleted: true, id: id]).get()
+        Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
+        Payment payment = PaymentRepository.query([includeDeleted: true, id: id, "customer.id": customerId]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
 
         return payment
     }
 
     public void delete(Long id) {
-        Payment payment = PaymentRepository.get(id)
+        Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
+        Payment payment = PaymentRepository.query([id: id, "customer.id": customerId]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
         payment.deleted = true
 
@@ -55,33 +61,38 @@ class PaymentService {
     }
 
     public void restore(Long id) {
-        Payment payment = PaymentRepository.query([deletedOnly: true, id: id]).get()
+        Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
+        Payment payment = PaymentRepository.query([deletedOnly: true, id: id, "customer.id": customerId]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
         payment.deleted = false
 
         payment.save(failOnError: true)
     }
 
-    public static void setPaymentsAsOverdue() {
-        Map params = [
-                dueDate: DateFormatUtils.getDateWithoutTimeUsingCalendar(),
-                status: PaymentStatus.PENDING
-        ]
-
-        List<Payment> paymentList = PaymentRepository.query(params).list()
-
-        for (Long id : paymentList.id) {
-            Payment.withNewTransaction { status ->
-                try {
-                    Payment payment = Payment.get(id)
-                    payment.status = PaymentStatus.OVERDUE
-                    payment.save(failOnError: true)
-                } catch (Exception exception) {
-                    status.setRollbackOnly()
-                }
-            }
-        }
+    public List<Payment> list() {
+        Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
+        return PaymentRepository.query(["customer.id": customerId, includeDeleted: true]).list()
     }
+      
+    public static void setPaymentsAsOverdue() {
+      Map params = [
+              dueDate: DateFormatUtils.getDateWithoutTimeUsingCalendar(),
+              status: PaymentStatus.PENDING
+      ]
+
+      List<Payment> paymentList = PaymentRepository.query(params).list()
+
+      for (Long id : paymentList.id) {
+          Payment.withNewTransaction { status ->
+              try {
+                  Payment payment = Payment.get(id)
+                  payment.status = PaymentStatus.OVERDUE
+                  payment.save(failOnError: true)
+              } catch (Exception exception) {
+                  status.setRollbackOnly()
+              }
+          }
+      }
 
     private Payment validate(PaymentAdapter adapter, Payment validatedPayment) {
         PaymentValidator validator = new PaymentValidator()
@@ -97,7 +108,9 @@ class PaymentService {
     }
 
     private Payment buildPayment(PaymentAdapter adapter, Payment payment) {
-        payment.customer = Customer.get(adapter.customerId)
+        payment.customer = (springSecurityService.loadCurrentUser() as User).customer
+        if (!payment.customer) throw new BusinessException("Cliente não encontrado")
+
         payment.payer = Payer.get(adapter.payerId)
         payment.value = adapter.value
         payment.description = adapter.description

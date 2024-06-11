@@ -44,7 +44,7 @@ abstract class BasePerson extends BaseEntity {
         city blank: false
         state blank: false
         zipCode blank: false
-        birthDate blank: false
+        birthDate blank: false, nullable: true
     }
 
     static mappings = {

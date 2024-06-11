@@ -13,6 +13,10 @@ class UserRepository implements Repository<User, UserRepository> {
             if (search.containsKey("email")) {
                 eq("email", search.email)
             }
+
+            if (search.containsKey("customerId")) {
+                eq("customer.id", search.customerId)
+            }
         }
     }
 
@@ -24,7 +28,8 @@ class UserRepository implements Repository<User, UserRepository> {
     @Override
     List<String> listAllowedFilters() {
         return [
-            "email"
+            "email",
+            "customerId"
         ]
     }
 }
