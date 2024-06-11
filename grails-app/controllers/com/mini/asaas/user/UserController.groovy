@@ -1,6 +1,5 @@
 package com.mini.asaas.user
 
-
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.user.adapters.UpdateUserAdapter
