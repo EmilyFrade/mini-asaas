@@ -16,7 +16,7 @@ class Notification extends BaseEntity {
 
     NotificationLink link
 
-    Boolean isRead = false
+    Boolean isRead
 
     Customer customer
 
