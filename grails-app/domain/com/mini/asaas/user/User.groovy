@@ -40,6 +40,12 @@ class User extends BaseEntity implements Serializable {
         return this.hasRole(adminRole)
     }
 
+    public Boolean isAdminButNotOnlyOne() {
+        Role adminRole = Role.findByAuthority(RoleAuthority.ADMIN.getAuthority())
+        List<UserRole> adminUserRoles = UserRole.findAllByRole(adminRole)
+        return this.hasRole(adminRole) && adminUserRoles.size() > 1
+    }
+
     public RoleAuthority getRoleAuthority() {
         if (this.isAdmin()) return RoleAuthority.ADMIN
         return RoleAuthority.SELLER
