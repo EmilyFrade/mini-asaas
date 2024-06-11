@@ -42,7 +42,7 @@ class NotificationService {
         Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
 
         List<Notification> notificationList = NotificationRepository
-            .query([customerId: customerId, isRead: false])
+            .query([customerId: customerId])
             .sort([[column: "priority", order: "desc"]])
             .list()
 
