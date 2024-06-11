@@ -6,13 +6,13 @@ import com.mini.asaas.user.adapters.UpdateUserAdapter
 import com.mini.asaas.user.adapters.UpdateUserPasswordAdapter
 import grails.plugin.springsecurity.annotation.Secured
 
+@Secured(["ROLE_ADMIN", "ROLE_SELLER"])
 class UserController {
 
     UserService userService
 
     static allowedMethods = [show: "GET", update: "POST", updatePassword: "POST"]
 
-    @Secured(["ROLE_ADMIN", "ROLE_SELLER"])
     def show() {
         try {
             User user = userService.loadLoggedUser()
@@ -25,7 +25,6 @@ class UserController {
         }
     }
 
-    @Secured(["ROLE_ADMIN", "ROLE_SELLER"])
     def update() {
         try {
             userService.update(new UpdateUserAdapter(params))
@@ -44,12 +43,9 @@ class UserController {
             flash.status = AlertType.ERROR.getValue()
 
             redirect(action: "show")
-        } finally {
-            flash.section = "update"
         }
     }
-
-    @Secured(["ROLE_ADMIN", "ROLE_SELLER"])
+ 
     def updatePassword() {
         try {
             userService.updatePassword(new UpdateUserPasswordAdapter(params))
@@ -68,8 +64,6 @@ class UserController {
             flash.status = AlertType.ERROR.getValue()
 
             redirect(action: "show")
-        } finally {
-            flash.section = "update-password"
         }
     }
 }

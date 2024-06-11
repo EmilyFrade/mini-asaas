@@ -1,5 +1,6 @@
 package com.mini.asaas.user
 
+import com.mini.asaas.customer.Customer
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.user.adapters.SaveUserAdapter
 import com.mini.asaas.user.adapters.UpdateUserAdapter
@@ -23,13 +24,14 @@ class UserService {
         return user
     }
 
-    public User save(SaveUserAdapter adapter) {
+    public User save(SaveUserAdapter adapter, Customer customer) {
         User validatedUser = validateBeforeSave(adapter)
         if (validatedUser.hasErrors()) {
             throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(validatedUser))
         }
 
         User user = buildUser(adapter, new User())
+        user.customer = customer
         user.save(failOnError: true)
 
         userRoleService.save(adapter.roleAuthority, user)
