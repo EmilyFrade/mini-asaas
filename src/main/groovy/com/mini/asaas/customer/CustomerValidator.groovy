@@ -69,8 +69,6 @@ class CustomerValidator extends BaseValidator {
             if (birthDate > new Date()) validationResult.addError("future.birthDate")
             Integer age = DateUtils.getDifferenceInYears(birthDate, new Date())
             if (age < 18) validationResult.addError("underage")
-        } else {
-            validationResult.addError("notFilled.birthDate")
         }
         return this
     }
