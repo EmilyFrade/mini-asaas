@@ -36,7 +36,7 @@ class UserValidator extends BaseValidator {
 
     private UserValidator validateAuthority(RoleAuthority authority) {
         if (!authority) {
-            validationResult.addError("user.invalid.authority")
+            validationResult.addError("user.authority.invalid")
         }
 
         return this
