@@ -25,7 +25,7 @@ class UserValidator extends BaseValidator {
     public BusinessValidation validateBeforeUpdate(UpdateUserAdapter adapter, User user) {
         validateEmail(adapter.email)
         if (user.email != adapter.email) validateIfEmailExists(adapter.email)
-        if (user.getRoleAuthority() != adapter.roleAuthority) validateIfCanUpdateAuthority(user)
+        if (user.getRoleAuthority() != adapter.roleAuthority) validateIfCanUpdateAuthority(adapter, user)
 
         return validationResult
     }
@@ -93,8 +93,23 @@ class UserValidator extends BaseValidator {
         return this
     }
 
-    private UserValidator validateIfCanUpdateAuthority(User user) {
+    private UserValidator validateIfCanUpdateAuthority(UpdateUserAdapter adapter, User user) {
         if (!user.isAdmin()) {
+            validationResult.addError("user.authority.update.not.allowed")
+            return this
+        }
+
+        if (adapter.roleAuthority.isAdmin()) return this
+
+        Role adminRole = Role.findByAuthority(RoleAuthority.ADMIN.getAuthority())
+        Integer countAdminUserOfCustomer = UserRole
+            .findAllByRole(adminRole)
+            .stream()
+            .filter { it.user.customerId == user.customerId }
+            .count()
+            .toInteger()
+
+        if (countAdminUserOfCustomer == 1) {
             validationResult.addError("user.authority.update.not.allowed")
         }
 

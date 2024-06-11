@@ -6,6 +6,8 @@ import grails.compiler.GrailsCompileStatic
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
+import java.util.stream.Collectors
+
 @GrailsCompileStatic
 @EqualsAndHashCode(includes = "email")
 @ToString(includes = "email", includeNames = true, includePackage = false)
@@ -43,9 +45,10 @@ class User extends BaseEntity implements Serializable {
         return this.hasRole(adminRole)
     }
 
-    public Boolean isAdminButNotOnlyOne() {
+    public Boolean isAdminButNotUniqueAdminOfCustomer() {
         Role adminRole = Role.findByAuthority(RoleAuthority.ADMIN.getAuthority())
         List<UserRole> adminUserRoles = UserRole.findAllByRole(adminRole)
+        adminUserRoles = adminUserRoles.stream().filter { it.user.customerId == this.customerId }.collect(Collectors.toList())
         return this.hasRole(adminRole) && adminUserRoles.size() > 1
     }
 

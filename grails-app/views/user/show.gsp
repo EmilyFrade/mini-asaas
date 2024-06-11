@@ -48,11 +48,11 @@
 						</atlas-masked-input>
 					</atlas-col>
 				</atlas-row>
-				<g:if test="${user.isAdminButNotOnlyOne()}">
+				<g:if test="${user.isAdminButNotUniqueAdminOfCustomer()}">
 					<atlas-row>
 						<atlas-col lg="12">
 							<atlas-select
-								${user.isAdminButNotOnlyOne() ? "" : "disabled=''"}
+								${user.isAdminButNotUniqueAdminOfCustomer() ? "" : "disabled=''"}
 								label="Função do Usuário"
 								placeholder="Selecione uma função"
 								name="roleAuthority"
