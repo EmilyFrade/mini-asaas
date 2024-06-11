@@ -85,6 +85,7 @@ class PaymentService {
 
         payment.status = PaymentStatus.RECEIVED
         payment.paymentDate = new Date()
+        generatePublicId(payment)
 
         payment.save(failOnError: true)
     }
@@ -137,5 +138,11 @@ class PaymentService {
         payment.dueDate = adapter.dueDate
 
         return payment
+    }
+
+    private void generatePublicId(Payment payment) {
+        if (payment.status != PaymentStatus.RECEIVED || payment.publicId != null) throw new RuntimeException("Cobrança inválida")
+
+        payment.publicId = UUID.randomUUID().toString()
     }
 }
