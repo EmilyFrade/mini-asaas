@@ -73,26 +73,27 @@ class PaymentService {
         Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
         return PaymentRepository.query(["customer.id": customerId, includeDeleted: true]).list()
     }
-      
+
     public static void setPaymentsAsOverdue() {
-      Map params = [
-              dueDate: DateFormatUtils.getDateWithoutTimeUsingCalendar(),
-              status: PaymentStatus.PENDING
-      ]
+        Map params = [
+                dueDate: DateFormatUtils.getDateWithoutTimeUsingCalendar(),
+                status: PaymentStatus.PENDING
+        ]
 
-      List<Payment> paymentList = PaymentRepository.query(params).list()
+        List<Long> paymentIdList = PaymentRepository.query(params).column("id").list()
 
-      for (Long id : paymentList.id) {
-          Payment.withNewTransaction { status ->
-              try {
-                  Payment payment = Payment.get(id)
-                  payment.status = PaymentStatus.OVERDUE
-                  payment.save(failOnError: true)
-              } catch (Exception exception) {
-                  status.setRollbackOnly()
-              }
-          }
-      }
+        for (Long id : paymentIdList) {
+            Payment.withNewTransaction { status ->
+                try {
+                    Payment payment = Payment.get(id)
+                    payment.status = PaymentStatus.OVERDUE
+                    payment.save(failOnError: true)
+                } catch (Exception exception) {
+                    status.setRollbackOnly()
+                }
+            }
+        }
+    }
 
     private Payment validate(PaymentAdapter adapter, Payment validatedPayment) {
         PaymentValidator validator = new PaymentValidator()

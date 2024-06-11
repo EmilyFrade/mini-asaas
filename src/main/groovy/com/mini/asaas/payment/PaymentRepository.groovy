@@ -10,17 +10,18 @@ class PaymentRepository implements Repository<Payment, PaymentRepository> {
     @Override
     void buildCriteria() {
         addCriteria {
-          if (search.containsKey("customer.id")) {
-              eq("customer.id", Long.valueOf(search["customer.id"].toString()))
-          }
+            if (search.containsKey("customer.id")) {
+                eq("customer.id", Long.valueOf(search["customer.id"].toString()))
+            }
 
-          if (search.containsKey("status")) {
-              eq("status", PaymentStatus.valueOf(search.status as String))
-          }
+            if (search.containsKey("status")) {
+                eq("status", PaymentStatus.valueOf(search.status as String))
+            }
 
-          if (search.containsKey("dueDate")) {
-              lt("dueDate", search.dueDate)
-          }
+            if (search.containsKey("dueDate")) {
+                lt("dueDate", search.dueDate)
+            }
+        }
 
     }
 
@@ -32,7 +33,7 @@ class PaymentRepository implements Repository<Payment, PaymentRepository> {
     @Override
     List<String> listAllowedFilters() {
         return [
-                "customer.id"
+                "customer.id",
                 "status",
                 "dueDate",
         ]
