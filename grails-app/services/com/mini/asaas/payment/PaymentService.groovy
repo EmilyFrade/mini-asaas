@@ -18,6 +18,9 @@ class PaymentService {
     public Payment save(PaymentAdapter adapter) {
         Payment payment = new Payment()
 
+        payment.customer = (springSecurityService.loadCurrentUser() as User).customer
+        if (!payment.customer) throw new BusinessException("Cliente não encontrado")
+
         payment = validate(adapter, payment)
 
         if (payment.hasErrors()) throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(payment))
@@ -87,9 +90,6 @@ class PaymentService {
     }
 
     private Payment buildPayment(PaymentAdapter adapter, Payment payment) {
-        payment.customer = (springSecurityService.loadCurrentUser() as User).customer
-        if (!payment.customer) throw new BusinessException("Cliente não encontrado")
-
         payment.payer = Payer.get(adapter.payerId)
         payment.value = adapter.value
         payment.description = adapter.description
