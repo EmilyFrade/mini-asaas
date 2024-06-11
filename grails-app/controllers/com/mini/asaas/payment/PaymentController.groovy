@@ -1,11 +1,9 @@
 package com.mini.asaas.payment
 
-import com.mini.asaas.customer.Customer
-import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
-import com.mini.asaas.payer.PayerRepository
+import com.mini.asaas.payer.PayerService
 import grails.plugin.springsecurity.annotation.Secured
 
 @Secured(["ROLE_ADMIN", "ROLE_SELLER"])
@@ -13,16 +11,16 @@ class PaymentController {
 
     PaymentService paymentService
 
+    PayerService payerService
+
     def index() {
-        List<Payment> paymentList = PaymentRepository.query([includeDeleted: true]).list()
+        List<Payment> paymentList = paymentService.list()
         return [paymentList: paymentList]
     }
 
     def create() {
-        List<Customer> customerList = CustomerRepository.query().list()
-        List<Payer> payerList = PayerRepository.query().list()
-
-        return [customerList: customerList, payerList: payerList]
+        List<Payer> payerList = payerService.list()
+        return [payerList: payerList]
     }
 
     def save() {

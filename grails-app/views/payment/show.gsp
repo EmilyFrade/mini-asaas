@@ -40,16 +40,7 @@
 
             <atlas-grid>
                 <atlas-row>
-                    <atlas-col lg="6">
-                        <atlas-input
-                                label="Cliente"
-                                name="customerId"
-                                value="${payment.customerId}"
-                                required
-                                readonly>
-                        </atlas-input>
-                    </atlas-col>
-                    <atlas-col lg="6">
+                    <atlas-col lg="7">
                         <atlas-input
                                 name="payerId"
                                 value="${payment.payerId}"
@@ -62,10 +53,7 @@
                                 readonly>
                         </atlas-input>
                     </atlas-col>
-                </atlas-row>
-
-                <atlas-row>
-                    <atlas-col lg="2">
+                    <atlas-col lg="5">
                         <atlas-money
                                 label="Valor da cobrança"
                                 name="value"
@@ -74,7 +62,10 @@
                                 required>
                         </atlas-money>
                     </atlas-col>
-                    <atlas-col lg="10">
+                </atlas-row>
+
+                <atlas-row>
+                    <atlas-col lg="12">
                         <atlas-input
                                 label="Descrição"
                                 type="text"

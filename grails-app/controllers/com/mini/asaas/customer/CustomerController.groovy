@@ -2,6 +2,7 @@ package com.mini.asaas.customer
 
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.user.adapters.SaveUserAdapter
 import grails.plugin.springsecurity.annotation.Secured
 
 class CustomerController {
@@ -14,7 +15,7 @@ class CustomerController {
     @Secured("permitAll")
     def save() {
         try {
-            Customer customer = customerService.save(new CustomerAdapter(params))
+            Customer customer = customerService.save(new CustomerAdapter(params), new SaveUserAdapter(params))
             flash.message = "Cliente salvo com sucesso."
             flash.status = AlertType.SUCCESS.getValue()
 

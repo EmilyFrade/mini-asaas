@@ -25,5 +25,4 @@ class SaveUserAdapter {
         this.email = params.email
         this.password = params.password
     }
-
 }
