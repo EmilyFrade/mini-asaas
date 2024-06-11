@@ -15,7 +15,7 @@ class UserController {
     @Secured(["ROLE_ADMIN", "ROLE_SELLER"])
     def show() {
         try {
-            User user = userService.show()
+            User user = userService.loadLoggedUser()
 
             render(view: "show", model: [user: user])
         } catch (Exception exception) {
