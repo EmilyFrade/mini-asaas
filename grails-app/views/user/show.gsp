@@ -10,7 +10,7 @@
 	</head>
 
 	<body>
-		<g:if test="${flash.section == "update"}">
+		<g:if test="${flash.message}">
 			<atlas-alert type="${flash.status}" message="${flash.message}"></atlas-alert>
 		</g:if>
 		<atlas-form-panel

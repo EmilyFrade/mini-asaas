@@ -15,7 +15,7 @@ class UserController {
     def show() {
         try {
             User user = userService.loadLoggedUser()
-          
+
             render(view: "show", model: [user: user])
         } catch (Exception exception) {
             redirect(uri: "/logout")
@@ -41,8 +41,6 @@ class UserController {
             flash.status = AlertType.ERROR.getValue()
 
             redirect(action: "show")
-        } finally {
-            flash.section = "update"
         }
     }
 }
