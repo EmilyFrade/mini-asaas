@@ -1,26 +1,15 @@
 package com.mini.asaas.payment
 
 import com.mini.asaas.base.BaseValidator
-import com.mini.asaas.customer.Customer
 import com.mini.asaas.payer.Payer
 
 class PaymentValidator extends BaseValidator {
 
     public PaymentValidator validateAll(PaymentAdapter adapter) {
-        this.validateCustomer(adapter.customerId)
         this.validatePayer(adapter.payerId)
         this.validateValue(adapter.value)
         this.validateDueDate(adapter.dueDate)
         this.validateBillingType(adapter.billingType)
-
-        return this
-    }
-
-    public PaymentValidator validateCustomer(Long id) {
-        Customer customer = Customer.get(id)
-        if (!customer || customer.deleted) {
-            validationResult.addError("invalid.customer")
-        }
 
         return this
     }

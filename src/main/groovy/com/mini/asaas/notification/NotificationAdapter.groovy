@@ -16,8 +16,6 @@ class NotificationAdapter {
 
     NotificationLink link
 
-    Boolean isRead
-
     User user
 
     public NotificationAdapter(Map map) {
@@ -27,6 +25,5 @@ class NotificationAdapter {
         this.event = map.event as NotificationEvent
         this.link = map.link as NotificationLink
         this.user = map.user as User
-        this.isRead = map.isRead ?: false
     }
 }
