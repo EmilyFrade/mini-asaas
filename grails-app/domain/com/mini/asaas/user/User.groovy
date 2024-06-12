@@ -30,28 +30,24 @@ class User extends BaseEntity implements Serializable {
     boolean passwordExpired = false
 
     public Set<Role> getAuthorities() {
-        (UserRoleRepository.query([userId: this.id]) as List<UserRole>)*.role as Set<Role>
+        (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
     }
 
     public Boolean hasRole(Role role) {
-        return UserRoleRepository.query([userId: this.id, roleAuthority: role.authority]).exists()
+        return this.getAuthorities().contains(role)
     }
 
     public Boolean isAdmin() {
-        return UserRoleRepository.query([userId: this.id, roleAuthority: RoleAuthority.ADMIN.getAuthority()]).exists()
+        Role adminRole = Role.findByAuthority(RoleAuthority.ADMIN.getAuthority())
+
+        return this.hasRole(adminRole)
     }
 
-    public Boolean isAdminButNotUniqueAdminOfCustomer() {
-        Integer countAdminUserRoleOfCustomer = UserRoleRepository.query([
-            customerId   : this.customerId,
-            roleAuthority: RoleAuthority.ADMIN.getAuthority()
-        ]).count()
-        return this.isAdmin() && countAdminUserRoleOfCustomer > 1
-    }
-
-    public RoleAuthority getRoleAuthority() {
+    public RoleAuthority getMainAuthority() {
         if (this.isAdmin()) return RoleAuthority.ADMIN
-        return RoleAuthority.SELLER
+        Role mainRole = this.getAuthorities().stream().findFirst().get()
+
+        return RoleAuthority.parseFromString(mainRole.authority)
     }
 
     static constraints = {
