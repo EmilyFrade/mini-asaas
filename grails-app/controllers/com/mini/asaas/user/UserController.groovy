@@ -1,8 +1,5 @@
 package com.mini.asaas.user
 
-import com.mini.asaas.enums.AlertType
-import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.user.adapters.UpdateUserAdapter
 import grails.plugin.springsecurity.annotation.Secured
 
 class UserController {
@@ -14,33 +11,10 @@ class UserController {
     @Secured(["ROLE_ADMIN", "ROLE_SELLER"])
     def show() {
         try {
-            User user = userService.loadLoggedUser()
-
+            User user = userService.show()
             render(view: "show", model: [user: user])
-        } catch (Exception exception) {
+        } catch (Exception e) {
             redirect(uri: "/logout")
-        }
-    }
-
-    @Secured(["ROLE_ADMIN", "ROLE_SELLER"])
-    def update() {
-        try {
-            userService.update(new UpdateUserAdapter(params))
-            flash.status = AlertType.SUCCESS.getValue()
-            flash.message = "Usuário atualizado com sucesso!"
-
-            redirect(action: "show")
-        } catch (BusinessException businessException) {
-            flash.message = businessException.message
-            flash.status = AlertType.ERROR.getValue()
-
-            redirect(action: "show")
-        } catch (Exception exception) {
-            log.error(exception)
-            flash.message = "Ocorreu um erro durante a atualização dos dados, aguarde um momento e tente novamente."
-            flash.status = AlertType.ERROR.getValue()
-
-            redirect(action: "show")
         }
     }
 }
