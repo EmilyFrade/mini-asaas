@@ -38,11 +38,14 @@ class User extends BaseEntity implements Serializable {
     }
 
     public Boolean isAdmin() {
-        return UserRoleRepository.query([userId: this.id, onlyAdmin: true]).exists()
+        return UserRoleRepository.query([userId: this.id, roleAuthority: RoleAuthority.ADMIN.getAuthority()]).exists()
     }
 
     public Boolean isAdminButNotUniqueAdminOfCustomer() {
-        Integer countAdminUserRoleOfCustomer = UserRoleRepository.query([customerId: this.customerId, onlyAdmin: true]).count()
+        Integer countAdminUserRoleOfCustomer = UserRoleRepository.query([
+            customerId   : this.customerId,
+            roleAuthority: RoleAuthority.ADMIN.getAuthority()
+        ]).count()
         return this.isAdmin() && countAdminUserRoleOfCustomer > 1
     }
 

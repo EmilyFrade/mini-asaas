@@ -17,10 +17,6 @@ class UserRoleRepository implements Repository<UserRole, UserRoleRepository> {
                 eq("user.customer.id", Long.valueOf(search.customerId as String))
             }
 
-            if (search.containsKey("onlyAdmin")) {
-                eq("role.authority", RoleAuthority.ADMIN.getAuthority())
-            }
-
             if (search.containsKey("roleAuthority")) {
                 eq("role.authority", search.roleAuthority)
             }
@@ -37,7 +33,6 @@ class UserRoleRepository implements Repository<UserRole, UserRoleRepository> {
         return [
             "userId",
             "customerId",
-            "onlyAdmin",
             "roleAuthority"
         ]
     }
