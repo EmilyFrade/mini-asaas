@@ -72,9 +72,6 @@
 			</atlas-grid>
 		</atlas-form-panel>
 
-		<g:if test="${flash.section == "update-password"}">
-			<atlas-alert type=${flash.status} message="${flash.message}"></atlas-alert>
-		</g:if>
 		<atlas-form-panel
 			header="Atualizar Senha"
 			description="Para atualizar a senha, informa a senha atual e a nova senha."
