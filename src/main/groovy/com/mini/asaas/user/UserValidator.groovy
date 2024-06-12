@@ -82,7 +82,7 @@ class UserValidator extends BaseValidator {
 
         if (adapter.roleAuthority.isAdmin()) return this
 
-        if (UserRoleRepository.query([customerId: user.customerId, onlyAdmin: true]).count() == 1) {
+        if (!user.isAdminButNotUniqueAdminOfCustomer()) {
             validationResult.addError("user.authority.update.not.allowed")
         }
 
