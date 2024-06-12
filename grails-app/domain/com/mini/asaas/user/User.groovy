@@ -6,8 +6,6 @@ import grails.compiler.GrailsCompileStatic
 import groovy.transform.EqualsAndHashCode
 import groovy.transform.ToString
 
-import java.util.stream.Collectors
-
 @GrailsCompileStatic
 @EqualsAndHashCode(includes = "email")
 @ToString(includes = "email", includeNames = true, includePackage = false)
@@ -32,24 +30,20 @@ class User extends BaseEntity implements Serializable {
     boolean passwordExpired = false
 
     public Set<Role> getAuthorities() {
-        (UserRole.findAllByUser(this) as List<UserRole>)*.role as Set<Role>
+        (UserRoleRepository.query([userId: this.id]) as List<UserRole>)*.role as Set<Role>
     }
 
     public Boolean hasRole(Role role) {
-        return this.getAuthorities().contains(role)
+        return UserRoleRepository.query([userId: this.id, roleAuthority: role.authority]).exists()
     }
 
     public Boolean isAdmin() {
-        Role adminRole = Role.findByAuthority(RoleAuthority.ADMIN.getAuthority())
-
-        return this.hasRole(adminRole)
+        return UserRoleRepository.query([userId: this.id, onlyAdmin: true]).exists()
     }
 
     public Boolean isAdminButNotUniqueAdminOfCustomer() {
-        Role adminRole = Role.findByAuthority(RoleAuthority.ADMIN.getAuthority())
-        List<UserRole> adminUserRoles = UserRole.findAllByRole(adminRole)
-        adminUserRoles = adminUserRoles.stream().filter { it.user.customerId == this.customerId }.collect(Collectors.toList())
-        return this.hasRole(adminRole) && adminUserRoles.size() > 1
+        Integer countAdminUserRoleOfCustomer = UserRoleRepository.query([customerId: this.customerId, onlyAdmin: true]).count()
+        return this.isAdmin() && countAdminUserRoleOfCustomer > 1
     }
 
     public RoleAuthority getRoleAuthority() {
