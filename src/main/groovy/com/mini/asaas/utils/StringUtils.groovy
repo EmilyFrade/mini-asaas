@@ -21,4 +21,8 @@ class StringUtils {
         return trimmedValue.isEmpty() ? null : trimmedValue
     }
 
+    public static String fromBigDecimal(BigDecimal value) {
+        if (!value) return null
+        return value.toString().replace(".", ",")
+    }
 }
