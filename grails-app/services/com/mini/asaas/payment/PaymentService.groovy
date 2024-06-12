@@ -77,7 +77,7 @@ class PaymentService {
         return PaymentRepository.query([customerId: customerId, includeDeleted: true]).list()
     }
 
-    public static void setPaymentsAsOverdue() {
+    public void setPaymentsAsOverdue() {
         Map params = [
                 "dueDate[lt]": DateFormatUtils.getDateWithoutTime(),
                 status: PaymentStatus.PENDING

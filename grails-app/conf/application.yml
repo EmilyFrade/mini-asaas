@@ -46,7 +46,8 @@ spring:
 management:
   endpoints:
     enabled-by-default: false
-
+quartz:
+  autoStartup: true
 ---
 grails:
   mime:

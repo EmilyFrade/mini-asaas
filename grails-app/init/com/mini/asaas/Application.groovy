@@ -1,6 +1,5 @@
 package com.mini.asaas
 
-import com.mini.asaas.payment.JobScheduler
 import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration
 
@@ -10,6 +9,5 @@ import groovy.transform.CompileStatic
 class Application extends GrailsAutoConfiguration {
     static void main(String[] args) {
         GrailsApp.run(Application, args)
-        JobScheduler.startScheduler()
     }
 }
