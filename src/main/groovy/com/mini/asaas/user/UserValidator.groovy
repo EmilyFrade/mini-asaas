@@ -3,8 +3,11 @@ package com.mini.asaas.user
 import com.mini.asaas.base.BaseValidator
 import com.mini.asaas.user.adapters.SaveUserAdapter
 import com.mini.asaas.user.adapters.UpdateUserAdapter
+import com.mini.asaas.user.adapters.UpdateUserPasswordAdapter
 import com.mini.asaas.utils.EmailUtils
 import com.mini.asaas.validation.BusinessValidation
+import grails.util.Holders
+import org.springframework.security.crypto.password.PasswordEncoder
 
 class UserValidator extends BaseValidator {
 
@@ -23,6 +26,22 @@ class UserValidator extends BaseValidator {
         validateEmail(adapter.email)
         if (user.email != adapter.email) validateIfEmailExists(adapter.email)
         if (user.getRoleAuthority() != adapter.roleAuthority) validateIfCanUpdateAuthority(adapter, user)
+
+        return validationResult
+    }
+
+    public BusinessValidation validateBeforeUpdatePassword(UpdateUserPasswordAdapter adapter, User user) {
+        PasswordEncoder passwordEncoder = Holders.applicationContext.springSecurityService.passwordEncoder as PasswordEncoder
+
+        if (!adapter.currentPassword || !passwordEncoder.matches(adapter.currentPassword, user.password)) {
+            validationResult.addError("user.password.not.equal.current")
+        }
+
+        if (passwordEncoder.matches(adapter.newPassword, user.password)) {
+            validationResult.addError("user.password.not.equal.old")
+        }
+
+        validatePassword(adapter.newPassword)
 
         return validationResult
     }
