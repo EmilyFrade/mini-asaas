@@ -30,7 +30,7 @@ class User extends BaseEntity implements Serializable {
     boolean passwordExpired = false
 
     public Set<Role> getAuthorities() {
-        (UserRoleRepository.query([userId: this.id]) as List<UserRole>)*.role as Set<Role>
+        (UserRoleRepository.query([userId: this.id]).list() as List<UserRole>)*.role as Set<Role>
     }
 
     public Boolean hasRole(Role role) {
@@ -38,11 +38,14 @@ class User extends BaseEntity implements Serializable {
     }
 
     public Boolean isAdmin() {
-        return UserRoleRepository.query([userId: this.id, onlyAdmin: true]).exists()
+        return UserRoleRepository.query([userId: this.id, roleAuthority: RoleAuthority.ADMIN.getAuthority()]).exists()
     }
 
     public Boolean isAdminButNotUniqueAdminOfCustomer() {
-        Integer countAdminUserRoleOfCustomer = UserRoleRepository.query([customerId: this.customerId, onlyAdmin: true]).count()
+        Integer countAdminUserRoleOfCustomer = UserRoleRepository.query([
+            customerId   : this.customerId,
+            roleAuthority: RoleAuthority.ADMIN.getAuthority()
+        ]).count()
         return this.isAdmin() && countAdminUserRoleOfCustomer > 1
     }
 

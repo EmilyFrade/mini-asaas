@@ -6,6 +6,9 @@ import org.grails.datastore.mapping.query.api.BuildableCriteria
 
 @GrailsCompileStatic
 class UserRoleRepository implements Repository<UserRole, UserRoleRepository> {
+
+    Boolean domainHasSoftDelete = false
+
     @Override
     void buildCriteria() {
         addCriteria {
@@ -14,14 +17,12 @@ class UserRoleRepository implements Repository<UserRole, UserRoleRepository> {
             }
 
             if (search.containsKey("customerId")) {
+                createAlias("user", "user")
                 eq("user.customer.id", Long.valueOf(search.customerId as String))
             }
 
-            if (search.containsKey("onlyAdmin")) {
-                eq("role.authority", RoleAuthority.ADMIN.getAuthority())
-            }
-
             if (search.containsKey("roleAuthority")) {
+                createAlias("role", "role")
                 eq("role.authority", search.roleAuthority)
             }
         }
@@ -37,7 +38,6 @@ class UserRoleRepository implements Repository<UserRole, UserRoleRepository> {
         return [
             "userId",
             "customerId",
-            "onlyAdmin",
             "roleAuthority"
         ]
     }
