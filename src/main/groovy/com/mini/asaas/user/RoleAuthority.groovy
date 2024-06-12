@@ -10,6 +10,10 @@ enum RoleAuthority {
         return this == ADMIN
     }
 
+    public Boolean isSeller() {
+        return this == SELLER
+    }
+
     public String getAuthority() {
         return "ROLE_${this.name()}"
     }

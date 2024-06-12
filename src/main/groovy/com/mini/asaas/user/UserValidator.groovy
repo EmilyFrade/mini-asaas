@@ -2,7 +2,6 @@ package com.mini.asaas.user
 
 import com.mini.asaas.base.BaseValidator
 import com.mini.asaas.user.adapters.SaveUserAdapter
-import com.mini.asaas.user.adapters.UpdateUserAdapter
 import com.mini.asaas.utils.EmailUtils
 import com.mini.asaas.validation.BusinessValidation
 
@@ -15,14 +14,6 @@ class UserValidator extends BaseValidator {
         validateIfEmailExists(adapter.email)
         validatePassword(adapter.password)
         validateAuthority(adapter.roleAuthority)
-
-        return validationResult
-    }
-
-    public BusinessValidation validateBeforeUpdate(UpdateUserAdapter adapter, User user) {
-        validateEmail(adapter.email)
-        if (user.email != adapter.email) validateIfEmailExists(adapter.email)
-        if (user.getRoleAuthority() != adapter.roleAuthority) validateIfCanUpdateAuthority(adapter, user)
 
         return validationResult
     }
@@ -69,21 +60,6 @@ class UserValidator extends BaseValidator {
         }
         if (!password.matches(".*[!@#\$%^&*].*")) {
             validationResult.addError("user.password.mustContainSpecialCharacter")
-        }
-
-        return this
-    }
-
-    private UserValidator validateIfCanUpdateAuthority(UpdateUserAdapter adapter, User user) {
-        if (!user.isAdmin()) {
-            validationResult.addError("user.authority.update.not.allowed")
-            return this
-        }
-
-        if (adapter.roleAuthority.isAdmin()) return this
-
-        if (!user.isAdminButNotUniqueAdminOfCustomer()) {
-            validationResult.addError("user.authority.update.not.allowed")
         }
 
         return this
