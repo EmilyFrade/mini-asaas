@@ -19,6 +19,7 @@ class NotificationService {
         notification.link = adapter.link
         notification.customer = adapter.user.customer
         notification.user = adapter.user
+        notification.isRead = false
         notification.save(failOnError: true)
 
         return notification
