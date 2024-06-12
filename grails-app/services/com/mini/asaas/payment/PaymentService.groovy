@@ -2,6 +2,7 @@ package com.mini.asaas.payment
 
 import com.mini.asaas.exceptions.BusinessException
 import com.mini.asaas.payer.Payer
+import com.mini.asaas.utils.DateFormatUtils
 import com.mini.asaas.user.User
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
@@ -74,6 +75,27 @@ class PaymentService {
     public List<Payment> list() {
         Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
         return PaymentRepository.query([customerId: customerId, includeDeleted: true]).list()
+    }
+
+    public void setPaymentsAsOverdue() {
+        Map params = [
+                "dueDate[lt]": DateFormatUtils.getDateWithoutTime(),
+                status: PaymentStatus.PENDING
+        ]
+
+        List<Long> paymentIdList = PaymentRepository.query(params).column("id").list()
+
+        for (Long id : paymentIdList) {
+            Payment.withNewTransaction { status ->
+                try {
+                    Payment payment = Payment.get(id)
+                    payment.status = PaymentStatus.OVERDUE
+                    payment.save(failOnError: true)
+                } catch (Exception exception) {
+                    status.setRollbackOnly()
+                }
+            }
+        }
     }
 
     private Payment validate(PaymentAdapter adapter, Payment validatedPayment) {
