@@ -20,7 +20,7 @@ class UserAdminService {
 
         if (!user) throw new RuntimeException("Usuário não encontrado")
 
-        if (user.isAdmin() && !hasOtherAdmins(user)) {
+        if (user.isAdmin() && !user.isAdminButNotUniqueAdminOfCustomer()) {
             throw new BusinessException("É necessário ter pelo menos um usuário Admin")
         }
 
@@ -36,9 +36,5 @@ class UserAdminService {
         user.deleted = false
 
         user.save(failOnError: true)
-    }
-
-    private Boolean hasOtherAdmins(User userToExclude) {
-        return userToExclude.isAdminButNotUniqueAdminOfCustomer()
     }
 }
