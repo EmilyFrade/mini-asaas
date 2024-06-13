@@ -18,7 +18,7 @@
 			header="Dados do usuário"
 			description=""
 			submit-button-label=""
-			action="${createLink(controller: "user", action: "update")}"
+			action="${createLink(controller: "user", action: "update", id: user.id)}"
 			method="post">
 			<atlas-button
 				slot="actions"
@@ -75,7 +75,7 @@
 			header="Atualizar Senha"
 			description="Para atualizar a senha, informa a senha atual e a nova senha."
 			submit-button-label=""
-			action="${createLink(controller: "user", action: "updatePassword")}"
+			action="${createLink(controller: "user", action: "updatePassword", id: user.id)}"
 			method="post">
 			<atlas-button
 				slot="actions"
@@ -110,5 +110,15 @@
 				</atlas-row>
 			</atlas-grid>
 		</atlas-form-panel>
+
+        <atlas-toolbar>
+            <atlas-button
+                    slot="actions"
+                    description="Sair do sistema"
+                    icon="power"
+                    theme="danger"
+                    href="${createLink(controller: "user", action: "logout")}">
+            </atlas-button>
+        </atlas-toolbar>
 	</body>
 </html>
