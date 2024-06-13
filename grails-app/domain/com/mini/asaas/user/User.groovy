@@ -29,8 +29,10 @@ class User extends BaseEntity implements Serializable {
 
     boolean passwordExpired = false
 
-    public Set<Role> getAuthorities() {
-        (UserRoleRepository.query([userId: this.id]).list() as List<UserRole>)*.role as Set<Role>
+    public List<Role> getAuthorities() {
+        List<Role> roles = UserRoleRepository.query([userId: this.id]).column("role").list() as List<Role>
+        roles.each { println(it.authority) }
+        return UserRoleRepository.query([userId: this.id]).column("role").list() as List<Role>
     }
 
     public Boolean hasRole(Role role) {
