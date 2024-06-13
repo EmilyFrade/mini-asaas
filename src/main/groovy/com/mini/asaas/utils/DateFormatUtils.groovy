@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat
 class DateFormatUtils {
 
     private static final String DEFAULT_FORMAT = "dd/MM/yyyy"
+    private static final String TIME_FORMAT = "dd/MM/yyyy HH:mm"
 
     public static Date parseDateFromString(String date, String format) {
         if (!date || !format) return null
@@ -18,10 +19,16 @@ class DateFormatUtils {
         return parseDateFromString(date, DEFAULT_FORMAT)
     }
 
-    public static String format(Date databaseDate) {
-        if (!databaseDate) return null
+    public static String format(Date date) {
+        if (!date) return null
 
-        return new SimpleDateFormat(DEFAULT_FORMAT).format(databaseDate)
+        return new SimpleDateFormat(DEFAULT_FORMAT).format(date)
+    }
+
+    public static String formatWithTime(Date date) {
+        if (!date) return null
+
+        return new SimpleDateFormat(TIME_FORMAT).format(date)
     }
 
     public static Date getDateWithoutTime() {

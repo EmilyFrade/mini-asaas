@@ -1,4 +1,7 @@
-<%@ page import="com.mini.asaas.utils.StringUtils; com.mini.asaas.payment.BillingType; com.mini.asaas.utils.DateFormatUtils" %>
+<%@ page import="com.mini.asaas.payment.PaymentStatus" %>
+<%@ page import="com.mini.asaas.utils.StringUtils" %>
+<%@ page import="com.mini.asaas.payment.BillingType" %>
+<%@ page import="com.mini.asaas.utils.DateFormatUtils" %>
 <html>
     <head>
         <title>Detalhes da cobrança</title>
@@ -19,15 +22,30 @@
                     hidden>
             </atlas-input>
 
-            <g:if test="${!payment.deleted}">
-                <atlas-button slot="actions" description="Editar" icon="pencil" data-panel-start-editing="true"></atlas-button>
+            <g:if test="${payment.status.canBeReceived()}">
+                <atlas-button slot="actions" description="Receber" icon="money" theme="success"
+                              href="${createLink(controller: "payment", action: "receive", params: [id: payment.id])}">
+                </atlas-button>
+            </g:if>
+
+            <g:if test="${payment.status.canBeDeleted()}">
                 <atlas-button slot="actions" description="Excluir" icon="trash" theme="danger"
                               href="${createLink(controller: "payment", action: "delete", params: [id: payment.id])}">
                 </atlas-button>
             </g:if>
-            <g:else>
+
+            <g:if test="${payment.deleted}">
                 <atlas-button slot="actions" description="Restaurar" icon="refresh" theme="danger"
                               href="${createLink(controller: "payment", action: "restore", params: [id: payment.id])}">
+                </atlas-button>
+            </g:if>
+
+            <g:if test="${payment.status != PaymentStatus.RECEIVED}">
+                <atlas-button slot="actions" description="Editar" icon="pencil" data-panel-start-editing="true"></atlas-button>
+            </g:if>
+            <g:else>
+                <atlas-button slot="actions" description="Comprovante" icon="file-text" theme="primary"
+                              href="${createLink(controller: "payment", action: "receipt", params: [id: payment.id, publicId: payment.receiptId])}">
                 </atlas-button>
             </g:else>
 
@@ -88,6 +106,26 @@
                                 <atlas-option label="${type.getLabel()}" value="${type.name()}"></atlas-option>
                             </g:each>
                         </atlas-select>
+                    </atlas-col>
+                </atlas-row>
+
+                <atlas-row>
+                    <atlas-col lg="6">
+                        <atlas-input
+                                label="Status"
+                                value="${payment.status.getLabel()}"
+                                name="status"
+                                required
+                                readonly>
+                        </atlas-input>
+                    </atlas-col>
+                    <atlas-col lg="6">
+                        <atlas-input
+                                label="Data de pagamento"
+                                name="paymentDate"
+                                value="${DateFormatUtils.format(payment.paymentDate)}"
+                                readonly>
+                        </atlas-input>
                     </atlas-col>
                 </atlas-row>
             </atlas-grid>
