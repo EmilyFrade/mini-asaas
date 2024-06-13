@@ -3,7 +3,6 @@ package com.mini.asaas.payment
 import com.mini.asaas.utils.MessageSourceUtils
 
 enum PaymentStatus {
-
     CANCELED,
     OVERDUE,
     PENDING,
@@ -19,5 +18,13 @@ enum PaymentStatus {
         } catch (Exception ignored) {
             return null
         }
+    }
+
+    public Boolean canBeDeleted() {
+        return [OVERDUE, PENDING].contains(this)
+    }
+
+    public Boolean canBeReceived() {
+        return [PENDING].contains(this)
     }
 }
