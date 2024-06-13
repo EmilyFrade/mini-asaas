@@ -2,12 +2,16 @@ package com.mini.asaas.customer
 
 import com.mini.asaas.enums.AlertType
 import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.user.User
 import com.mini.asaas.user.adapters.SaveUserAdapter
+import grails.plugin.springsecurity.SpringSecurityService
 import grails.plugin.springsecurity.annotation.Secured
 
 class CustomerController {
 
     CustomerService customerService
+
+    SpringSecurityService springSecurityService
 
     @Secured("permitAll")
     def create() {}
@@ -33,4 +37,40 @@ class CustomerController {
         }
     }
 
+    @Secured(["ROLE_ADMIN", "ROLE_SELLER"])
+    def show() {
+        try {
+            Customer customer = (springSecurityService.loadCurrentUser() as User).customer
+            User user = springSecurityService.loadCurrentUser() as User
+
+            return [customer: customer, user: user]
+        } catch (Exception exception) {
+            log.error(exception)
+            redirect(uri: "/logout")
+        }
+    }
+
+    @Secured(["ROLE_ADMIN"])
+    def update() {
+        try {
+            CustomerAdapter adapter = new CustomerAdapter(params)
+            customerService.update(adapter)
+
+            flash.message = "Conta atualizada com sucesso"
+            flash.status = AlertType.SUCCESS.getValue()
+
+            redirect(action: "show")
+        } catch (BusinessException exception) {
+            flash.message = exception.getMessage()
+            flash.status = AlertType.ERROR.getValue()
+
+            redirect(action: "show")
+        } catch (Exception exception) {
+            log.error(exception)
+            flash.message = "Ocorreu um erro ao atualizar os dados, aguarde um momento e tente novamente."
+            flash.status = AlertType.ERROR.getValue()
+
+            redirect(action: "show")
+        }
+    }
 }
