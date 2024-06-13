@@ -20,7 +20,7 @@ class UserAdminService {
 
         if (!user) throw new RuntimeException("Usuário não encontrado")
 
-        if (!hasOtherAdmins(customerId, id)) {
+        if (user.isAdmin() && !hasOtherAdmins(user)) {
             throw new BusinessException("É necessário ter pelo menos um usuário Admin")
         }
 
@@ -38,8 +38,7 @@ class UserAdminService {
         user.save(failOnError: true)
     }
 
-    private boolean hasOtherAdmins(Long customerId, Long userIdToExclude) {
-        List<User> userList = UserRepository.query([customerId: customerId]).list()
-        return userList.any { it.isAdmin() && it.id != userIdToExclude }
+    private Boolean hasOtherAdmins(User userToExclude) {
+        return userToExclude.isAdminButNotUniqueAdminOfCustomer()
     }
 }
