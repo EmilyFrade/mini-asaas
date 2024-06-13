@@ -18,8 +18,6 @@ class Notification extends BaseEntity {
 
     Customer customer
 
-    User user
-
     static constraints = {
         title blank: false
         message blank: false
