@@ -85,6 +85,7 @@ class PaymentService {
 
         payment.status = PaymentStatus.RECEIVED
         payment.paymentDate = new Date()
+        generateReceiptId(payment)
 
         payment.save(failOnError: true)
     }
@@ -137,5 +138,11 @@ class PaymentService {
         payment.dueDate = adapter.dueDate
 
         return payment
+    }
+
+    private void generateReceiptId(Payment payment) {
+        if (payment.status != PaymentStatus.RECEIVED || payment.receiptId != null) throw new RuntimeException("Cobrança inválida")
+
+        payment.receiptId = UUID.randomUUID().toString()
     }
 }

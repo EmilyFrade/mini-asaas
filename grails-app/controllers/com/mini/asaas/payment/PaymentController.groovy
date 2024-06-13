@@ -132,4 +132,19 @@ class PaymentController {
             redirect(action: "show", id: id)
         }
     }
+
+    @Secured("permitAll")
+    def receipt() {
+        Long id = params.id as Long
+
+        try {
+            Payment payment = PaymentRepository.get(id)
+            return [payment: payment]
+        } catch (Exception exception) {
+            log.error(exception)
+            flash.message = "Ocorreu um erro ao visualizar o comprovante, aguarde um momento e tente novamente."
+            flash.status = AlertType.ERROR.getValue()
+            redirect(action: "show", id: id)
+        }
+    }
 }

@@ -27,19 +27,27 @@
                               href="${createLink(controller: "payment", action: "receive", params: [id: payment.id])}">
                 </atlas-button>
             </g:if>
-            <g:if test="${payment.status != PaymentStatus.RECEIVED}">
-                <atlas-button slot="actions" description="Editar" icon="pencil" data-panel-start-editing="true"></atlas-button>
-            </g:if>
+
             <g:if test="${payment.status.canBeDeleted()}">
                 <atlas-button slot="actions" description="Excluir" icon="trash" theme="danger"
                               href="${createLink(controller: "payment", action: "delete", params: [id: payment.id])}">
                 </atlas-button>
             </g:if>
+
             <g:if test="${payment.deleted}">
                 <atlas-button slot="actions" description="Restaurar" icon="refresh" theme="danger"
                               href="${createLink(controller: "payment", action: "restore", params: [id: payment.id])}">
                 </atlas-button>
             </g:if>
+
+            <g:if test="${payment.status != PaymentStatus.RECEIVED}">
+                <atlas-button slot="actions" description="Editar" icon="pencil" data-panel-start-editing="true"></atlas-button>
+            </g:if>
+            <g:else>
+                <atlas-button slot="actions" description="Comprovante" icon="file-text" theme="primary"
+                              href="${createLink(controller: "payment", action: "receipt", params: [id: payment.id, publicId: payment.receiptId])}">
+                </atlas-button>
+            </g:else>
 
             <atlas-grid>
                 <atlas-row>
