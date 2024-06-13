@@ -10,8 +10,6 @@ class Notification extends BaseEntity {
 
     String message
 
-    NotificationPriority priority
-
     NotificationEvent event
 
     NotificationLink link

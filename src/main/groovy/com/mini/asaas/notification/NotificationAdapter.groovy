@@ -10,8 +10,6 @@ class NotificationAdapter {
 
     String message
 
-    NotificationPriority priority
-
     NotificationEvent event
 
     NotificationLink link
@@ -21,7 +19,6 @@ class NotificationAdapter {
     public NotificationAdapter(Map map) {
         this.title = map.title
         this.message = map.message
-        this.priority = map.priority as NotificationPriority
         this.event = map.event as NotificationEvent
         this.link = map.link as NotificationLink
         this.user = map.user as User

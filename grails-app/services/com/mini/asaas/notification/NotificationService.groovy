@@ -14,7 +14,6 @@ class NotificationService {
         Notification notification = new Notification()
         notification.title = adapter.title
         notification.message = adapter.message
-        notification.priority = adapter.priority
         notification.event = adapter.event
         notification.link = adapter.link
         notification.customer = adapter.user.customer
@@ -42,11 +41,6 @@ class NotificationService {
     public List<Notification> list() {
         Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
 
-        List<Notification> notificationList = NotificationRepository
-            .query([customerId: customerId])
-            .sort([[column: "priority", order: "desc"]])
-            .list()
-
-        return notificationList
+        return NotificationRepository.query([customerId: customerId]).list()
     }
 }
