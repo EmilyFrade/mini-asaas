@@ -1,4 +1,7 @@
-<%@ page import="com.mini.asaas.payment.PaymentStatus; com.mini.asaas.utils.StringUtils; com.mini.asaas.payment.BillingType; com.mini.asaas.utils.DateFormatUtils" %>
+<%@ page import="com.mini.asaas.payment.PaymentStatus" %>
+<%@ page import="com.mini.asaas.utils.StringUtils" %>
+<%@ page import="com.mini.asaas.payment.BillingType" %>
+<%@ page import="com.mini.asaas.utils.DateFormatUtils" %>
 <html>
     <head>
         <title>Detalhes da cobrança</title>

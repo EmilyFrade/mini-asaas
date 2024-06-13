@@ -1,22 +1,23 @@
 package com.mini.asaas.payer
 
 import com.mini.asaas.customer.Customer
-import com.mini.asaas.customer.CustomerRepository
 import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.user.User
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
-import grails.compiler.GrailsCompileStatic
 import grails.gorm.transactions.Transactional
+import grails.plugin.springsecurity.SpringSecurityService
 
-@GrailsCompileStatic
 @Transactional
 class PayerService {
 
     BusinessValidation validationResult
 
+    SpringSecurityService springSecurityService
+
     public Payer save(PayerAdapter adapter) {
         Payer payer = new Payer()
-        Customer customer = CustomerRepository.get(adapter.customerId)
+        Customer customer = (springSecurityService.loadCurrentUser() as User).customer
         if (!customer) throw new BusinessException("Cliente não encontrado")
 
         payer = validate(adapter, payer, customer)
@@ -32,8 +33,8 @@ class PayerService {
     }
 
     public Payer update(PayerAdapter adapter, Long id) {
-        Payer payer = PayerRepository.get(id)
-
+        Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
+        Payer payer = PayerRepository.query([id: id, customerId: customerId]).get()
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
         payer = validate(adapter, payer, payer.customer)
@@ -46,19 +47,31 @@ class PayerService {
     }
 
     public Payer show(Long id) {
-        Payer payer = PayerRepository.get(id)
+        Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
+        Payer payer = PayerRepository.query([id: id, customerId: customerId]).get()
         if (!payer) throw new RuntimeException("Pagador não encontrado")
         return payer
     }
 
     public void deleteOrRestore(Long id) {
-        Payer payer = PayerRepository.query([includeDeleted: true, id: id]).get()
 
+        Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
+        Payer payer = PayerRepository.query([includeDeleted: true, id: id, customerId: customerId]).get()
         if (!payer) throw new RuntimeException("Pagador não encontrado")
 
         payer.deleted = !payer.deleted
         payer.markDirty()
         payer.save(failOnError: true)
+    }
+
+    public List<Payer> list() {
+        Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
+        return PayerRepository.query([customerId: customerId]).list()
+    }
+
+    public List<Payer> listForRestoration() {
+        Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
+        return PayerRepository.query([customerId: customerId, deletedOnly: true]).list()
     }
 
     private Payer validate(PayerAdapter adapter, Payer payer, Customer customer) {
