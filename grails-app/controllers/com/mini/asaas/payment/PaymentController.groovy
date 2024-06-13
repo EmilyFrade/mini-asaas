@@ -74,24 +74,62 @@ class PaymentController {
     }
 
     def delete() {
+        Long id = params.id as Long
+
         try {
-            Long id = params.id as Long
             paymentService.delete(id)
-            redirect(action: "index", id: id)
+            flash.message = "Cobrança deletada com sucesso"
+            flash.status = AlertType.SUCCESS.getValue()
+            redirect(action: "index")
+        } catch (BusinessException exception) {
+            flash.message = exception.getMessage()
+            flash.status = AlertType.ERROR.getValue()
+            redirect(action: "show", id: id)
         } catch (Exception exception) {
             log.error(exception)
-            redirect(action: "index")
+            flash.message = "Ocorreu um erro ao deletar a cobrança, aguarde um momento e tente novamente."
+            flash.status = AlertType.ERROR.getValue()
+            redirect(action: "show", id: id)
         }
     }
 
     def restore() {
+        Long id = params.id as Long
+
         try {
-            Long id = params.id as Long
             paymentService.restore(id)
+            flash.message = "Cobrança restaurada com sucesso"
+            flash.status = AlertType.SUCCESS.getValue()
+            redirect(action: "show", id: id)
+        } catch (BusinessException exception) {
+            flash.message = exception.getMessage()
+            flash.status = AlertType.ERROR.getValue()
             redirect(action: "show", id: id)
         } catch (Exception exception) {
             log.error(exception)
-            redirect(action: "index")
+            flash.message = "Ocorreu um erro ao restaurar a cobrança, aguarde um momento e tente novamente."
+            flash.status = AlertType.ERROR.getValue()
+            redirect(action: "show", id: id)
+        }
+    }
+
+    def receive() {
+        Long id = params.id as Long
+
+        try {
+            paymentService.receive(id)
+            flash.message = "Cobrança recebida com sucesso"
+            flash.status = AlertType.SUCCESS.getValue()
+            redirect(action: "show", id: id)
+        } catch (BusinessException exception) {
+            flash.message = exception.getMessage()
+            flash.status = AlertType.ERROR.getValue()
+            redirect(action: "show", id: id)
+        } catch (Exception exception) {
+            log.error(exception)
+            flash.message = "Ocorreu um erro durante o recebimento, aguarde um momento e tente novamente."
+            flash.status = AlertType.ERROR.getValue()
+            redirect(action: "show", id: id)
         }
     }
 }

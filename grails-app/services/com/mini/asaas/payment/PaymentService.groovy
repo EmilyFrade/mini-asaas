@@ -58,7 +58,10 @@ class PaymentService {
         Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
         Payment payment = PaymentRepository.query([id: id, customerId: customerId]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
+        if (!payment.status.canBeDeleted()) throw new BusinessException("Cobrança não pode ser deletada")
+
         payment.deleted = true
+        payment.status = PaymentStatus.CANCELED
 
         payment.save(failOnError: true)
     }
@@ -67,7 +70,21 @@ class PaymentService {
         Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
         Payment payment = PaymentRepository.query([deletedOnly: true, id: id, customerId: customerId]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
+        if (payment.dueDate < new Date()) throw new BusinessException("A data de vencimento não pode ser uma data passada")
+
         payment.deleted = false
+        payment.status = PaymentStatus.PENDING
+
+        payment.save(failOnError: true)
+    }
+
+    public void receive(Long id) {
+        Payment payment = PaymentRepository.get(id)
+        if (!payment) throw new RuntimeException("Cobrança não encontrada")
+        if (!payment.status.canBeReceived()) throw new BusinessException("Apenas cobranças com status 'Aguardando pagamento' podem ser recebidas")
+
+        payment.status = PaymentStatus.RECEIVED
+        payment.paymentDate = new Date()
 
         payment.save(failOnError: true)
     }
