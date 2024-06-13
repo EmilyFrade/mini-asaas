@@ -8,8 +8,6 @@ import com.mini.asaas.utils.Utils
 
 class PayerAdapter {
 
-    Long customerId
-
     String name
 
     String email
@@ -39,7 +37,6 @@ class PayerAdapter {
     public PayerAdapter(Map originalParams) {
         Map<String, String> params = Utils.normalizeParams(originalParams)
         if (!params) return
-        this.customerId = params.customerId as Long ?: null
         this.name = params.name
         this.email = params.email
         this.cpfCnpj = StringUtils.removeNonNumeric(params.cpfCnpj as String) ?: null
