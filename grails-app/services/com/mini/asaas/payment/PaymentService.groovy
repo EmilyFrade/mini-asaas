@@ -85,7 +85,7 @@ class PaymentService {
 
         payment.status = PaymentStatus.RECEIVED
         payment.paymentDate = new Date()
-        generatePublicId(payment)
+        generateReceiptId(payment)
 
         payment.save(failOnError: true)
     }
@@ -140,9 +140,9 @@ class PaymentService {
         return payment
     }
 
-    private void generatePublicId(Payment payment) {
-        if (payment.status != PaymentStatus.RECEIVED || payment.publicId != null) throw new RuntimeException("Cobrança inválida")
+    private void generateReceiptId(Payment payment) {
+        if (payment.status != PaymentStatus.RECEIVED || payment.receiptId != null) throw new RuntimeException("Cobrança inválida")
 
-        payment.publicId = UUID.randomUUID().toString()
+        payment.receiptId = UUID.randomUUID().toString()
     }
 }

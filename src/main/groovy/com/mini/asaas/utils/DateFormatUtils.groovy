@@ -19,16 +19,16 @@ class DateFormatUtils {
         return parseDateFromString(date, DEFAULT_FORMAT)
     }
 
-    public static String format(Date databaseDate) {
-        if (!databaseDate) return null
+    public static String format(Date date) {
+        if (!date) return null
 
-        return new SimpleDateFormat(DEFAULT_FORMAT).format(databaseDate)
+        return new SimpleDateFormat(DEFAULT_FORMAT).format(date)
     }
 
-    public static String formatWithTime(Date databaseDate) {
-        if (!databaseDate) return null
+    public static String formatWithTime(Date date) {
+        if (!date) return null
 
-        return new SimpleDateFormat(TIME_FORMAT).format(databaseDate)
+        return new SimpleDateFormat(TIME_FORMAT).format(date)
     }
 
     public static Date getDateWithoutTime() {

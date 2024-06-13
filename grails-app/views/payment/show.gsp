@@ -45,7 +45,7 @@
             </g:if>
             <g:else>
                 <atlas-button slot="actions" description="Comprovante" icon="file-text" theme="primary"
-                              href="${createLink(controller: "payment", action: "receipt", params: [id: payment.id, publicId: payment.publicId])}">
+                              href="${createLink(controller: "payment", action: "receipt", params: [id: payment.id, publicId: payment.receiptId])}">
                 </atlas-button>
             </g:else>
 

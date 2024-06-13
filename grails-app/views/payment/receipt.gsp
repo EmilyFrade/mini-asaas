@@ -23,7 +23,7 @@
 
             <div class="details">
                 <h3>Sobre a transação:</h3>
-                <p>Identificador: ${payment.publicId}</p>
+                <p>Identificador: ${payment.receiptId}</p>
                 <p>Data da transação: ${DateFormatUtils.formatWithTime(payment.paymentDate)}</p>
                 <p>Descrição: ${payment.description}</p>
                 <p>Forma de pagamento: ${payment.billingType.getLabel()}</p>
