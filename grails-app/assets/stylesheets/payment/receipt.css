@@ -1,0 +1,17 @@
+.header {
+    position: absolute;
+}
+
+.container {
+    width: auto;
+    margin: 90px auto;
+}
+
+h2 {
+    margin: 0;
+    text-align: center;
+}
+
+.details {
+    padding-left: 15px;
+}
