@@ -111,7 +111,7 @@
 						<h3>Detalhes da Cobrança</h3>
 						<ul>
 							<li>
-								<strong>Valor:</strong> R$ ${formatNumber(number: payment.value, type: "currency", currencyCode: "BRL")}
+								<strong>Valor:</strong> ${formatNumber(number: payment.value, type: "currency", currencyCode: "BRL")}
 							</li>
 							<li>
 								<strong>Vencimento:</strong>${formatDate(date: payment.dueDate, format: "dd/MM/yyyy")}
@@ -127,14 +127,12 @@
 							<li><strong>Nome:</strong> ${payment.customer.name}</li>
 							<li><strong>E-mail:</strong> ${payment.customer.email}</li>
 							<li>
-								<strong>(${payment.customer.personType.isNatural() ? "CPF" : "CNPJ"}:</strong> ${CpfCnpjUtils.formatCpfCnpj(payment.customer.cpfCnpj)})
+								<strong>${payment.customer.personType.isNatural() ? "CPF" : "CNPJ"}:</strong> ${CpfCnpjUtils.formatCpfCnpj(payment.customer.cpfCnpj)}
 							</li>
 						</ul>
 					</section>
 
 				</div>
-
-				<a class="btn-link" href="${baseUrl}/payment/show/${payment.id}">Visualizar cobrança</a>
 
 				<p class="helper">Não reconhece essa cobrança? Entre em contato com o seu vendedor para mais informações.</p>
 			</div>

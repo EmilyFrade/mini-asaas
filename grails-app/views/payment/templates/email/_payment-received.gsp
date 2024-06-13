@@ -112,10 +112,13 @@
 						<ul>
 							<li><strong>Identificador:</strong> ${payment.receiptId}</li>
 							<li>
-								<strong>Valor:</strong> R$ ${formatNumber(number: payment.value, type: "currency", currencyCode: "BRL")}
+								<strong>Valor:</strong> ${formatNumber(number: payment.value, type: "currency", currencyCode: "BRL")}
 							</li>
 							<li>
-								<strong>Vencimento:</strong>${formatDate(date: payment.dueDate, format: "dd/MM/yyyy")}
+								<strong>Vencimento:</strong> ${formatDate(date: payment.dueDate, format: "dd/MM/yyyy")}
+							</li>
+							<li>
+								<strong>Data do Pagamento:</strong> ${formatDate(date: payment.paymentDate, format: "dd/MM/yyyy")}
 							</li>
 							<li><strong>Descrição:</strong> ${payment.description}</li>
 							<li><strong>Forma de Pagamento:</strong> ${payment.billingType.getLabel()}</li>
@@ -128,7 +131,7 @@
 							<li><strong>Nome:</strong> ${payment.customer.name}</li>
 							<li><strong>E-mail:</strong> ${payment.customer.email}</li>
 							<li>
-								<strong>(${payment.customer.personType.isNatural() ? "CPF" : "CNPJ"}:</strong> ${CpfCnpjUtils.formatCpfCnpj(payment.customer.cpfCnpj)})
+								<strong>${payment.customer.personType.isNatural() ? "CPF" : "CNPJ"}:</strong> ${CpfCnpjUtils.formatCpfCnpj(payment.customer.cpfCnpj)}
 							</li>
 						</ul>
 					</section>
@@ -142,7 +145,9 @@
 					</section>
 				</div>
 
-				<a class="btn-link" href="${baseUrl}/payment/receipt/${payment.receiptId}">Acessar comprovante</a>
+				<a class="btn-link" href="${baseUrl}/payment/receipt/${payment.id}?publicId=${payment.receiptId}">
+					Acessar comprovante
+				</a>
 
 				<p class="helper">Não reconhece essa cobrança? Entre em contato com o vendedor para mais informações.</p>
 			</div>
