@@ -2,7 +2,6 @@ package com.mini.asaas.notification
 
 import com.mini.asaas.base.BaseEntity
 import com.mini.asaas.customer.Customer
-import com.mini.asaas.user.User
 
 class Notification extends BaseEntity {
 
@@ -10,27 +9,17 @@ class Notification extends BaseEntity {
 
     String message
 
-    NotificationPriority priority
-
     NotificationEvent event
 
-    NotificationLink link
+    String link
 
     Boolean isRead
 
     Customer customer
 
-    User user
-
     static constraints = {
         title blank: false
         message blank: false
-        link nullable: true, validator: { NotificationLink link, Notification notification ->
-            if (link && !link.validate()) {
-                return "default.invalid.validator.message"
-            }
-        }
+        link nullable: true
     }
-
-    static embedded = ["link"]
 }

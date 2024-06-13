@@ -1,6 +1,6 @@
 package com.mini.asaas.notification
 
-import com.mini.asaas.user.User
+import com.mini.asaas.customer.Customer
 import grails.compiler.GrailsCompileStatic
 
 @GrailsCompileStatic
@@ -10,20 +10,17 @@ class NotificationAdapter {
 
     String message
 
-    NotificationPriority priority
-
     NotificationEvent event
 
-    NotificationLink link
+    String link
 
-    User user
+    Customer customer
 
     public NotificationAdapter(Map map) {
         this.title = map.title
         this.message = map.message
-        this.priority = map.priority as NotificationPriority
         this.event = map.event as NotificationEvent
         this.link = map.link as NotificationLink
-        this.user = map.user as User
+        this.customer = map.customer as Customer
     }
 }
