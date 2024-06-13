@@ -1,7 +1,6 @@
 package com.mini.asaas.notification
 
 import com.mini.asaas.user.User
-import com.mini.asaas.user.UserRepository
 import grails.gorm.transactions.Transactional
 import grails.plugin.springsecurity.SpringSecurityService
 
@@ -18,20 +17,6 @@ class NotificationService {
         notification.link = adapter.link
         notification.customer = adapter.customer
         notification.isRead = false
-        notification.save(failOnError: true)
-
-        return notification
-    }
-
-    public Notification markAsRead(Long notificationId, Long userId) {
-        User user = UserRepository.get(userId)
-        if (!user) throw new RuntimeException("Usuário não encontrado")
-
-        Long customerId = user.customerId
-        Notification notification = NotificationRepository.query([customerId: customerId, id: notificationId]).get()
-        if (!notification) throw new RuntimeException("Notificação não encontrada")
-
-        notification.isRead = true
         notification.save(failOnError: true)
 
         return notification

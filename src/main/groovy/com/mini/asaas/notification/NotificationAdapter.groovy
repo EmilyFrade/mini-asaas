@@ -12,7 +12,7 @@ class NotificationAdapter {
 
     NotificationEvent event
 
-    NotificationLink link
+    String link
 
     Customer customer
 
