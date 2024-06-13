@@ -31,6 +31,7 @@ class EmailMessage extends BaseEntity {
         subject blank: false
         body nullable: true, blank: false
         attempts min: 0, max: MAX_ATTEMPTS
+        sentDate nullable: true
     }
 
     static mapping = {

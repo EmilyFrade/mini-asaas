@@ -20,6 +20,6 @@ class EmailAdapter {
         this.subject = params.subject
         this.body = params.body
         this.isHTML = params.isHTML as Boolean
-        this.sentDate = params.sentDate as Date
+        this.sentDate = params.sentDate ? params.sentDate as Date : null
     }
 }
