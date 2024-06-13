@@ -1,4 +1,5 @@
-<%@ page import="com.mini.asaas.utils.DateFormatUtils; com.mini.asaas.utils.StringUtils" %>
+<%@ page import="com.mini.asaas.utils.DateFormatUtils" %>
+<%@ page import="com.mini.asaas.utils.StringUtils" %>
 <html>
     <head>
         <title>Minhas Cobranças</title>
