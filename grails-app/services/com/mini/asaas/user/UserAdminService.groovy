@@ -32,7 +32,7 @@ class UserAdminService {
     public void restore(Long id) {
         Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
         User user = UserRepository.query([deletedOnly: true, id: id, customerId: customerId]).get()
-        if (!user) throw new RuntimeException("Cobrança não encontrada")
+        if (!user) throw new RuntimeException("Usuário não encontrado")
         user.deleted = false
 
         user.save(failOnError: true)
