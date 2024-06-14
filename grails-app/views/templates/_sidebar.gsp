@@ -48,16 +48,22 @@
             ></atlas-sidebar-menu-item>
         </atlas-sidebar-menu-item>
         <atlas-sidebar-menu-item
-              icon="cog"
-              value="profile-group"
-              text="Meu Perfil"
-              ${controllerName == "user" ? "active" : ""}>
-              <atlas-sidebar-menu-item
-                icon="user"
-                text="Ver Perfil"
-                href="${createLink(controller: "user", action: "show")}"
-                ${controllerName == "user" && actionName == "show" ? "active" : ""}>
-              </atlas-sidebar-menu-item>
+                icon="cog"
+                value="profile-group"
+                text="Meu Perfil"
+            ${controllerName == "user" || controllerName == "customer" ? "active" : ""}>
+            <atlas-sidebar-menu-item
+                    icon="info"
+                    text="Informações"
+                    href="${createLink(controller: "customer", action: "show")}"
+                ${controllerName == "customer" && actionName == "show" ? "active" : ""}>
             </atlas-sidebar-menu-item>
+            <atlas-sidebar-menu-item
+                    icon="user"
+                    text="Ver Perfil"
+                    href="${createLink(controller: "user", action: "show")}"
+                ${controllerName == "user" && actionName == "show" ? "active" : ""}>
+            </atlas-sidebar-menu-item>
+        </atlas-sidebar-menu-item>
     </atlas-sidebar-menu>
 </atlas-sidebar>
