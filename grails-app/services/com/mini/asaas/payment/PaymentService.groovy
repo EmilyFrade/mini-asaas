@@ -1,9 +1,12 @@
 package com.mini.asaas.payment
 
 import com.mini.asaas.exceptions.BusinessException
+import com.mini.asaas.notification.NotificationAdapter
+import com.mini.asaas.notification.NotificationEvent
+import com.mini.asaas.notification.NotificationService
 import com.mini.asaas.payer.Payer
-import com.mini.asaas.utils.DateFormatUtils
 import com.mini.asaas.user.User
+import com.mini.asaas.utils.DateFormatUtils
 import com.mini.asaas.utils.DomainErrorUtils
 import com.mini.asaas.validation.BusinessValidation
 import grails.gorm.transactions.Transactional
@@ -15,6 +18,8 @@ class PaymentService {
     BusinessValidation validationResult
 
     SpringSecurityService springSecurityService
+
+    NotificationService notificationService
 
     public Payment save(PaymentAdapter adapter) {
         Payment payment = new Payment()
@@ -28,7 +33,18 @@ class PaymentService {
 
         payment = buildPayment(adapter, payment)
 
-        return payment.save(failOnError: true)
+        payment.save(failOnError: true)
+
+        User user = springSecurityService.loadCurrentUser() as User
+        notificationService.save(new NotificationAdapter([
+                title     : "Nova cobrança criada",
+                message   : "O usuário com email ${user.email} criou uma cobrança no dia ${DateFormatUtils.formatWithTime(payment.dateCreated)}",
+                event     : NotificationEvent.PAYMENT_CREATED,
+                link      : "http://localhost:8080/payment/show/${payment.id}",
+                customer  : payment.customer
+        ]))
+
+        return payment
     }
 
     public Payment update(PaymentAdapter adapter, Long id) {
@@ -64,6 +80,15 @@ class PaymentService {
         payment.status = PaymentStatus.CANCELED
 
         payment.save(failOnError: true)
+
+        User user = springSecurityService.loadCurrentUser() as User
+        notificationService.save(new NotificationAdapter([
+                title     : "Cobrança cancelada",
+                message   : "O usuário com email ${user.email} cancelou uma cobrança no dia ${DateFormatUtils.formatWithTime(payment.dateCreated)}",
+                event     : NotificationEvent.PAYMENT_DELETED,
+                link      : "http://localhost:8080/payment/show/${payment.id}",
+                customer  : payment.customer
+        ]))
     }
 
     public void restore(Long id) {
@@ -88,6 +113,15 @@ class PaymentService {
         generateReceiptId(payment)
 
         payment.save(failOnError: true)
+
+        User user = springSecurityService.loadCurrentUser() as User
+        notificationService.save(new NotificationAdapter([
+                title     : "Cobrança recebida",
+                message   : "O usuário com email ${user.email} recebeu uma cobrança no dia ${DateFormatUtils.formatWithTime(payment.dateCreated)}",
+                event     : NotificationEvent.PAYMENT_RECEIVED,
+                link      : "http://localhost:8080/payment/show/${payment.id}",
+                customer  : payment.customer
+        ]))
     }
 
     public List<Payment> list() {
@@ -109,6 +143,14 @@ class PaymentService {
                     Payment payment = Payment.get(id)
                     payment.status = PaymentStatus.OVERDUE
                     payment.save(failOnError: true)
+
+                    notificationService.save(new NotificationAdapter([
+                            title     : "Cobrança vencida",
+                            message   : "Uma cobrança venceu no dia ${DateFormatUtils.formatWithTime(payment.dateCreated)}",
+                            event     : NotificationEvent.PAYMENT_OVERDUE,
+                            link      : "http://localhost:8080/payment/show/${payment.id}",
+                            customer  : payment.customer
+                    ]))
                 } catch (Exception exception) {
                     status.setRollbackOnly()
                 }
