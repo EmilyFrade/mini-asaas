@@ -51,7 +51,13 @@
                 icon="cog"
                 value="profile-group"
                 text="Minha conta"
-            ${controllerName == "user" ? "active" : ""}>
+            ${controllerName == "user" || controllerName == "customer" ? "active" : ""}>
+            <atlas-sidebar-menu-item
+                    icon="info"
+                    text="Informações"
+                    href="${createLink(controller: "customer", action: "show")}"
+                ${controllerName == "customer" && actionName == "show" ? "active" : ""}>
+            </atlas-sidebar-menu-item>
             <atlas-sidebar-menu-item
                     icon="user"
                     text="Meu usuário"
