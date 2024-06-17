@@ -35,8 +35,6 @@ class EmailMessageService {
 
         if (emailMessageIdList.isEmpty()) return
 
-        emailMessageIdList.each { println(it) }
-
         List<Promise> promiseList = []
         emailMessageIdList.collate(2).each {
             List idList = it.collect()
