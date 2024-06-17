@@ -33,12 +33,12 @@ class PaymentController {
         } catch (BusinessException exception) {
             flash.message = exception.getMessage()
             flash.status = AlertType.ERROR.getValue()
-            render view: "create"
+            redirect(action: "create", params: params)
         } catch (Exception exception) {
             log.error(exception)
             flash.message = "Ocorreu um erro durante a criação, aguarde um momento e tente novamente."
             flash.status = AlertType.ERROR.getValue()
-            render view: "create"
+            redirect(action: "create", params: params)
         }
     }
 
