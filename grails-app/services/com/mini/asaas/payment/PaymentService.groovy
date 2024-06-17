@@ -1,8 +1,6 @@
 package com.mini.asaas.payment
 
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.notification.NotificationAdapter
-import com.mini.asaas.notification.NotificationEvent
 import com.mini.asaas.notification.NotificationService
 import com.mini.asaas.payer.Payer
 import com.mini.asaas.user.User
@@ -17,6 +15,8 @@ class PaymentService {
 
     BusinessValidation validationResult
 
+    PaymentEventNotificationService paymentEventNotificationService
+
     SpringSecurityService springSecurityService
 
     NotificationService notificationService
@@ -24,7 +24,8 @@ class PaymentService {
     public Payment save(PaymentAdapter adapter) {
         Payment payment = new Payment()
 
-        payment.customer = (springSecurityService.loadCurrentUser() as User).customer
+        User user = springSecurityService.loadCurrentUser() as User
+        payment.customer = user.customer
         if (!payment.customer) throw new BusinessException("Cliente não encontrado")
 
         payment = validate(adapter, payment)
@@ -33,16 +34,9 @@ class PaymentService {
 
         payment = buildPayment(adapter, payment)
 
-        payment.save(failOnError: true)
+        payment = payment.save(failOnError: true)
 
-        User user = springSecurityService.loadCurrentUser() as User
-        notificationService.save(new NotificationAdapter([
-                title     : "Nova cobrança criada",
-                message   : "O usuário com email ${user.email} criou uma cobrança no dia ${DateFormatUtils.formatWithTime(payment.dateCreated)}",
-                event     : NotificationEvent.PAYMENT_CREATED,
-                link      : "http://localhost:8080/payment/show/${payment.id}",
-                customer  : payment.customer
-        ]))
+        paymentEventNotificationService.onSave(payment, user)
 
         return payment
     }
@@ -71,7 +65,8 @@ class PaymentService {
     }
 
     public void delete(Long id) {
-        Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
+        User user = springSecurityService.loadCurrentUser() as User
+        Long customerId = user.customerId
         Payment payment = PaymentRepository.query([id: id, customerId: customerId]).get()
         if (!payment) throw new RuntimeException("Cobrança não encontrada")
         if (!payment.status.canBeDeleted()) throw new BusinessException("Cobrança não pode ser deletada")
@@ -81,14 +76,7 @@ class PaymentService {
 
         payment.save(failOnError: true)
 
-        User user = springSecurityService.loadCurrentUser() as User
-        notificationService.save(new NotificationAdapter([
-                title     : "Cobrança cancelada",
-                message   : "O usuário com email ${user.email} cancelou uma cobrança no dia ${DateFormatUtils.formatWithTime(payment.dateCreated)}",
-                event     : NotificationEvent.PAYMENT_DELETED,
-                link      : "http://localhost:8080/payment/show/${payment.id}",
-                customer  : payment.customer
-        ]))
+        paymentEventNotificationService.onDelete(payment, user)
     }
 
     public void restore(Long id) {
@@ -114,14 +102,7 @@ class PaymentService {
 
         payment.save(failOnError: true)
 
-        User user = springSecurityService.loadCurrentUser() as User
-        notificationService.save(new NotificationAdapter([
-                title     : "Cobrança recebida",
-                message   : "O usuário com email ${user.email} recebeu uma cobrança no dia ${DateFormatUtils.formatWithTime(payment.dateCreated)}",
-                event     : NotificationEvent.PAYMENT_RECEIVED,
-                link      : "http://localhost:8080/payment/show/${payment.id}",
-                customer  : payment.customer
-        ]))
+        paymentEventNotificationService.onReceive(payment, springSecurityService.loadCurrentUser() as User)
     }
 
     public List<Payment> list() {
@@ -140,17 +121,10 @@ class PaymentService {
         for (Long id : paymentIdList) {
             Payment.withNewTransaction { status ->
                 try {
-                    Payment payment = Payment.get(id)
+                    Payment payment = PaymentRepository.get(id)
                     payment.status = PaymentStatus.OVERDUE
                     payment.save(failOnError: true)
-
-                    notificationService.save(new NotificationAdapter([
-                            title     : "Cobrança vencida",
-                            message   : "Uma cobrança venceu no dia ${DateFormatUtils.formatWithTime(payment.dateCreated)}",
-                            event     : NotificationEvent.PAYMENT_OVERDUE,
-                            link      : "http://localhost:8080/payment/show/${payment.id}",
-                            customer  : payment.customer
-                    ]))
+                    paymentEventNotificationService.onOverdue(payment)
                 } catch (Exception exception) {
                     status.setRollbackOnly()
                 }
