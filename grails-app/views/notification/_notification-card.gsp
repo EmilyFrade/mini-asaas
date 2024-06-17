@@ -24,7 +24,7 @@
 		overlay-theme="${overlayTheme.getValue()}"
 		header="${notification.title}"
 		description="${notification.message}"
-		${notification.link ? "link-path=${notification.link.getPath()}" : ""}
+		${notification.link ? "link-path=${notification.link}" : ""}
 		${notification.link ? "link-text=Ver mais" : ""}
 		data-read="${notification.isRead}">
 	</atlas-notification-card>
