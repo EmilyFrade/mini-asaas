@@ -42,13 +42,13 @@ class SendGridSendEmailService implements SendEmailService, GrailsConfigurationA
 
             Response response = sendGrid.api(request)
             if (response.statusCode != SENDGRID_SUCCESS_STATUS_CODE) {
-                handleSendError(emailMessage, response.body)
+                throw new Exception(response.body)
             }
 
             emailMessage.status = EmailStatus.SENT
             emailMessage.sentDate = new Date()
             emailMessage.save(failOnError: true)
-        } catch (IOException exception) {
+        } catch (Exception exception) {
             handleSendError(emailMessage, exception.message)
         }
 
