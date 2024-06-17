@@ -1,7 +1,6 @@
 package com.mini.asaas.payment
 
 import com.mini.asaas.exceptions.BusinessException
-import com.mini.asaas.notification.NotificationService
 import com.mini.asaas.payer.Payer
 import com.mini.asaas.user.User
 import com.mini.asaas.utils.DateFormatUtils
@@ -18,8 +17,6 @@ class PaymentService {
     PaymentEventNotificationService paymentEventNotificationService
 
     SpringSecurityService springSecurityService
-
-    NotificationService notificationService
 
     public Payment save(PaymentAdapter adapter) {
         Payment payment = new Payment()
@@ -113,7 +110,7 @@ class PaymentService {
     public void setPaymentsAsOverdue() {
         Map params = [
                 "dueDate[lt]": DateFormatUtils.getDateWithoutTime(),
-                status: PaymentStatus.PENDING
+                status       : PaymentStatus.PENDING
         ]
 
         List<Long> paymentIdList = PaymentRepository.query(params).column("id").list()
