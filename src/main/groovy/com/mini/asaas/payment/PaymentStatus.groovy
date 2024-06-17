@@ -27,4 +27,12 @@ enum PaymentStatus {
     public Boolean canBeReceived() {
         return [PENDING].contains(this)
     }
+
+    public Boolean isReceived() {
+        return this == RECEIVED
+    }
+
+    public Boolean isOverdue() {
+        return this == OVERDUE
+    }
 }

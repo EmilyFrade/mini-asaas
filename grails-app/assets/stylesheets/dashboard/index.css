@@ -1,0 +1,56 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.summary-card {
+    border: 1px solid var(--atlas-primary);
+    border-radius: 0.25rem;
+    height: 100%;
+}
+
+.summary-card-header {
+    border-radius: 0.25rem 0.25rem 0 0;
+    border-bottom: 1px solid #CDCDCD;
+    padding: 1rem;
+    background-color: var(--atlas-primary);
+    color: var(--atlas-light);
+
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.summary-card-body {
+    padding: 1.5rem 1.5rem 2rem 1.5rem;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.summary-card-item {
+    width: fit-content;
+    padding: 1rem;
+    list-style: none;
+    border-radius: 0.25rem;
+    border: 1px solid var(--atlas-primary);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.25rem;
+
+    position: relative;
+}
+
+.summary-card-item-title {
+}
+
+.summary-card-item-value {
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+}
