@@ -1,9 +1,13 @@
 package com.mini.asaas.email
 
+import grails.async.Promise
+import grails.async.Promises
 import grails.gorm.transactions.Transactional
 
 @Transactional
 class EmailMessageService {
+
+    SendEmailService sendEmailService
 
     private String fromEmailAddress = System.getenv("FROM_EMAIL_ADDRESS")
 
@@ -17,11 +21,41 @@ class EmailMessageService {
         emailMessage.subject = adapter.subject
         emailMessage.body = adapter.body
         emailMessage.isHTML = adapter.isHTML
-        emailMessage.sentDate = new Date()
         emailMessage.status = EmailStatus.PENDING
         emailMessage.attempts = 0
         emailMessage.save(failOnError: true)
 
         return emailMessage
+    }
+
+    public void processPending() {
+        List<Long> emailMessageIdList = EmailMessageRepository.query([
+            status: EmailStatus.PENDING
+        ]).column("id").list([max: 10]) as List<Long>
+
+        if (emailMessageIdList.isEmpty()) return
+
+        emailMessageIdList.each { println(it) }
+
+        List<Promise> promiseList = []
+        emailMessageIdList.collate(2).each {
+            List idList = it.collect()
+            promiseList << Promises.task { sendEmailList(idList) }
+        }
+
+        Promises.waitAll(promiseList)
+    }
+
+    private void sendEmailList(List<Long> emailMessageIdList) {
+        emailMessageIdList.each { emailMessageId ->
+            EmailMessage.withNewTransaction { status ->
+                try {
+                    sendEmailService.send(emailMessageId)
+                } catch (Exception exception) {
+                    log.error("Error sending email message: ${emailMessageId}", exception)
+                    status.setRollbackOnly()
+                }
+            }
+        }
     }
 }

@@ -2,8 +2,12 @@ package com.mini.asaas.user
 
 import com.mini.asaas.base.BaseValidator
 import com.mini.asaas.user.adapters.SaveUserAdapter
+import com.mini.asaas.user.adapters.UpdateUserAdapter
+import com.mini.asaas.user.adapters.UpdateUserPasswordAdapter
 import com.mini.asaas.utils.EmailUtils
 import com.mini.asaas.validation.BusinessValidation
+import grails.util.Holders
+import org.springframework.security.crypto.password.PasswordEncoder
 
 class UserValidator extends BaseValidator {
 
@@ -14,6 +18,32 @@ class UserValidator extends BaseValidator {
         validateIfEmailExists(adapter.email)
         validatePassword(adapter.password)
         validateAuthority(adapter.roleAuthority)
+
+        return validationResult
+    }
+
+    public BusinessValidation validateBeforeUpdate(UpdateUserAdapter adapter, User user) {
+        validateEmail(adapter.email)
+        if (user.email != adapter.email) validateIfEmailExists(adapter.email)
+        if (adapter.roleAuthority && user.getRoleAuthority() != adapter.roleAuthority) {
+            validateIfCanUpdateAuthority(adapter, user)
+        }
+
+        return validationResult
+    }
+
+    public BusinessValidation validateBeforeUpdatePassword(UpdateUserPasswordAdapter adapter, User user) {
+        PasswordEncoder passwordEncoder = Holders.applicationContext.springSecurityService.passwordEncoder as PasswordEncoder
+
+        if (!adapter.currentPassword || !passwordEncoder.matches(adapter.currentPassword, user.password)) {
+            validationResult.addError("user.password.not.equal.current")
+        }
+
+        if (passwordEncoder.matches(adapter.newPassword, user.password)) {
+            validationResult.addError("user.password.not.equal.old")
+        }
+
+        validatePassword(adapter.newPassword)
 
         return validationResult
     }
@@ -60,6 +90,21 @@ class UserValidator extends BaseValidator {
         }
         if (!password.matches(".*[!@#\$%^&*].*")) {
             validationResult.addError("user.password.mustContainSpecialCharacter")
+        }
+
+        return this
+    }
+
+    private UserValidator validateIfCanUpdateAuthority(UpdateUserAdapter adapter, User user) {
+        if (!user.isAdmin()) {
+            validationResult.addError("user.authority.update.not.allowed")
+            return this
+        }
+
+        if (adapter.roleAuthority.isAdmin()) return this
+
+        if (!user.isAdminButNotUniqueAdminOfCustomer()) {
+            validationResult.addError("customer.should.have.at.least.one.admin")
         }
 
         return this
