@@ -12,10 +12,6 @@ import grails.config.Config
 import grails.core.support.GrailsConfigurationAware
 import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
-import org.springframework.scheduling.annotation.Async
-import org.springframework.scheduling.annotation.AsyncResult
-
-import java.util.concurrent.Future
 
 @Slf4j
 @CompileStatic
@@ -26,8 +22,10 @@ class SendGridSendEmailService implements SendEmailService, GrailsConfigurationA
     String apiKey
 
     @Override
-    @Async
-    public Future<Void> send(EmailMessage emailMessage) {
+    public void send(Long emailMessageId) {
+        EmailMessage emailMessage = EmailMessageRepository.get(emailMessageId)
+        if (!emailMessage) return
+
         try {
             Mail mail = buildMail(emailMessage)
             SendGrid sendGrid = new SendGrid(this.apiKey)
@@ -44,21 +42,16 @@ class SendGridSendEmailService implements SendEmailService, GrailsConfigurationA
 
             Response response = sendGrid.api(request)
             if (response.statusCode != SENDGRID_SUCCESS_STATUS_CODE) {
-                throw new RuntimeException(response.body)
+                handleSendError(emailMessage, response.body)
             }
 
             emailMessage.status = EmailStatus.SENT
             emailMessage.sentDate = new Date()
             emailMessage.save(failOnError: true)
-        } catch (Exception exception) {
-            log.error("Erro ao enviar e-mail: {} ({}/{})", exception.getMessage(), emailMessage.attempts, EmailMessage.MAX_ATTEMPTS)
-            if (emailMessage.attempts >= EmailMessage.MAX_ATTEMPTS) {
-                emailMessage.status = EmailStatus.FAILED
-                emailMessage.save(failOnError: true)
-            }
+        } catch (IOException exception) {
+            handleSendError(emailMessage, exception.message)
         }
 
-        return new AsyncResult<>(null)
     }
 
     @Override
@@ -99,5 +92,13 @@ class SendGridSendEmailService implements SendEmailService, GrailsConfigurationA
         if (emailMessage.isHTML) return new Content("text/html", emailMessage.body)
 
         return new Content("text/plain", emailMessage.body)
+    }
+
+    private void handleSendError(EmailMessage emailMessage, String errorMessage) {
+        log.error("Erro ao enviar e-mail: {} ({}/{})", errorMessage, emailMessage.attempts, EmailMessage.MAX_ATTEMPTS)
+        if (emailMessage.attempts >= EmailMessage.MAX_ATTEMPTS) {
+            emailMessage.status = EmailStatus.FAILED
+            emailMessage.save(failOnError: true)
+        }
     }
 }

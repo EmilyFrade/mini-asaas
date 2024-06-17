@@ -10,10 +10,6 @@ class EmailMessageRepository implements Repository<EmailMessage, EmailMessageRep
             if (search.containsKey("status")) {
                 eq("status", search.status as EmailStatus)
             }
-
-            if (search.containsKey("attempts[lt]")) {
-                lt("attempts", search["attempts[lt]"] as Integer)
-            }
         }
     }
 
@@ -25,8 +21,7 @@ class EmailMessageRepository implements Repository<EmailMessage, EmailMessageRep
     @Override
     List<String> listAllowedFilters() {
         return [
-            "status",
-            "attempts[lt]",
+            "status"
         ]
     }
 }
