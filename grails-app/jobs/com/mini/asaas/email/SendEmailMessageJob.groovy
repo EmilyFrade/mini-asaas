@@ -5,7 +5,7 @@ class SendEmailMessageJob {
     EmailMessageService emailMessageService
 
     static triggers = {
-        cron name: 'ProcessSendEmailMessageJobTrigger', cronExpression: "0/30 * * * * ?"
+        cron name: 'SendEmailMessageJobTrigger', cronExpression: "0/30 * * * * ?"
     }
 
     void execute() {
