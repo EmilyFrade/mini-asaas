@@ -8,6 +8,17 @@
 
     <body page-title="Minhas Cobranças">
         <atlas-panel>
+            <atlas-filter>
+                <atlas-filter-form slot="simple-filter">
+                    <atlas-filter-group name="status">
+                        <atlas-checkbox value="PENDING">Aguardando pagamento</atlas-checkbox>
+                        <atlas-checkbox value="RECEIVED">Recebidas</atlas-checkbox>
+                        <atlas-checkbox value="OVERDUE">Vencidas</atlas-checkbox>
+                        <atlas-checkbox value="CANCELED">Canceladas</atlas-checkbox>
+                    </atlas-filter-group>
+                </atlas-filter-form>
+            </atlas-filter>
+
             <g:if test="${paymentList}">
                 <atlas-toolbar>
                     <atlas-button
@@ -54,5 +65,7 @@
                 </atlas-empty-state>
             </g:else>
         </atlas-panel>
+
+        <asset:javascript src="form-filters.js" />
     </body>
 </html>
