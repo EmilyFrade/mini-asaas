@@ -18,6 +18,12 @@ class PaymentRepository implements Repository<Payment, PaymentRepository> {
                 eq("status", PaymentStatus.valueOf(search.status as String))
             }
 
+            if (search.containsKey("status[in]")) {
+                List<PaymentStatus> paymentStatusList = []
+                search["status[in]"].each { paymentStatusList.add(PaymentStatus.valueOf(it as String)) }
+                'in'("status", paymentStatusList)
+            }
+
             if (search.containsKey("dueDate[lt]")) {
                 lt("dueDate", search["dueDate[lt]"])
             }
@@ -35,6 +41,7 @@ class PaymentRepository implements Repository<Payment, PaymentRepository> {
         return [
                 "customerId",
                 "status",
+                "status[in]",
                 "dueDate[lt]",
         ]
     }

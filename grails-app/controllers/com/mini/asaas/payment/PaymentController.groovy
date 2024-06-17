@@ -14,7 +14,7 @@ class PaymentController {
     PayerService payerService
 
     def index() {
-        List<Payment> paymentList = paymentService.list()
+        List<Payment> paymentList = paymentService.list(params.status ?: 'PENDING,RECEIVED,CANCELED,OVERDUE')
         return [paymentList: paymentList]
     }
 
