@@ -31,12 +31,12 @@ class EmailMessageService {
     public void processPending() {
         List<Long> emailMessageIdList = EmailMessageRepository.query([
             status: EmailStatus.PENDING
-        ]).column("id").list([max: 10]) as List<Long>
+        ]).column("id").list([max: 100]) as List<Long>
 
         if (emailMessageIdList.isEmpty()) return
 
         List<Promise> promiseList = []
-        emailMessageIdList.collate(2).each {
+        emailMessageIdList.collate(10).each {
             List idList = it.collect()
             promiseList << Promises.task { sendEmailList(idList) }
         }
