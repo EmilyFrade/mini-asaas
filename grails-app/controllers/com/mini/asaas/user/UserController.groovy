@@ -56,7 +56,7 @@ class UserController {
             User user = userService.loadLoggedUser()
 
             Long id = params.id as Long
-            if(id) user = userAdminService.idAdminOfCustomer(id, user)
+            if(id) user = userAdminService.getUserIfAdminOfCustomer(id, user)
 
             render(view: "show", model: [user: user])
         } catch (Exception exception) {
@@ -72,7 +72,7 @@ class UserController {
         try {
             User user = userService.loadLoggedUser()
 
-            if(id) user = userAdminService.idAdminOfCustomer(id, user)
+            if(id) user = userAdminService.getUserIfAdminOfCustomer(id, user)
 
             userService.update(new UpdateUserAdapter(params), user)
             flash.status = AlertType.SUCCESS.getValue()
@@ -100,7 +100,7 @@ class UserController {
         try {
             User user = userService.loadLoggedUser()
 
-            if(id) user = userAdminService.idAdminOfCustomer(id, user)
+            if(id) user = userAdminService.getUserIfAdminOfCustomer(id, user)
 
             userService.updatePassword(new UpdateUserPasswordAdapter(params), user)
             flash.status = AlertType.SUCCESS.getValue()

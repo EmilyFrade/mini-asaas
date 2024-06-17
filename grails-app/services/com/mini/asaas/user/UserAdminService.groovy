@@ -38,7 +38,7 @@ class UserAdminService {
         user.save(failOnError: true)
     }
 
-    public User idAdminOfCustomer(Long id, User user) {
+    public User getUserIfAdminOfCustomer(Long id, User user) {
         if (user.isAdmin()) user = UserRepository.query([customerId: user.customerId, id: id]).get()
         return user
     }
