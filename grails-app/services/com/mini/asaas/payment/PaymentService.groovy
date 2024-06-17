@@ -109,8 +109,8 @@ class PaymentService {
 
     public void setPaymentsAsOverdue() {
         Map params = [
-            "dueDate[lt]": DateFormatUtils.getDateWithoutTime(),
-            status       : PaymentStatus.PENDING
+                "dueDate[lt]": DateFormatUtils.getDateWithoutTime(),
+                status       : PaymentStatus.PENDING
         ]
 
         List<Long> paymentIdList = PaymentRepository.query(params).column("id").list()
