@@ -102,15 +102,16 @@ class PaymentService {
         paymentEventNotificationService.onReceive(payment, springSecurityService.loadCurrentUser() as User)
     }
 
-    public List<Payment> list() {
+    public List<Payment> list(List<String> statusFilterList) {
         Long customerId = (springSecurityService.loadCurrentUser() as User).customerId
-        return PaymentRepository.query([customerId: customerId, includeDeleted: true]).list()
+        Map queryParams = [customerId: customerId, includeDeleted: true, "status[in]": statusFilterList]
+        return PaymentRepository.query(queryParams).list()
     }
 
     public void setPaymentsAsOverdue() {
         Map params = [
-                "dueDate[lt]": DateFormatUtils.getDateWithoutTime(),
-                status       : PaymentStatus.PENDING
+            "dueDate[lt]": DateFormatUtils.getDateWithoutTime(),
+            status       : PaymentStatus.PENDING
         ]
 
         List<Long> paymentIdList = PaymentRepository.query(params).column("id").list()

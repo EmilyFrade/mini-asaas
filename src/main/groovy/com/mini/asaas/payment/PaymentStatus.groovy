@@ -27,4 +27,8 @@ enum PaymentStatus {
     public Boolean canBeReceived() {
         return [PENDING].contains(this)
     }
+
+    public static List<String> getAllNames() {
+        return values().collect { it.name() }
+    }
 }
