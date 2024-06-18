@@ -14,7 +14,12 @@ class PaymentController {
     PayerService payerService
 
     def index() {
-        List<Payment> paymentList = paymentService.list(params.status ?: PaymentStatus.values().join(","))
+        List<String> statusFilterList = [];
+        if (params.status && params.status instanceof String) {
+            statusFilterList = (params.status as String).split(",")
+        }
+        if (statusFilterList.isEmpty()) statusFilterList = PaymentStatus.getAllNames()
+        List<Payment> paymentList = paymentService.list(statusFilterList)
         return [paymentList: paymentList]
     }
 
