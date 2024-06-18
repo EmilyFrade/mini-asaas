@@ -39,10 +39,8 @@ class UserService {
         return user
     }
 
-    public User update(UpdateUserAdapter adapter) {
-        User user = loadLoggedUser()
-        user = validateBeforeUpdate(adapter, user)
-        if (user.hasErrors()) {
+    public User update(UpdateUserAdapter adapter, User user) {
+        if (validateBeforeUpdate(adapter, user).hasErrors()) {
             throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(user))
         }
 
@@ -55,9 +53,7 @@ class UserService {
         return user
     }
 
-    public User updatePassword(UpdateUserPasswordAdapter adapter) {
-        User user = loadLoggedUser()
-
+    public User updatePassword(UpdateUserPasswordAdapter adapter, User user) {
         user = validateBeforeUpdatePassword(adapter, user)
         if (user.hasErrors()) {
             throw new BusinessException(DomainErrorUtils.getFirstValidationMessage(user))
