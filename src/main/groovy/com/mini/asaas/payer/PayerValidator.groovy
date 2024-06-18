@@ -32,7 +32,7 @@ class PayerValidator extends BaseValidator {
         if (payer.deleted) {
             validationResult.addError("alreadyExistsAndDeleted.cpfCnpj")
         } else {
-            validationResult.addError("alreadyExists.cpfCnpj")
+            validationResult.addError("alreadyExistsAndView.cpfCnpj")
         }
 
         return this
@@ -50,7 +50,7 @@ class PayerValidator extends BaseValidator {
         if (payer.deleted) {
             validationResult.addError("alreadyExistsAndDeleted.email")
         } else {
-            validationResult.addError("alreadyExists.email")
+            validationResult.addError("alreadyExistsAndView.email")
         }
 
         return this

@@ -1,4 +1,16 @@
-<%@ page import="com.mini.asaas.enums.address.AddressState; com.mini.asaas.utils.DateFormatUtils" %>
+<%@ page import="com.mini.asaas.utils.DateFormatUtils" %>
+<%
+    Map address = [
+            zipCode      : payer.zipCode,
+            address      : payer.address,
+            addressNumber: payer.addressNumber,
+            complement   : payer.complement,
+            province     : payer.province,
+            city         : payer.city,
+            state        : payer.state,
+    ]
+%>
+
 <html>
     <head>
         <title>Detalhes do Pagador</title>
@@ -14,7 +26,7 @@
                           href="${createLink(controller: "payer", action: "restore")}">
             </atlas-helper>
         </g:if>
-        <g:if test="${flash.code == "alreadyExists.cpfCnpj" || flash.code == "alreadyExists.email"}">
+        <g:if test="${flash.code == "alreadyExistsAndView.cpfCnpj" || flash.code == "alreadyExistsAndView.email"}">
             <atlas-helper message="Visualizar pagador"
                           href="${createLink(controller: "payer", action: "index")}">
             </atlas-helper>
@@ -37,135 +49,89 @@
             <atlas-grid>
                 <atlas-row>
                     <atlas-col lg="6">
-                        <atlas-input
-                                label="Nome"
-                                name="name"
-                                required
-                                value="${payer.name}">
-                        </atlas-input>
+                        <atlas-layout gap="6">
+                            <atlas-text size="md" bold="" underline="">Dados comerciais</atlas-text>
+
+                            <atlas-row>
+                                <atlas-col lg="12">
+                                    <atlas-input
+                                            label="Nome"
+                                            name="name"
+                                            required
+                                            value="${payer.name}">
+                                    </atlas-input>
+                                </atlas-col>
+                            </atlas-row>
+
+                            <atlas-row>
+                                <atlas-col lg="12">
+                                    <atlas-masked-input
+                                            label="Email"
+                                            name="email"
+                                            mask-alias="email"
+                                            value="${payer.email}"
+                                            required>
+                                    </atlas-masked-input>
+                                </atlas-col>
+                            </atlas-row>
+
+                            <atlas-row>
+                                <atlas-col lg="12">
+                                    <atlas-input
+                                            label="Natureza Jurídica"
+                                            name="personType"
+                                            readonly
+                                            value="${payer.personType.getLabel()}"
+                                            required>
+                                    </atlas-input>
+                                </atlas-col>
+                            </atlas-row>
+
+                            <atlas-row>
+                                <atlas-col lg="12">
+                                    <atlas-masked-input
+                                            mask-alias="cpf-cnpj"
+                                            label="CPF/CNPJ"
+                                            name="cpfCnpj"
+                                            value="${payer.cpfCnpj}"
+                                            required>
+                                    </atlas-masked-input>
+                                </atlas-col>
+                            </atlas-row>
+
+                            <atlas-row>
+                                <atlas-col lg="12">
+                                    <atlas-datepicker
+                                            label="Data de nascimento"
+                                            value="${DateFormatUtils.format(payer.birthDate)}"
+                                            name="birthDate"
+                                            id="birthDate"
+                                            required>
+                                    </atlas-datepicker>
+                                </atlas-col>
+                            </atlas-row>
+
+                            <atlas-row>
+                                <atlas-col lg="12">
+                                    <atlas-masked-input
+                                            mask-alias="phone"
+                                            label="Número de Telefone"
+                                            type="tel"
+                                            name="phoneNumber"
+                                            id="phoneNumber"
+                                            value="${payer.phoneNumber}"
+                                            required>
+                                    </atlas-masked-input>
+                                </atlas-col>
+                            </atlas-row>
+                        </atlas-layout>
                     </atlas-col>
 
                     <atlas-col lg="6">
-                        <atlas-masked-input
-                                label="Email"
-                                name="email"
-                                mask-alias="email"
-                                value="${payer.email}"
-                                required>
-                        </atlas-masked-input>
-                    </atlas-col>
-                </atlas-row>
-
-                <atlas-row>
-                    <atlas-col lg="6">
-                        <atlas-input
-                                label="Natureza Jurídica"
-                                name="personType"
-                                readonly
-                                value="${payer.personType.getLabel()}"
-                                required>
-                        </atlas-input>
-                    </atlas-col>
-                    <atlas-col lg="6">
-                        <atlas-masked-input
-                                mask-alias="cpf-cnpj"
-                                label="CPF/CNPJ"
-                                name="cpfCnpj"
-                                value="${payer.cpfCnpj}"
-                                required>
-                        </atlas-masked-input>
-                    </atlas-col>
-                </atlas-row>
-
-                <atlas-row>
-                    <atlas-col lg="4">
-                        <atlas-datepicker
-                                label="Data de nascimento"
-                                value="${DateFormatUtils.format(payer.birthDate)}"
-                                name="birthDate"
-                                id="birthDate"
-                                required>
-                        </atlas-datepicker>
-                    </atlas-col>
-                    <atlas-col lg="4">
-                        <atlas-masked-input
-                                mask-alias="phone"
-                                label="Número de Telefone"
-                                type="tel"
-                                name="phoneNumber"
-                                id="phoneNumber"
-                                value="${payer.phoneNumber}"
-                                required>
-                        </atlas-masked-input>
-                    </atlas-col>
-                    <atlas-col lg="4">
-                        <atlas-postal-code
-                                label="CEP"
-                                name="zipCode"
-                                value="${payer.zipCode}"
-                                required>
-                        </atlas-postal-code>
-                    </atlas-col>
-                </atlas-row>
-
-                <atlas-row>
-                    <atlas-col lg="4">
-                        <atlas-input
-                                label="Rua"
-                                name="address"
-                                value="${payer.address}"
-                                required>
-                        </atlas-input>
-                    </atlas-col>
-                    <atlas-col lg="4">
-                        <atlas-integer-input
-                                class="postal-code-element"
-                                label="Número"
-                                name="addressNumber"
-                                min-value="1"
-                                min-value-error-message="O valor deve ser positivo"
-                                value="${payer.addressNumber}"
-                                required>
-                        </atlas-integer-input>
-                    </atlas-col>
-                    <atlas-col lg="4">
-                        <atlas-input
-                                label="Complemento"
-                                name="complement"
-                                value="${payer.complement}">
-                        </atlas-input>
-                    </atlas-col>
-                </atlas-row>
-
-                <atlas-row>
-                    <atlas-col lg="4">
-                        <atlas-input
-                                label="Bairro"
-                                name="province"
-                                value="${payer.province}"
-                                required>
-                        </atlas-input>
-                    </atlas-col>
-                    <atlas-col lg="4">
-                        <atlas-input
-                                label="Cidade"
-                                name="city"
-                                value="${payer.city}"
-                                required>
-                        </atlas-input>
-                    </atlas-col>
-                    <atlas-col lg="4">
-                        <atlas-select
-                                class="postal-code-element"
-                                label="Estado"
-                                name="state"
-                                id="state"
-                                value="${payer.state}"
-                                required>
-                            <g:each in="${AddressState.values()}" var="state">
-                                <atlas-option label="${state.label}" value="${state.name()}"></atlas-option>
-                            </g:each>
-                        </atlas-select>
+                        <atlas-layout gap="5">
+                            <atlas-text size="md" bold="" underline="">Dados de endereço</atlas-text>
+                            <g:render template="/templates/address-group" model="${[address: address, opened: true]}"/>
+                        </atlas-layout>
                     </atlas-col>
                 </atlas-row>
             </atlas-grid>
