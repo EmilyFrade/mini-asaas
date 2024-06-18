@@ -50,7 +50,7 @@
         <atlas-sidebar-menu-item
                 icon="cog"
                 value="profile-group"
-                text="Meu Perfil"
+                text="Minha conta"
             ${controllerName == "user" || controllerName == "customer" ? "active" : ""}>
             <atlas-sidebar-menu-item
                     icon="info"
@@ -60,10 +60,18 @@
             </atlas-sidebar-menu-item>
             <atlas-sidebar-menu-item
                     icon="user"
-                    text="Ver Perfil"
+                    text="Meu usuário"
                     href="${createLink(controller: "user", action: "show")}"
                 ${controllerName == "user" && actionName == "show" ? "active" : ""}>
             </atlas-sidebar-menu-item>
+            <user:ifAdmin>
+                <atlas-sidebar-menu-item
+                        icon="users"
+                        text="Usuários do sistema"
+                        href="${createLink(controller: 'user', action: 'index')}"
+                    ${controllerName == 'user' && actionName == 'index' ? 'active' : ''}>
+                </atlas-sidebar-menu-item>
+            </user:ifAdmin>
         </atlas-sidebar-menu-item>
     </atlas-sidebar-menu>
 </atlas-sidebar>
