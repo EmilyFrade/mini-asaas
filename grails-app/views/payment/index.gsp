@@ -9,7 +9,9 @@
 	<body page-title="Minhas Cobranças">
 		<atlas-panel>
 			<atlas-filter>
-				<atlas-filter-form slot="simple-filter">
+				<atlas-filter-form
+					slot="simple-filter"
+					data-base-url="${createLink(controller: "payment", action: "index")}">
 					<atlas-filter-group name="status">
 						<atlas-checkbox value="${PaymentStatus.PENDING}">Aguardando pagamento</atlas-checkbox>
 						<atlas-checkbox value="${PaymentStatus.RECEIVED}">Recebidas</atlas-checkbox>
